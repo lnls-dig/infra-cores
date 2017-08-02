@@ -1,6 +1,7 @@
 modules = { "local" : ["fmc_adc_common",
                        "pcie_cntr",
-                       "textio_extended"
+                       "textio_extended",
+                       "fabric"
                       ]
           };
 
