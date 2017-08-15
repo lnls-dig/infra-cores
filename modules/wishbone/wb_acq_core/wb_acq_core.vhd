@@ -567,6 +567,8 @@ begin
   regs_in.trig_pos_i                        <= f_gen_std_logic_vector(regs_in.trig_pos_i'length-
                                                     ddr_trig_addr'length, '0') & ddr_trig_addr;
   regs_in.samples_cnt_i                     <= std_logic_vector(samples_cnt);
+  regs_in.acq_chan_ctl_num_chan_i           <= std_logic_vector(to_unsigned(g_acq_num_channels,
+                                                    regs_in.acq_chan_ctl_num_chan_i'length));
 
   ------------------------------------------------------------------------------
   -- Channel Descriptions
