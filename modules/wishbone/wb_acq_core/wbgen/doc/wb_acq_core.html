@@ -2307,7 +2307,41 @@ acq_core_acq_chan_ctl_dtrig_which_o[4:0]
 
 </td>
 <td  class="td_pblock_right">
-acq_core_acq_chan_ctl_reserved1_o[18:0]
+acq_core_acq_chan_ctl_reserved1_o[2:0]
+</td>
+<td  class="td_arrow_right">
+&rArr;
+</td>
+</tr>
+<tr>
+<td  class="td_arrow_left">
+
+</td>
+<td  class="td_pblock_left">
+
+</td>
+<td  class="td_sym_center">
+
+</td>
+<td  class="td_pblock_right">
+acq_core_acq_chan_ctl_num_chan_i[4:0]
+</td>
+<td  class="td_arrow_right">
+&lArr;
+</td>
+</tr>
+<tr>
+<td  class="td_arrow_left">
+
+</td>
+<td  class="td_pblock_left">
+
+</td>
+<td  class="td_sym_center">
+
+</td>
+<td  class="td_pblock_right">
+acq_core_acq_chan_ctl_reserved2_o[10:0]
 </td>
 <td  class="td_arrow_right">
 &rArr;
@@ -9331,7 +9365,7 @@ ACQ_CHAN_CTL
 </tr>
 <tr>
 <td style="border: solid 1px black;" colspan=8  class="td_field">
-RESERVED1[18:11]
+RESERVED2[10:3]
 </td>
 <td >
 
@@ -9384,11 +9418,11 @@ RESERVED1[18:11]
 </td>
 </tr>
 <tr>
-<td style="border: solid 1px black;" colspan=8  class="td_field">
-RESERVED1[10:3]
+<td style="border: solid 1px black;" colspan=3  class="td_field">
+RESERVED2[2:0]
 </td>
-<td >
-
+<td style="border: solid 1px black;" colspan=5  class="td_field">
+NUM_CHAN[4:0]
 </td>
 <td >
 
@@ -9534,6 +9568,14 @@ DTRIG_WHICH
 <li><b>
 RESERVED1
 </b>[<i>read/write</i>]: Reserved1
+<br>Ignore on read, write with 0's
+<li><b>
+NUM_CHAN
+</b>[<i>read-only</i>]: Number of acquisition channels
+<br>Number of acquisition Channels
+<li><b>
+RESERVED2
+</b>[<i>read/write</i>]: Reserved2
 <br>Ignore on read, write with 0's
 </ul>
 <a name="CH0_DESC"></a>

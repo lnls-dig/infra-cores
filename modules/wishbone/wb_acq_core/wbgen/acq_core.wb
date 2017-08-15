@@ -468,7 +468,28 @@ peripheral {
       description = "Ignore on read, write with 0's";
       prefix = "reserved1";
       type = SLV;
-      size = 19;
+      size = 3;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Number of acquisition channels";
+      description = "Number of acquisition Channels";
+      prefix = "num_chan";
+      type = SLV;
+      align = 8;
+      size = 5;
+      access_bus = READ_ONLY;
+      access_dev = WRITE_ONLY;
+    };
+
+    field {
+      name = "Reserved2";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved2";
+      type = SLV;
+      size = 11;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
