@@ -1,0 +1,47 @@
+peripheral {
+  name = "AFC MGMT registers";
+  description = "Wishbone slave for AFC MGMT";
+  hdl_entity = "afc_mgmt_regs";
+  prefix = "afc_mgmt";
+
+  reg {
+    name = "Clock distribution control register";
+    prefix = "clk_distrib";
+
+    field {
+      name = "Si 571 Output Enable";
+      prefix = "si57x_oe";
+      description = "Si57x output enable pin, check datasheet for proper voltage standard and signal polarity";
+      type = BIT;
+      --size = 1;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's.";
+      prefix = "reserved";
+      type = SLV;
+      size = 31;
+      access_bus = READ_ONLY;
+      access_dev = WRITE_ONLY;
+    };
+  };
+
+  reg {
+    name = "Dummy";
+    prefix = "dummy";
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's.";
+      prefix = "reserved";
+      type = SLV;
+      size = 32;
+      access_bus = READ_ONLY;
+      access_dev = WRITE_ONLY;
+    };
+  };
+
+};

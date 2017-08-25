@@ -21,5 +21,6 @@ modules = { "local" : [
                         "wb_facq_core_mux",
                         "wb_pcie_cntr",
                         "wb_fmc_adc_common",
-                        "wb_fmc_active_clk"
+                        "wb_fmc_active_clk",
+                        "wb_afc_mgmt"
                       ] };
