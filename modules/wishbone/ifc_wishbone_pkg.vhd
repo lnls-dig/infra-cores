@@ -2942,224 +2942,224 @@ package ifc_wishbone_pkg is
   end component;
 
   component wb_trigger_mux
-    generic (
-      g_interface_mode       : t_wishbone_interface_mode      := CLASSIC;
-      g_address_granularity  : t_wishbone_address_granularity := WORD;
-      g_sync_edge            : string                         := "positive";
-      g_trig_num             : natural range 1 to 24          := 8;
-      g_intern_num           : natural range 1 to 24          := 8;
-      g_rcv_intern_num       : natural range 1 to 24          := 2);
-    port (
-      clk_i               : in    std_logic;
-      rst_n_i             : in    std_logic;
-      fs_clk_i            : in    std_logic;
-      fs_rst_n_i          : in    std_logic;
-      wb_adr_i            : in    std_logic_vector(c_wishbone_address_width-1 downto 0) := (others => '0');
-      wb_dat_i            : in    std_logic_vector(c_wishbone_data_width-1 downto 0)    := (others => '0');
-      wb_dat_o            : out   std_logic_vector(c_wishbone_data_width-1 downto 0);
-      wb_sel_i            : in    std_logic_vector(c_wishbone_data_width/8-1 downto 0)  := (others => '0');
-      wb_we_i             : in    std_logic                                             := '0';
-      wb_cyc_i            : in    std_logic                                             := '0';
-      wb_stb_i            : in    std_logic                                             := '0';
-      wb_ack_o            : out   std_logic;
-      wb_err_o            : out   std_logic;
-      wb_rty_o            : out   std_logic;
-      wb_stall_o          : out   std_logic;
+  generic (
+    g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
+    g_address_granularity                     : t_wishbone_address_granularity := WORD;
+    g_sync_edge                               : string                         := "positive";
+    g_trig_num                                : natural range 1 to 24          := 8;
+    g_intern_num                              : natural range 1 to 24          := 8;
+    g_rcv_intern_num                          : natural range 1 to 24          := 2);
+  port (
+    clk_i                                     : in    std_logic;
+    rst_n_i                                   : in    std_logic;
+    fs_clk_i                                  : in    std_logic;
+    fs_rst_n_i                                : in    std_logic;
+    wb_adr_i                                  : in    std_logic_vector(c_wishbone_address_width-1 downto 0) := (others => '0');
+    wb_dat_i                                  : in    std_logic_vector(c_wishbone_data_width-1 downto 0)    := (others => '0');
+    wb_dat_o                                  : out   std_logic_vector(c_wishbone_data_width-1 downto 0);
+    wb_sel_i                                  : in    std_logic_vector(c_wishbone_data_width/8-1 downto 0)  := (others => '0');
+    wb_we_i                                   : in    std_logic                                             := '0';
+    wb_cyc_i                                  : in    std_logic                                             := '0';
+    wb_stb_i                                  : in    std_logic                                             := '0';
+    wb_ack_o                                  : out   std_logic;
+    wb_err_o                                  : out   std_logic;
+    wb_rty_o                                  : out   std_logic;
+    wb_stall_o                                : out   std_logic;
 
-      trig_out_o          : out   t_trig_channel_array(g_trig_num-1 downto 0);
-      trig_in_i           : in    t_trig_channel_array(g_trig_num-1 downto 0);
-      trig_rcv_intern_i   : in    t_trig_channel_array(g_rcv_intern_num-1 downto 0);
-      trig_pulse_transm_i : in    t_trig_channel_array(g_intern_num-1 downto 0);
-      trig_pulse_rcv_o    : out   t_trig_channel_array(g_intern_num-1 downto 0)
+    trig_out_o                                : out   t_trig_channel_array(g_trig_num-1 downto 0);
+    trig_in_i                                 : in    t_trig_channel_array(g_trig_num-1 downto 0);
+    trig_rcv_intern_i                         : in    t_trig_channel_array(g_rcv_intern_num-1 downto 0);
+    trig_pulse_transm_i                       : in    t_trig_channel_array(g_intern_num-1 downto 0);
+    trig_pulse_rcv_o                          : out   t_trig_channel_array(g_intern_num-1 downto 0)
   );
   end component;
 
   component xwb_trigger_mux
-    generic (
-      g_interface_mode       : t_wishbone_interface_mode      := CLASSIC;
-      g_address_granularity  : t_wishbone_address_granularity := WORD;
-      g_sync_edge            : string                         := "positive";
-      g_trig_num             : natural range 1 to 24          := 8;
-      g_intern_num           : natural range 1 to 24          := 8;
-      g_rcv_intern_num       : natural range 1 to 24          := 2);
-    port (
-      rst_n_i             : in    std_logic;
-      clk_i               : in    std_logic;
-      fs_clk_i            : in    std_logic;
-      fs_rst_n_i          : in    std_logic;
-      wb_slv_i            : in    t_wishbone_slave_in;
-      wb_slv_o            : out   t_wishbone_slave_out;
+  generic (
+    g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
+    g_address_granularity                     : t_wishbone_address_granularity := WORD;
+    g_sync_edge                               : string                         := "positive";
+    g_trig_num                                : natural range 1 to 24          := 8;
+    g_intern_num                              : natural range 1 to 24          := 8;
+    g_rcv_intern_num                          : natural range 1 to 24          := 2);
+  port (
+    rst_n_i                                   : in    std_logic;
+    clk_i                                     : in    std_logic;
+    fs_clk_i                                  : in    std_logic;
+    fs_rst_n_i                                : in    std_logic;
+    wb_slv_i                                  : in    t_wishbone_slave_in;
+    wb_slv_o                                  : out   t_wishbone_slave_out;
 
-      trig_out_o          : out t_trig_channel_array(g_trig_num-1 downto 0);
-      trig_in_i           : in  t_trig_channel_array(g_trig_num-1 downto 0);
-      trig_rcv_intern_i   : in  t_trig_channel_array(g_rcv_intern_num-1 downto 0);
-      trig_pulse_transm_i : in  t_trig_channel_array(g_intern_num-1 downto 0);
-      trig_pulse_rcv_o    : out t_trig_channel_array(g_intern_num-1 downto 0));
+    trig_out_o                                : out t_trig_channel_array(g_trig_num-1 downto 0);
+    trig_in_i                                 : in  t_trig_channel_array(g_trig_num-1 downto 0);
+    trig_rcv_intern_i                         : in  t_trig_channel_array(g_rcv_intern_num-1 downto 0);
+    trig_pulse_transm_i                       : in  t_trig_channel_array(g_intern_num-1 downto 0);
+    trig_pulse_rcv_o                          : out t_trig_channel_array(g_intern_num-1 downto 0));
   end component;
 
   component wb_trigger_iface
-    generic (
-      g_interface_mode       : t_wishbone_interface_mode      := CLASSIC;
-      g_address_granularity  : t_wishbone_address_granularity := WORD;
-      g_sync_edge            : string                         := "positive";
-      g_trig_num             : natural range 1 to 24          := 8 -- channels facing outside the FPGA. Limit defined by wb_slave_trigger.vhd
-    );
-    port (
-      clk_i   : in std_logic;
-      rst_n_i : in std_logic;
-
-      ref_clk_i   : in std_logic;
-      ref_rst_n_i : in std_logic;
-
-      -------------------------------
-      ---- Wishbone Control Interface signals
-      -------------------------------
-
-      wb_adr_i   : in  std_logic_vector(c_wishbone_address_width-1 downto 0) := (others => '0');
-      wb_dat_i   : in  std_logic_vector(c_wishbone_data_width-1 downto 0)    := (others => '0');
-      wb_dat_o   : out std_logic_vector(c_wishbone_data_width-1 downto 0);
-      wb_sel_i   : in  std_logic_vector(c_wishbone_data_width/8-1 downto 0)  := (others => '0');
-      wb_we_i    : in  std_logic                                             := '0';
-      wb_cyc_i   : in  std_logic                                             := '0';
-      wb_stb_i   : in  std_logic                                             := '0';
-      wb_ack_o   : out std_logic;
-      wb_err_o   : out std_logic;
-      wb_rty_o   : out std_logic;
-      wb_stall_o : out std_logic;
-
-      -------------------------------
-      ---- External ports
-      -------------------------------
-
-      trig_b      : inout std_logic_vector(g_trig_num-1 downto 0);
-      trig_dir_o  : out   std_logic_vector(g_trig_num-1 downto 0);
-
-      -------------------------------
-      ---- Internal ports
-      -------------------------------
-
-      trig_out_o : out t_trig_channel_array(g_trig_num-1 downto 0);
-      trig_in_i  : in  t_trig_channel_array(g_trig_num-1 downto 0);
-
-      -------------------------------
-      ---- Debug ports
-      -------------------------------
-      trig_dbg_o : out std_logic_vector(g_trig_num-1 downto 0)
-    );
-  end component;
-
-  component xwb_trigger_iface
-    generic
-      (
-        g_interface_mode       : t_wishbone_interface_mode      := CLASSIC;
-        g_address_granularity  : t_wishbone_address_granularity := WORD;
-        g_sync_edge            : string                         := "positive";
-        g_trig_num             : natural range 1 to 24          := 8
-    );
-    port
-    (
-      rst_n_i    : in std_logic;
-      clk_i      : in std_logic;
-
-      ref_clk_i   : in std_logic;
-      ref_rst_n_i : in std_logic;
-
-      -----------------------------
-      -- Wishbone signals
-      -----------------------------
-
-      wb_slv_i : in  t_wishbone_slave_in;
-      wb_slv_o : out t_wishbone_slave_out;
-
-      -----------------------------
-      -- External ports
-      -----------------------------
-
-      trig_b     : inout std_logic_vector(g_trig_num-1 downto 0);
-      trig_dir_o : out   std_logic_vector(g_trig_num-1 downto 0);
-
-      -----------------------------
-      -- Internal ports
-      -----------------------------
-
-      trig_out_o : out t_trig_channel_array(g_trig_num-1 downto 0);
-      trig_in_i  : in  t_trig_channel_array(g_trig_num-1 downto 0);
-
-      -------------------------------
-      ---- Debug ports
-      -------------------------------
-      trig_dbg_o : out std_logic_vector(g_trig_num-1 downto 0)
-    );
-  end component;
-
-  component wb_trigger
   generic (
-    g_interface_mode       : t_wishbone_interface_mode      := CLASSIC;
-    g_address_granularity  : t_wishbone_address_granularity := WORD;
-    g_sync_edge            : string                         := "positive";
-    g_trig_num             : natural range 1 to 24          := 8; -- channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
-    g_intern_num           : natural range 1 to 24          := 8; -- channels facing inside the FPGA. Limit defined by wb_trigger_regs.vhd
-    g_rcv_intern_num       : natural range 1 to 24          := 2; -- signals from inside the FPGA that can be used as input at a rcv mux.
-                                                                  -- Limit defined by wb_trigger_regs.vhd
-    g_num_mux_interfaces   : natural                        := 2;  -- Number of wb_trigger_mux modules
-    g_out_resolver         : string                         := "fanout"; -- Resolver policy for output triggers
-    g_in_resolver          : string                         := "or";     -- Resolver policy for input triggers
-    g_with_input_sync      : boolean                        := true;
-    g_with_output_sync     : boolean                        := true
+    g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
+    g_address_granularity                     : t_wishbone_address_granularity := WORD;
+    g_sync_edge                               : string                         := "positive";
+    g_trig_num                                : natural range 1 to 24          := 8 -- channels facing outside the FPGA. Limit defined by wb_slave_trigger.vhd
   );
   port (
-    clk_i   : in std_logic;
-    rst_n_i : in std_logic;
+    clk_i                                     : in std_logic;
+    rst_n_i                                   : in std_logic;
 
-    ref_clk_i   : in std_logic;
-    ref_rst_n_i : in std_logic;
-
-    fs_clk_array_i    : in std_logic_vector(g_num_mux_interfaces-1 downto 0);
-    fs_rst_n_array_i  : in std_logic_vector(g_num_mux_interfaces-1 downto 0);
+    ref_clk_i                                 : in std_logic;
+    ref_rst_n_i                               : in std_logic;
 
     -------------------------------
     ---- Wishbone Control Interface signals
     -------------------------------
 
-    wb_trigger_iface_adr_i   : in  std_logic_vector(c_wishbone_address_width-1 downto 0) := (others => '0');
-    wb_trigger_iface_dat_i   : in  std_logic_vector(c_wishbone_data_width-1 downto 0)    := (others => '0');
-    wb_trigger_iface_dat_o   : out std_logic_vector(c_wishbone_data_width-1 downto 0);
-    wb_trigger_iface_sel_i   : in  std_logic_vector(c_wishbone_data_width/8-1 downto 0)  := (others => '0');
-    wb_trigger_iface_we_i    : in  std_logic                                             := '0';
-    wb_trigger_iface_cyc_i   : in  std_logic                                             := '0';
-    wb_trigger_iface_stb_i   : in  std_logic                                             := '0';
-    wb_trigger_iface_ack_o   : out std_logic;
-    wb_trigger_iface_err_o   : out std_logic;
-    wb_trigger_iface_rty_o   : out std_logic;
-    wb_trigger_iface_stall_o : out std_logic;
-
-    wb_trigger_mux_adr_i   : in  std_logic_vector(g_num_mux_interfaces*c_wishbone_address_width-1 downto 0) := (others => '0');
-    wb_trigger_mux_dat_i   : in  std_logic_vector(g_num_mux_interfaces*c_wishbone_data_width-1 downto 0)    := (others => '0');
-    wb_trigger_mux_dat_o   : out std_logic_vector(g_num_mux_interfaces*c_wishbone_data_width-1 downto 0);
-    wb_trigger_mux_sel_i   : in  std_logic_vector(g_num_mux_interfaces*c_wishbone_data_width/8-1 downto 0)  := (others => '0');
-    wb_trigger_mux_we_i    : in  std_logic_vector(g_num_mux_interfaces-1 downto 0)                          := (others => '0');
-    wb_trigger_mux_cyc_i   : in  std_logic_vector(g_num_mux_interfaces-1 downto 0)                          := (others => '0');
-    wb_trigger_mux_stb_i   : in  std_logic_vector(g_num_mux_interfaces-1 downto 0)                          := (others => '0');
-    wb_trigger_mux_ack_o   : out std_logic_vector(g_num_mux_interfaces-1 downto 0);
-    wb_trigger_mux_err_o   : out std_logic_vector(g_num_mux_interfaces-1 downto 0);
-    wb_trigger_mux_rty_o   : out std_logic_vector(g_num_mux_interfaces-1 downto 0);
-    wb_trigger_mux_stall_o : out std_logic_vector(g_num_mux_interfaces-1 downto 0);
+    wb_adr_i                                  : in  std_logic_vector(c_wishbone_address_width-1 downto 0) := (others => '0');
+    wb_dat_i                                  : in  std_logic_vector(c_wishbone_data_width-1 downto 0)    := (others => '0');
+    wb_dat_o                                  : out std_logic_vector(c_wishbone_data_width-1 downto 0);
+    wb_sel_i                                  : in  std_logic_vector(c_wishbone_data_width/8-1 downto 0)  := (others => '0');
+    wb_we_i                                   : in  std_logic                                             := '0';
+    wb_cyc_i                                  : in  std_logic                                             := '0';
+    wb_stb_i                                  : in  std_logic                                             := '0';
+    wb_ack_o                                  : out std_logic;
+    wb_err_o                                  : out std_logic;
+    wb_rty_o                                  : out std_logic;
+    wb_stall_o                                : out std_logic;
 
     -------------------------------
     ---- External ports
     -------------------------------
 
-    trig_b      : inout std_logic_vector(g_trig_num-1 downto 0);
-    trig_dir_o  : out   std_logic_vector(g_trig_num-1 downto 0);
+    trig_b                                    : inout std_logic_vector(g_trig_num-1 downto 0);
+    trig_dir_o                                : out   std_logic_vector(g_trig_num-1 downto 0);
 
     -------------------------------
     ---- Internal ports
     -------------------------------
 
-    trig_rcv_intern_i   : in  t_trig_channel_array(g_num_mux_interfaces*g_rcv_intern_num-1 downto 0);  -- signals from inside the FPGA that can be used as input at a rcv mux
+    trig_out_o                                : out t_trig_channel_array(g_trig_num-1 downto 0);
+    trig_in_i                                 : in  t_trig_channel_array(g_trig_num-1 downto 0);
 
-    trig_pulse_transm_i : in  t_trig_channel_array(g_num_mux_interfaces*g_intern_num-1 downto 0);
-    trig_pulse_rcv_o    : out t_trig_channel_array(g_num_mux_interfaces*g_intern_num-1 downto 0);
+    -------------------------------
+    ---- Debug ports
+    -------------------------------
+    trig_dbg_o                                : out std_logic_vector(g_trig_num-1 downto 0)
+  );
+  end component;
+
+  component xwb_trigger_iface
+  generic
+    (
+      g_interface_mode                        : t_wishbone_interface_mode      := CLASSIC;
+      g_address_granularity                   : t_wishbone_address_granularity := WORD;
+      g_sync_edge                             : string                         := "positive";
+      g_trig_num                              : natural range 1 to 24          := 8
+  );
+  port
+  (
+    rst_n_i                                   : in std_logic;
+    clk_i                                     : in std_logic;
+
+    ref_clk_i                                 : in std_logic;
+    ref_rst_n_i                               : in std_logic;
+
+    -----------------------------
+    -- Wishbone signals
+    -----------------------------
+
+    wb_slv_i                                  : in  t_wishbone_slave_in;
+    wb_slv_o                                  : out t_wishbone_slave_out;
+
+    -----------------------------
+    -- External ports
+    -----------------------------
+
+    trig_b                                    : inout std_logic_vector(g_trig_num-1 downto 0);
+    trig_dir_o                                : out   std_logic_vector(g_trig_num-1 downto 0);
+
+    -----------------------------
+    -- Internal ports
+    -----------------------------
+
+    trig_out_o                                : out t_trig_channel_array(g_trig_num-1 downto 0);
+    trig_in_i                                 : in  t_trig_channel_array(g_trig_num-1 downto 0);
+
+    -------------------------------
+    ---- Debug ports
+    -------------------------------
+    trig_dbg_o                                : out std_logic_vector(g_trig_num-1 downto 0)
+  );
+  end component;
+
+  component wb_trigger
+  generic (
+    g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
+    g_address_granularity                     : t_wishbone_address_granularity := WORD;
+    g_sync_edge                               : string                         := "positive";
+    g_trig_num                                : natural range 1 to 24          := 8; -- channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
+    g_intern_num                              : natural range 1 to 24          := 8; -- channels facing inside the FPGA. Limit defined by wb_trigger_regs.vhd
+    g_rcv_intern_num                          : natural range 1 to 24          := 2; -- signals from inside the FPGA that can be used as input at a rcv mux.
+                                                                                     -- Limit defined by wb_trigger_regs.vhd
+    g_num_mux_interfaces                      : natural                        := 2;  -- Number of wb_trigger_mux modules
+    g_out_resolver                            : string                         := "fanout"; -- Resolver policy for output triggers
+    g_in_resolver                             : string                         := "or";     -- Resolver policy for input triggers
+    g_with_input_sync                         : boolean                        := true;
+    g_with_output_sync                        : boolean                        := true
+  );
+  port (
+    clk_i                                     : in std_logic;
+    rst_n_i                                   : in std_logic;
+
+    ref_clk_i                                 : in std_logic;
+    ref_rst_n_i                               : in std_logic;
+
+    fs_clk_array_i                            : in std_logic_vector(g_num_mux_interfaces-1 downto 0);
+    fs_rst_n_array_i                          : in std_logic_vector(g_num_mux_interfaces-1 downto 0);
+
+    -------------------------------
+    ---- Wishbone Control Interface signals
+    -------------------------------
+
+    wb_trigger_iface_adr_i                    : in  std_logic_vector(c_wishbone_address_width-1 downto 0) := (others => '0');
+    wb_trigger_iface_dat_i                    : in  std_logic_vector(c_wishbone_data_width-1 downto 0)    := (others => '0');
+    wb_trigger_iface_dat_o                    : out std_logic_vector(c_wishbone_data_width-1 downto 0);
+    wb_trigger_iface_sel_i                    : in  std_logic_vector(c_wishbone_data_width/8-1 downto 0)  := (others => '0');
+    wb_trigger_iface_we_i                     : in  std_logic                                             := '0';
+    wb_trigger_iface_cyc_i                    : in  std_logic                                             := '0';
+    wb_trigger_iface_stb_i                    : in  std_logic                                             := '0';
+    wb_trigger_iface_ack_o                    : out std_logic;
+    wb_trigger_iface_err_o                    : out std_logic;
+    wb_trigger_iface_rty_o                    : out std_logic;
+    wb_trigger_iface_stall_o                  : out std_logic;
+
+    wb_trigger_mux_adr_i                      : in  std_logic_vector(g_num_mux_interfaces*c_wishbone_address_width-1 downto 0) := (others => '0');
+    wb_trigger_mux_dat_i                      : in  std_logic_vector(g_num_mux_interfaces*c_wishbone_data_width-1 downto 0)    := (others => '0');
+    wb_trigger_mux_dat_o                      : out std_logic_vector(g_num_mux_interfaces*c_wishbone_data_width-1 downto 0);
+    wb_trigger_mux_sel_i                      : in  std_logic_vector(g_num_mux_interfaces*c_wishbone_data_width/8-1 downto 0)  := (others => '0');
+    wb_trigger_mux_we_i                       : in  std_logic_vector(g_num_mux_interfaces-1 downto 0)                          := (others => '0');
+    wb_trigger_mux_cyc_i                      : in  std_logic_vector(g_num_mux_interfaces-1 downto 0)                          := (others => '0');
+    wb_trigger_mux_stb_i                      : in  std_logic_vector(g_num_mux_interfaces-1 downto 0)                          := (others => '0');
+    wb_trigger_mux_ack_o                      : out std_logic_vector(g_num_mux_interfaces-1 downto 0);
+    wb_trigger_mux_err_o                      : out std_logic_vector(g_num_mux_interfaces-1 downto 0);
+    wb_trigger_mux_rty_o                      : out std_logic_vector(g_num_mux_interfaces-1 downto 0);
+    wb_trigger_mux_stall_o                    : out std_logic_vector(g_num_mux_interfaces-1 downto 0);
+
+    -------------------------------
+    ---- External ports
+    -------------------------------
+
+    trig_b                                    : inout std_logic_vector(g_trig_num-1 downto 0);
+    trig_dir_o                                : out   std_logic_vector(g_trig_num-1 downto 0);
+
+    -------------------------------
+    ---- Internal ports
+    -------------------------------
+
+    trig_rcv_intern_i                         : in  t_trig_channel_array(g_num_mux_interfaces*g_rcv_intern_num-1 downto 0);  -- signals from inside the FPGA that can be used as input at a rcv mux
+
+    trig_pulse_transm_i                       : in  t_trig_channel_array(g_num_mux_interfaces*g_intern_num-1 downto 0);
+    trig_pulse_rcv_o                          : out t_trig_channel_array(g_num_mux_interfaces*g_intern_num-1 downto 0);
 
       -------------------------------
       ---- Debug ports
@@ -3171,60 +3171,60 @@ package ifc_wishbone_pkg is
   component xwb_trigger
   generic
     (
-      g_interface_mode       : t_wishbone_interface_mode      := CLASSIC;
-      g_address_granularity  : t_wishbone_address_granularity := WORD;
-      g_sync_edge            : string                         := "positive";
-      g_trig_num             : natural range 1 to 24          := 8; -- channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
-      g_intern_num           : natural range 1 to 24          := 8; -- channels facing inside the FPGA. Limit defined by wb_trigger_regs.vhd
-      g_rcv_intern_num       : natural range 1 to 24          := 2; -- signals from inside the FPGA that can be used as input at a rcv mux.
-                                                                    -- Limit defined by wb_trigger_regs.vhd
-      g_num_mux_interfaces   : natural                        := 2;  -- Number of wb_trigger_mux modules
-      g_out_resolver         : string                         := "fanout"; -- Resolver policy for output triggers
-      g_in_resolver          : string                         := "or";     -- Resolver policy for input triggers
-      g_with_input_sync      : boolean                        := true;
-      g_with_output_sync     : boolean                        := true
+      g_interface_mode                        : t_wishbone_interface_mode      := CLASSIC;
+      g_address_granularity                   : t_wishbone_address_granularity := WORD;
+      g_sync_edge                             : string                         := "positive";
+      g_trig_num                              : natural range 1 to 24          := 8; -- channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
+      g_intern_num                            : natural range 1 to 24          := 8; -- channels facing inside the FPGA. Limit defined by wb_trigger_regs.vhd
+      g_rcv_intern_num                        : natural range 1 to 24          := 2; -- signals from inside the FPGA that can be used as input at a rcv mux.
+                                                                                     -- Limit defined by wb_trigger_regs.vhd
+      g_num_mux_interfaces                    : natural                        := 2;  -- Number of wb_trigger_mux modules
+      g_out_resolver                          : string                         := "fanout"; -- Resolver policy for output triggers
+      g_in_resolver                           : string                         := "or";     -- Resolver policy for input triggers
+      g_with_input_sync                       : boolean                        := true;
+      g_with_output_sync                      : boolean                        := true
     );
   port
     (
-      clk_i   : in std_logic;
-      rst_n_i : in std_logic;
+      clk_i                                   : in std_logic;
+      rst_n_i                                 : in std_logic;
 
-      ref_clk_i   : in std_logic;
-      ref_rst_n_i : in std_logic;
+      ref_clk_i                               : in std_logic;
+      ref_rst_n_i                             : in std_logic;
 
-      fs_clk_array_i    : in std_logic_vector(g_num_mux_interfaces-1 downto 0);
-      fs_rst_n_array_i  : in std_logic_vector(g_num_mux_interfaces-1 downto 0);
+      fs_clk_array_i                          : in std_logic_vector(g_num_mux_interfaces-1 downto 0);
+      fs_rst_n_array_i                        : in std_logic_vector(g_num_mux_interfaces-1 downto 0);
 
       -----------------------------
       -- Wishbone signals
       -----------------------------
 
-      wb_slv_trigger_iface_i : in  t_wishbone_slave_in;
-      wb_slv_trigger_iface_o : out t_wishbone_slave_out;
+      wb_slv_trigger_iface_i                  : in  t_wishbone_slave_in;
+      wb_slv_trigger_iface_o                  : out t_wishbone_slave_out;
 
-      wb_slv_trigger_mux_i : in  t_wishbone_slave_in_array(g_num_mux_interfaces-1 downto 0);
-      wb_slv_trigger_mux_o : out t_wishbone_slave_out_array(g_num_mux_interfaces-1 downto 0);
+      wb_slv_trigger_mux_i                    : in  t_wishbone_slave_in_array(g_num_mux_interfaces-1 downto 0);
+      wb_slv_trigger_mux_o                    : out t_wishbone_slave_out_array(g_num_mux_interfaces-1 downto 0);
 
       -----------------------------
       -- External ports
       -----------------------------
 
-      trig_b      : inout std_logic_vector(g_trig_num-1 downto 0);
-      trig_dir_o  : out   std_logic_vector(g_trig_num-1 downto 0);
+      trig_b                                  : inout std_logic_vector(g_trig_num-1 downto 0);
+      trig_dir_o                              : out   std_logic_vector(g_trig_num-1 downto 0);
 
       -----------------------------
       -- Internal ports
       -----------------------------
 
-      trig_rcv_intern_i   : in  t_trig_channel_array2d(g_num_mux_interfaces-1 downto 0, g_rcv_intern_num-1 downto 0);  -- signals from inside the FPGA that can be used as input at a rcv mux
+      trig_rcv_intern_i                       : in  t_trig_channel_array2d(g_num_mux_interfaces-1 downto 0, g_rcv_intern_num-1 downto 0);  -- signals from inside the FPGA that can be used as input at a rcv mux
 
-      trig_pulse_transm_i : in  t_trig_channel_array2d(g_num_mux_interfaces-1 downto 0, g_intern_num-1 downto 0);
-      trig_pulse_rcv_o    : out t_trig_channel_array2d(g_num_mux_interfaces-1 downto 0, g_intern_num-1 downto 0);
+      trig_pulse_transm_i                     : in  t_trig_channel_array2d(g_num_mux_interfaces-1 downto 0, g_intern_num-1 downto 0);
+      trig_pulse_rcv_o                        : out t_trig_channel_array2d(g_num_mux_interfaces-1 downto 0, g_intern_num-1 downto 0);
 
       -------------------------------
       ---- Debug ports
       -------------------------------
-      trig_dbg_o : out std_logic_vector(g_trig_num-1 downto 0)
+      trig_dbg_o                              : out std_logic_vector(g_trig_num-1 downto 0)
     );
   end component;
 
