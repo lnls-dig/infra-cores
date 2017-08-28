@@ -30,7 +30,8 @@ use work.afc_mgmt_wbgen2_pkg.all;
 entity wb_afc_mgmt is
 generic(
   g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
-  g_address_granularity                     : t_wishbone_address_granularity := WORD
+  g_address_granularity                     : t_wishbone_address_granularity := WORD;
+  g_with_extra_wb_reg                       : boolean := false
 );
 port(
   sys_clk_i                                 : in std_logic;
@@ -113,6 +114,14 @@ architecture rtl of wb_afc_mgmt is
   signal wb_slv_adp_in                      : t_wishbone_master_in;
   signal resized_addr                       : std_logic_vector(c_wishbone_address_width-1 downto 0);
 
+  -- Extra Wishbone registering stage
+  signal cbar_slave_in_reg0                 : t_wishbone_slave_in_array (c_masters-1 downto 0);
+  signal cbar_slave_out_reg0                : t_wishbone_slave_out_array(c_masters-1 downto 0);
+
+  -----------------------------
+  -- Wishbone crossbar signals
+  -----------------------------
+  -- Crossbar master/slave arrays
   signal cbar_slave_in                      : t_wishbone_slave_in_array (c_masters-1 downto 0);
   signal cbar_slave_out                     : t_wishbone_slave_out_array(c_masters-1 downto 0);
   signal cbar_master_in                     : t_wishbone_master_in_array(c_slaves-1 downto 0);
@@ -151,6 +160,55 @@ architecture rtl of wb_afc_mgmt is
 begin
 
   sys_rst_n                                 <= sys_rst_n_i;
+
+  -----------------------------
+  -- Insert extra Wishbone registering stage for ease timing.
+  -- It effectively cuts the bandwidth in half!
+  -----------------------------
+  gen_with_extra_wb_reg : if g_with_extra_wb_reg generate
+
+    cmp_register_link : xwb_register_link -- puts a register of delay between crossbars
+    port map (
+      clk_sys_i                             => sys_clk_i,
+      rst_n_i                               => sys_rst_n,
+      slave_i                               => cbar_slave_in_reg0(0),
+      slave_o                               => cbar_slave_out_reg0(0),
+      master_i                              => cbar_slave_out(0),
+      master_o                              => cbar_slave_in(0)
+    );
+
+    cbar_slave_in_reg0(0).adr               <= wb_adr_i;
+    cbar_slave_in_reg0(0).dat               <= wb_dat_i;
+    cbar_slave_in_reg0(0).sel               <= wb_sel_i;
+    cbar_slave_in_reg0(0).we                <= wb_we_i;
+    cbar_slave_in_reg0(0).cyc               <= wb_cyc_i;
+    cbar_slave_in_reg0(0).stb               <= wb_stb_i;
+
+    wb_dat_o                                <= cbar_slave_out_reg0(0).dat;
+    wb_ack_o                                <= cbar_slave_out_reg0(0).ack;
+    wb_err_o                                <= cbar_slave_out_reg0(0).err;
+    wb_rty_o                                <= cbar_slave_out_reg0(0).rty;
+    wb_stall_o                              <= cbar_slave_out_reg0(0).stall;
+
+  end generate;
+
+  gen_without_extra_wb_reg : if not g_with_extra_wb_reg generate
+
+    -- External master connection
+    cbar_slave_in(0).adr                    <= wb_adr_i;
+    cbar_slave_in(0).dat                    <= wb_dat_i;
+    cbar_slave_in(0).sel                    <= wb_sel_i;
+    cbar_slave_in(0).we                     <= wb_we_i;
+    cbar_slave_in(0).cyc                    <= wb_cyc_i;
+    cbar_slave_in(0).stb                    <= wb_stb_i;
+
+    wb_dat_o                                <= cbar_slave_out(0).dat;
+    wb_ack_o                                <= cbar_slave_out(0).ack;
+    wb_err_o                                <= cbar_slave_out(0).err;
+    wb_rty_o                                <= cbar_slave_out(0).rty;
+    wb_stall_o                              <= cbar_slave_out(0).stall;
+
+  end generate;
 
   -- The Internal Wishbone B.4 crossbar
   cmp_interconnect : xwb_sdb_crossbar

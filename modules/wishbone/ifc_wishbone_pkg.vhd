@@ -3231,7 +3231,8 @@ package ifc_wishbone_pkg is
   component wb_afc_mgmt
   generic(
     g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
-    g_address_granularity                     : t_wishbone_address_granularity := WORD
+    g_address_granularity                     : t_wishbone_address_granularity := WORD;
+    g_with_extra_wb_reg                       : boolean := false
   );
   port(
     sys_clk_i                                 : in std_logic;
@@ -3267,7 +3268,8 @@ package ifc_wishbone_pkg is
   component xwb_afc_mgmt
   generic(
     g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
-    g_address_granularity                     : t_wishbone_address_granularity := WORD
+    g_address_granularity                     : t_wishbone_address_granularity := WORD;
+    g_with_extra_wb_reg                       : boolean := false
   );
   port(
     sys_clk_i                                 : in std_logic;

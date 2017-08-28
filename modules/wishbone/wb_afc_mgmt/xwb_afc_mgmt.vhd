@@ -27,7 +27,8 @@ use work.wishbone_pkg.all;
 entity xwb_afc_mgmt is
 generic(
   g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
-  g_address_granularity                     : t_wishbone_address_granularity := WORD
+  g_address_granularity                     : t_wishbone_address_granularity := WORD;
+  g_with_extra_wb_reg                       : boolean := false
 );
 port(
   sys_clk_i                                 : in std_logic;
@@ -57,7 +58,8 @@ begin
   cmp_wb_afc_mgmt : wb_afc_mgmt
   generic map (
     g_interface_mode                        => g_interface_mode,
-    g_address_granularity                   => g_address_granularity
+    g_address_granularity                   => g_address_granularity,
+    g_with_extra_wb_reg                     => g_with_extra_wb_reg
   )
   port map(
     sys_clk_i                               => sys_clk_i,
