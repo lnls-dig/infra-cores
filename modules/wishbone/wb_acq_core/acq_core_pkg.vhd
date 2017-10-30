@@ -228,6 +228,10 @@ package acq_core_pkg is
                                                  id => (others => '0'),
                                                  trig => '0');
 
+  constant c_default_multishot_ram_size : t_property_value_array(c_default_acq_num_cores-1 downto 0) :=
+                                                (2048,
+                                                 2048);
+
   -----------------------------
   -- Functions declaration
   ----------------------------

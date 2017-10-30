@@ -2017,7 +2017,7 @@ package ifc_wishbone_pkg is
     g_ddr_payload_width                       : natural := 256;     -- be careful changing these!
     g_ddr_dq_width                            : natural := 64;      -- be careful changing these!
     g_ddr_addr_width                          : natural := 32;      -- be careful changing these!
-    g_multishot_ram_size                      : natural := 2048;
+    g_multishot_ram_size                      : t_property_value_array := c_default_multishot_ram_size;
     g_fifo_fc_size                            : natural := 64;
     g_sim_readback                            : boolean := false;
     g_acq_num_cores                           : natural := 2;
@@ -2142,7 +2142,7 @@ package ifc_wishbone_pkg is
     g_ddr_payload_width                       : natural := 256;     -- be careful changing these!
     g_ddr_dq_width                            : natural := 64;      -- be careful changing these!
     g_ddr_addr_width                          : natural := 32;      -- be careful changing these!
-    g_multishot_ram_size                      : natural := 2048;
+    g_multishot_ram_size                      : t_property_value_array := c_default_multishot_ram_size;
     g_fifo_fc_size                            : natural := 64;
     g_sim_readback                            : boolean := false;
     g_acq_num_cores                           : natural := 2;
@@ -2224,7 +2224,7 @@ package ifc_wishbone_pkg is
     g_ddr_payload_width                       : natural := 256;     -- be careful changing these!
     g_ddr_dq_width                            : natural := 64;      -- be careful changing these!
     g_ddr_addr_width                          : natural := 32;      -- be careful changing these!
-    g_multishot_ram_size                      : natural := 2048;
+    g_multishot_ram_size                      : t_property_value_array := c_default_multishot_ram_size;
     g_fifo_fc_size                            : natural := 64;
     g_sim_readback                            : boolean := false;
     g_acq_num_cores                           : natural := 2;
@@ -2351,7 +2351,7 @@ package ifc_wishbone_pkg is
     g_ddr_payload_width                       : natural := 256;     -- be careful changing these!
     g_ddr_dq_width                            : natural := 64;      -- be careful changing these!
     g_ddr_addr_width                          : natural := 32;      -- be careful changing these!
-    g_multishot_ram_size                      : natural := 2048;
+    g_multishot_ram_size                      : t_property_value_array := c_default_multishot_ram_size;
     g_fifo_fc_size                            : natural := 64;
     g_sim_readback                            : boolean := false;
     g_acq_num_cores                           : natural := 2;
