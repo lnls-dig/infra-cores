@@ -318,13 +318,13 @@ peripheral {
     };
 
     field {
-      name = "Reserved";
-      description = "Ignore on read, write with 0's";
-      prefix = "reserved";
+      name = "MultiShot RAM size";
+      description = "Multishot RAM size";
+      prefix = "multishot_ram_size";
       type = SLV;
       size = 16;
-      access_bus = READ_WRITE;
-      access_dev = READ_ONLY;
+      access_bus = READ_ONLY;
+      access_dev = WRITE_ONLY;
     };
   };
 
