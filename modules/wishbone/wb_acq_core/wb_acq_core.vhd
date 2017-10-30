@@ -569,6 +569,8 @@ begin
   regs_in.samples_cnt_i                     <= std_logic_vector(samples_cnt);
   regs_in.acq_chan_ctl_num_chan_i           <= std_logic_vector(to_unsigned(g_acq_num_channels,
                                                     regs_in.acq_chan_ctl_num_chan_i'length));
+  regs_in.shots_multishot_ram_size_i        <= std_logic_vector(to_unsigned(g_multishot_ram_size,
+                                                    regs_in.shots_multishot_ram_size_i'length));
 
   ------------------------------------------------------------------------------
   -- Channel Descriptions
@@ -821,7 +823,7 @@ begin
     lmt_valid_i                             => acq_start_safe,
 
     acq_wr_en_i                             => acq_fsm_accepting,
-    acq_data_o                              => acq_data(c_acq_data_width-1 downto 0),
+    acq_data_o                              => acq_data,
     acq_valid_o                             => acq_valid,
     acq_id_o                                => acq_id,
     acq_trig_o                              => acq_trig
@@ -921,7 +923,7 @@ begin
     fs_ce_i                                 => fs_ce_i,
     fs_rst_n_i                              => fs_rst_n,
 
-    data_i                                  => acq_data_fsm(c_acq_data_width-1 downto 0),
+    data_i                                  => acq_data_fsm,
     data_id_i                               => acq_fsm_state,
     dvalid_i                                => acq_valid_fsm,
     wr_en_i                                 => samples_wr_en,
@@ -979,7 +981,7 @@ begin
     dpram_dvalid_i                          => dpram_valid,
 
     -- Passthrough data
-    pt_data_i                               => acq_data_fsm(c_acq_data_width-1 downto 0),
+    pt_data_i                               => acq_data_fsm,
     pt_data_id_i                            => acq_fsm_state,
     pt_trig_i                               => acq_trig_fsm,
     pt_dvalid_i                             => acq_valid_fsm,
