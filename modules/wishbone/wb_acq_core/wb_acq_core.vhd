@@ -198,6 +198,7 @@ architecture rtl of wb_acq_core is
   constant c_dpram_depth                    : integer := f_log2_size(g_multishot_ram_size);
   constant c_periph_addr_size               : natural := 3+5;
   constant c_max_num_channels               : natural := 24;
+  constant c_multishot_ram_size_impl        : boolean := true;
 
   constant c_acq_data_width                 : natural :=
                                   f_acq_chan_find_widest(c_acq_channels);
@@ -443,6 +444,15 @@ architecture rtl of wb_acq_core is
   );
   end component;
 
+  function to_std_logic(arg : boolean) return std_logic is
+  begin
+    if arg then
+      return('1');
+    else
+      return('0');
+    end if;
+  end function;
+
 begin
 
   assert (g_ddr_interface_type = "AXIS" or g_ddr_interface_type = "UI")
@@ -569,6 +579,7 @@ begin
   regs_in.samples_cnt_i                     <= std_logic_vector(samples_cnt);
   regs_in.acq_chan_ctl_num_chan_i           <= std_logic_vector(to_unsigned(g_acq_num_channels,
                                                     regs_in.acq_chan_ctl_num_chan_i'length));
+  regs_in.shots_multishot_ram_size_impl_i   <= to_std_logic(c_multishot_ram_size_impl);
   regs_in.shots_multishot_ram_size_i        <= std_logic_vector(to_unsigned(g_multishot_ram_size,
                                                     regs_in.shots_multishot_ram_size_i'length));
 
