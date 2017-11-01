@@ -318,11 +318,21 @@ peripheral {
     };
 
     field {
+      name = "MultiShot RAM size implemented";
+      description = "Set this bit to 1 if the multishot RAM size reg is implemented";
+      prefix = "multishot_ram_size_impl";
+      type = BIT;
+      size = 1;
+      access_bus = READ_ONLY;
+      access_dev = WRITE_ONLY;
+    };
+
+    field {
       name = "MultiShot RAM size";
       description = "Multishot RAM size";
       prefix = "multishot_ram_size";
       type = SLV;
-      size = 16;
+      size = 15;
       access_bus = READ_ONLY;
       access_dev = WRITE_ONLY;
     };

@@ -1899,7 +1899,24 @@ acq_core_shots_nb_o[15:0]
 
 </td>
 <td  class="td_pblock_right">
-acq_core_shots_multishot_ram_size_i[15:0]
+acq_core_shots_multishot_ram_size_impl_i
+</td>
+<td  class="td_arrow_right">
+&larr;
+</td>
+</tr>
+<tr>
+<td  class="td_arrow_left">
+
+</td>
+<td  class="td_pblock_left">
+
+</td>
+<td  class="td_sym_center">
+
+</td>
+<td  class="td_pblock_right">
+acq_core_shots_multishot_ram_size_i[14:0]
 </td>
 <td  class="td_arrow_right">
 &lArr;
@@ -7555,7 +7572,7 @@ SHOTS
 </tr>
 <tr>
 <td style="border: solid 1px black;" colspan=8  class="td_field">
-MULTISHOT_RAM_SIZE[15:8]
+MULTISHOT_RAM_SIZE[14:7]
 </td>
 <td >
 
@@ -7608,11 +7625,11 @@ MULTISHOT_RAM_SIZE[15:8]
 </td>
 </tr>
 <tr>
-<td style="border: solid 1px black;" colspan=8  class="td_field">
-MULTISHOT_RAM_SIZE[7:0]
+<td style="border: solid 1px black;" colspan=7  class="td_field">
+MULTISHOT_RAM_SIZE[6:0]
 </td>
-<td >
-
+<td style="border: solid 1px black;" colspan=1  class="td_field">
+MULTISHOT_RAM_SIZE_IMPL
 </td>
 <td >
 
@@ -7747,6 +7764,10 @@ NB[7:0]
 NB
 </b>[<i>read/write</i>]: Number of shots
 <br>Number of shots required in multi-shot mode, set to one for single-shot mode.
+<li><b>
+MULTISHOT_RAM_SIZE_IMPL
+</b>[<i>read-only</i>]: MultiShot RAM size implemented
+<br>Set this bit to 1 if the multishot RAM size reg is implemented
 <li><b>
 MULTISHOT_RAM_SIZE
 </b>[<i>read-only</i>]: MultiShot RAM size
