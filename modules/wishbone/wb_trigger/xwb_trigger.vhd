@@ -7,6 +7,8 @@ library work;
 use work.wishbone_pkg.all;
 -- Custom Wishbone Modules
 use work.ifc_wishbone_pkg.all;
+-- Trigger common types
+use work.trigger_common_pkg.all;
 -- Trigger package
 use work.trigger_pkg.all;
 

@@ -51,7 +51,7 @@ use work.genram_pkg.all;
 -- General common cores
 use work.gencores_pkg.all;
 -- Trigger definitions
-use work.trigger_pkg.all;
+use work.trigger_common_pkg.all;
 
 -- For Xilinx primitives
 library unisim;

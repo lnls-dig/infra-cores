@@ -48,7 +48,9 @@ use work.wb_trig_mux_wbgen2_pkg.all;
 use work.ifc_common_pkg.all;
 -- General common cores
 use work.gencores_pkg.all;
--- Trigger package
+-- Trigger common types
+use work.trigger_common_pkg.all;
+-- Trigger types
 use work.trigger_pkg.all;
 
 entity wb_trigger is

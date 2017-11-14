@@ -8,7 +8,7 @@ use work.wishbone_pkg.all;
 -- Custom Wishbone Modules
 use work.ifc_wishbone_pkg.all;
 -- Trigger definitions
-use work.trigger_pkg.all;
+use work.trigger_common_pkg.all;
 
 entity xwb_trigger_mux is
   generic

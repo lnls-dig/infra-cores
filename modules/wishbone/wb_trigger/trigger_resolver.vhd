@@ -46,6 +46,8 @@ use work.gencores_pkg.all;
 use work.ifc_wishbone_pkg.all;
 -- Reset Synch
 use work.ifc_common_pkg.all;
+-- Trigger common types
+use work.trigger_common_pkg.all;
 -- Trigger types
 use work.trigger_pkg.all;
 
