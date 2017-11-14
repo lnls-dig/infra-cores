@@ -5,26 +5,11 @@ use ieee.numeric_std.all;
 library work;
 use work.wishbone_pkg.all;
 use work.genram_pkg.all;
+use work.trigger_common_pkg.all;
 
 package trigger_pkg is
 
-  -- Constants
-
-  -- Types
-  subtype t_trig_pulse is std_logic;
-
-  type t_trig_pulse_array is array (natural range <>) of t_trig_pulse;
-  type t_trig_pulse_array2d is array (natural range <>, natural range <>) of t_trig_pulse;
-
-  type t_trig_channel is record
-    pulse : t_trig_pulse;
-  end record;
-
-  type t_trig_channel_array is array (natural range <>) of t_trig_channel;
-  type t_trig_channel_array2d is array (natural range <>, natural range <>) of t_trig_channel;
-
-  constant c_trig_channel_dummy : t_trig_channel := (pulse => '0');
-
+  -- Components
   component trigger_resolver
   generic (
     g_trig_num             : natural := 8;
