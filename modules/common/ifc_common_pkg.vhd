@@ -91,4 +91,28 @@ package ifc_common_pkg is
   );
   end component;
 
+  component delay_gen_dyn
+  generic
+  (
+    -- delay counter width
+    g_delay_cnt_width                        : natural := 32
+  );
+  port
+  (
+    -- Clock/Resets
+    clk_i                                    : in std_logic;
+    rst_n_i                                  : in std_logic;
+
+    -- Incoming pulse
+    pulse_i                                  : in std_logic;
+    -- '1' when the module is ready to receive another the pulse
+    rdy_o                                    : out std_logic;
+    -- Number of clock cycles to delay the incoming pulse
+    delay_cnt_i                              : in unsigned(g_delay_cnt_width-1 downto 0);
+
+    -- Output pulse
+    pulse_o                                  : out std_logic
+  );
+  end component;
+
 end ifc_common_pkg;
