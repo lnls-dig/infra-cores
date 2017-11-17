@@ -68,13 +68,23 @@ begin  -- rtl
       extended_int <= '0';
       cntr         <= (others => '0');
     elsif clk_i'event and clk_i = '1' then  -- rising clock edge
-      if(pulse_i = '1') then
-        extended_int <= '1';
-        cntr         <= pulse_width_i - 2;
-      elsif cntr /= to_unsigned(0, cntr'length) then
-        cntr <= cntr - 1;
-      else
+      if pulse_width_i = 0 then -- bypass
         extended_int <= '0';
+      elsif pulse_width_i = 1 then -- hole pulse for 1 clock cycle more
+        if(pulse_i = '1') then
+          extended_int <= '1';
+        else
+          extended_int <= '0';
+        end if;
+      else -- for cases >= 2 the counter approach works fine
+        if(pulse_i = '1') then
+          extended_int <= '1';
+          cntr         <= pulse_width_i - 2;
+        elsif cntr /= to_unsigned(0, cntr'length) then
+          cntr <= cntr - 1;
+        else
+          extended_int <= '0';
+        end if;
       end if;
     end if;
   end process extend;
