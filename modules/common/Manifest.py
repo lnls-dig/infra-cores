@@ -4,7 +4,7 @@ modules = { "local" : ["reset_synch",
                        "trigger_common",
                        "trigger_io",
                        "counter_simple",
-               	       "extend_pulse_dyn",
+                       "extend_pulse_dyn",
                        "delay_gen_dyn",
                        "heartbeat"] };
 
