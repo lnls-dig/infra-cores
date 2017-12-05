@@ -54,6 +54,16 @@ peripheral {
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
   };
 
   reg {
@@ -114,6 +124,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 0 Transmitter Delay";
+    prefix = "ch0_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 0 Receiver Delay";
+    prefix = "ch0_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 1
   ---------------------------------------------------------------------------
@@ -160,6 +200,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -223,6 +273,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 1 Transmitter Delay";
+    prefix = "ch1_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 1 Receiver Delay";
+    prefix = "ch1_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 2
   ---------------------------------------------------------------------------
@@ -269,6 +349,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -332,6 +422,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 2 Transmitter Delay";
+    prefix = "ch2_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 2 Receiver Delay";
+    prefix = "ch2_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 3
   ---------------------------------------------------------------------------
@@ -378,6 +498,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -441,6 +571,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 3 Transmitter Delay";
+    prefix = "ch3_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 3 Receiver Delay";
+    prefix = "ch3_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 4
   ---------------------------------------------------------------------------
@@ -487,6 +647,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -550,6 +720,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 4 Transmitter Delay";
+    prefix = "ch4_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 4 Receiver Delay";
+    prefix = "ch4_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 5
   ---------------------------------------------------------------------------
@@ -596,6 +796,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -659,6 +869,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 5 Transmitter Delay";
+    prefix = "ch5_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 5 Receiver Delay";
+    prefix = "ch5_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 6
   ---------------------------------------------------------------------------
@@ -705,6 +945,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -768,6 +1018,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 6 Transmitter Delay";
+    prefix = "ch6_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 6 Receiver Delay";
+    prefix = "ch6_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 7
   ---------------------------------------------------------------------------
@@ -814,6 +1094,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -877,6 +1167,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 7 Transmitter Delay";
+    prefix = "ch7_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 7 Receiver Delay";
+    prefix = "ch7_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 8
   ---------------------------------------------------------------------------
@@ -923,6 +1243,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -986,6 +1316,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 8 Transmitter Delay";
+    prefix = "ch8_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 8 Receiver Delay";
+    prefix = "ch8_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 9
   ---------------------------------------------------------------------------
@@ -1032,6 +1392,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -1095,6 +1465,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 9 Transmitter Delay";
+    prefix = "ch9_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 9 Receiver Delay";
+    prefix = "ch9_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 10
   ---------------------------------------------------------------------------
@@ -1141,6 +1541,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -1204,6 +1614,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 10 Transmitter Delay";
+    prefix = "ch10_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 10 Receiver Delay";
+    prefix = "ch10_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 11
   ---------------------------------------------------------------------------
@@ -1250,6 +1690,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -1313,6 +1763,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 11 Transmitter Delay";
+    prefix = "ch11_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 11 Receiver Delay";
+    prefix = "ch11_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 12
   ---------------------------------------------------------------------------
@@ -1359,6 +1839,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -1422,6 +1912,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 12 Transmitter Delay";
+    prefix = "ch12_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 12 Receiver Delay";
+    prefix = "ch12_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 13
   ---------------------------------------------------------------------------
@@ -1468,6 +1988,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -1531,6 +2061,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 13 Transmitter Delay";
+    prefix = "ch13_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 13 Receiver Delay";
+    prefix = "ch13_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 14
   ---------------------------------------------------------------------------
@@ -1577,6 +2137,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -1640,6 +2210,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 14 Transmitter Delay";
+    prefix = "ch14_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 14 Receiver Delay";
+    prefix = "ch14_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 15
   ---------------------------------------------------------------------------
@@ -1686,6 +2286,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -1749,6 +2359,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 15 Transmitter Delay";
+    prefix = "ch15_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 15 Receiver Delay";
+    prefix = "ch15_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 16
   ---------------------------------------------------------------------------
@@ -1795,6 +2435,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -1858,6 +2508,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 16 Transmitter Delay";
+    prefix = "ch16_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 16 Receiver Delay";
+    prefix = "ch16_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 17
   ---------------------------------------------------------------------------
@@ -1904,6 +2584,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -1967,6 +2657,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 17 Transmitter Delay";
+    prefix = "ch17_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 17 Receiver Delay";
+    prefix = "ch17_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 18
   ---------------------------------------------------------------------------
@@ -2013,6 +2733,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -2076,6 +2806,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 18 Transmitter Delay";
+    prefix = "ch18_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 18 Receiver Delay";
+    prefix = "ch18_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 19
   ---------------------------------------------------------------------------
@@ -2122,6 +2882,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -2185,6 +2955,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 19 Transmitter Delay";
+    prefix = "ch19_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 19 Receiver Delay";
+    prefix = "ch19_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 20
   ---------------------------------------------------------------------------
@@ -2231,6 +3031,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -2294,6 +3104,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 20 Transmitter Delay";
+    prefix = "ch20_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 20 Receiver Delay";
+    prefix = "ch20_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 21
   ---------------------------------------------------------------------------
@@ -2340,6 +3180,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -2403,6 +3253,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 21 Transmitter Delay";
+    prefix = "ch21_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 21 Receiver Delay";
+    prefix = "ch21_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 22
   ---------------------------------------------------------------------------
@@ -2449,6 +3329,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -2512,6 +3402,36 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 22 Transmitter Delay";
+    prefix = "ch22_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 22 Receiver Delay";
+    prefix = "ch22_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 23
   ---------------------------------------------------------------------------
@@ -2558,6 +3478,16 @@ peripheral {
       type = MONOSTABLE;
       size = 1;
       clock = "fs_clk_i";
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Trigger Polarity";
+      prefix = "pol";
+      description = "1 - Trigger polarity reversed (1 -> 0 pulse)\n0 - Trigger polarity direct (0 -> 1 pulse)";
+      type = BIT;
+      --size = 1;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -2618,6 +3548,36 @@ peripheral {
       clock = "wb_clk_i";
       access_bus = READ_ONLY;
       access_dev = WRITE_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 23 Transmitter Delay";
+    prefix = "ch23_cfg_transm_delay_len";
+
+    field {
+      name = "Transmitter Delay Counter";
+      description = "Delays a transmitter pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 23 Receiver Delay";
+    prefix = "ch23_cfg_rcv_delay_len";
+
+    field {
+      name = "Receiver Delay Counter";
+      description = "Delays an incoming pulse by the number of clock cycles specified";
+      type = SLV;
+      size = 32;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
     };
   };
 
