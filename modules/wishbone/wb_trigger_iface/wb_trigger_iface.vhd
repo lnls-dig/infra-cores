@@ -112,6 +112,80 @@ end entity wb_trigger_iface;
 
 architecture rtl of wb_trigger_iface is
 
+  constant c_with_bidirectional_trigger : boolean   := true;
+  constant c_iobuf_instantiation_type   : string    := "native";
+  constant c_sync_edge                  : string    := g_sync_edge;
+  constant c_rx_debounce_width          : natural   := 8;  -- Defined according to the wb_slave_trigger.vhd
+  constant c_tx_extensor_width          : natural   := 8;  -- Defined according to the wb_slave_trigger.vhd
+  constant c_rx_counter_width           : natural   := 16;  -- Defined according to the wb_slave_trigger.vhd
+  constant c_tx_counter_width           : natural   := 16;  -- Defined according to the wb_slave_trigger.vhd
+  constant c_rx_delay_width             : natural   := 32; -- Defined according to the wb_slave_trigger.vhd
+  constant c_tx_delay_width             : natural   := 32; -- Defined according to the wb_slave_trigger.vhd
+
+  constant c_periph_addr_size           : natural   := 7+2;
+
+  constant c_max_num_channels           : natural   := 24;
+
+  -- Trigger direction constants
+  constant c_trig_dir_fpga_input        : std_logic := '1';
+  constant c_trig_dir_fpga_output       : std_logic := not (c_trig_dir_fpga_input);
+
+  -----------
+  --Signals--
+  -----------
+
+  signal regs_in  : t_wb_trig_iface_in_registers;
+  signal regs_out : t_wb_trig_iface_out_registers;
+
+  type t_wb_trig_out_channel is record
+    ch_ctl_dir                : std_logic;
+    ch_ctl_dir_pol            : std_logic;
+    ch_ctl_pol                : std_logic;
+    ch_ctl_rcv_count_rst_n    : std_logic;
+    ch_ctl_transm_count_rst_n : std_logic;
+    ch_cfg_rcv_len            : std_logic_vector(c_rx_debounce_width-1 downto 0);
+    ch_cfg_transm_len         : std_logic_vector(c_tx_extensor_width-1 downto 0);
+    ch_cfg_rcv_delay_len      : std_logic_vector(c_rx_delay_width-1 downto 0);
+    ch_cfg_transm_delay_len   : std_logic_vector(c_tx_delay_width-1 downto 0);
+  end record;
+
+  type t_wb_trig_out_array is array(natural range <>) of t_wb_trig_out_channel;
+
+  type t_wb_trig_in_channel is record
+    ch_count_rcv        : std_logic_vector(15 downto 0);
+    ch_count_transm     : std_logic_vector(15 downto 0);
+    ch_count_rcv_uns    : unsigned(15 downto 0);
+    ch_count_transm_uns : unsigned(15 downto 0);
+  end record;
+
+  type t_wb_trig_in_array is array(natural range <>) of t_wb_trig_in_channel;
+
+  signal ch_regs_out : t_wb_trig_out_array(c_max_num_channels-1 downto 0);
+  signal ch_regs_in  : t_wb_trig_in_array(c_max_num_channels-1 downto 0);
+
+  signal extended_rcv      : std_logic_vector(g_trig_num-1 downto 0);
+  signal extended_rcv_buff : std_logic_vector(g_trig_num-1 downto 0);
+  signal extended_transm   : std_logic_vector(g_trig_num-1 downto 0);
+
+  signal trig_dir_int           : std_logic_vector(g_trig_num-1 downto 0);
+  signal trig_pol_int           : std_logic_vector(g_trig_num-1 downto 0);
+  signal trig_data_int          : std_logic_vector(g_trig_num-1 downto 0);
+  signal trig_dir_polarized     : std_logic_vector(g_trig_num-1 downto 0);
+  signal trig_data_polarized    : std_logic_vector(g_trig_num-1 downto 0);
+  signal trig_dir_ext           : std_logic_vector(g_trig_num-1 downto 0);
+  signal trig_data_ext          : std_logic_vector(g_trig_num-1 downto 0);
+  signal trig_dir_int_buff      : std_logic_vector(g_trig_num-1 downto 0);
+-- signal trig_data_int_buff     : std_logic_vector(g_trig_num-1 downto 0);
+
+--  signal transm_mux_bus : std_logic_vector(g_intern_num-1 downto 0);  -- input of transm multiplexers
+--  signal rcv_mux_out    : std_logic_vector(g_intern_num-1 downto 0);
+
+  -----------------------------
+  -- Wishbone slave adapter signals/structures
+  -----------------------------
+  signal wb_slv_adp_out : t_wishbone_master_out;
+  signal wb_slv_adp_in  : t_wishbone_master_in;
+  signal resized_addr   : std_logic_vector(c_wishbone_address_width-1 downto 0);
 
   --------------------------
   --Component Declarations--
@@ -137,77 +211,10 @@ architecture rtl of wb_trigger_iface is
   );
   end component wb_trigger_iface_regs;
 
-  constant c_periph_addr_size : natural := 7+2;
-
-  constant c_rcv_pulse_len      : positive := 8;  -- Defined according to the wb_slave_trigger.vhd
-  constant c_transm_pulse_len   : positive := 8;  -- Defined according to the wb_slave_trigger.vhd
-  constant c_counter_width      : positive := 16; -- Defined according to the wb_slave_trigger.vhd
-
-  constant c_max_num_channels   : natural := 24;
-
-  -- Trigger direction constants
-  constant c_trig_dir_fpga_input  : std_logic := '1';
-  constant c_trig_dir_fpga_output : std_logic := not (c_trig_dir_fpga_input);
-
-  -----------
-  --Signals--
-  -----------
-
-  signal regs_in  : t_wb_trig_iface_in_registers;
-  signal regs_out : t_wb_trig_iface_out_registers;
-
-  type t_wb_trig_out_channel is record
-    ch_ctl_dir                : std_logic;
-    ch_ctl_dir_pol            : std_logic;
-    ch_ctl_rcv_count_rst_n    : std_logic;
-    ch_ctl_transm_count_rst_n : std_logic;
-    ch_cfg_rcv_len            : std_logic_vector(c_rcv_pulse_len-1 downto 0);
-    ch_cfg_transm_len         : std_logic_vector(c_transm_pulse_len-1 downto 0);
-  end record;
-
-  type t_wb_trig_out_array is array(natural range <>) of t_wb_trig_out_channel;
-
-  type t_wb_trig_in_channel is record
-    ch_count_rcv    : std_logic_vector(15 downto 0);
-    ch_count_transm : std_logic_vector(15 downto 0);
-  end record;
-
-  type t_wb_trig_in_array is array(natural range <>) of t_wb_trig_in_channel;
-
-  signal ch_regs_out : t_wb_trig_out_array(c_max_num_channels-1 downto 0);
-  signal ch_regs_in  : t_wb_trig_in_array(c_max_num_channels-1 downto 0);
-
-  signal extended_rcv      : std_logic_vector(g_trig_num-1 downto 0);
-  signal extended_rcv_buff : std_logic_vector(g_trig_num-1 downto 0);
-  signal extended_transm   : std_logic_vector(g_trig_num-1 downto 0);
-
-  signal rcv_pulse_bus    : t_trig_channel_array(g_trig_num-1 downto 0);  -- rcv pulses
-  signal transm_pulse_bus : t_trig_channel_array(g_trig_num-1 downto 0);    -- transm pulses
-
-  signal trig_dir_int           : std_logic_vector(g_trig_num-1 downto 0);
-  signal trig_pol_int           : std_logic_vector(g_trig_num-1 downto 0);
-  signal trig_data_int          : std_logic_vector(g_trig_num-1 downto 0);
-  signal trig_dir_polarized     : std_logic_vector(g_trig_num-1 downto 0);
-  signal trig_data_polarized    : std_logic_vector(g_trig_num-1 downto 0);
-  signal trig_dir_ext           : std_logic_vector(g_trig_num-1 downto 0);
-  signal trig_data_ext          : std_logic_vector(g_trig_num-1 downto 0);
-  signal trig_dir_int_buff      : std_logic_vector(g_trig_num-1 downto 0);
--- signal trig_data_int_buff     : std_logic_vector(g_trig_num-1 downto 0);
-
---  signal transm_mux_bus : std_logic_vector(g_intern_num-1 downto 0);  -- input of transm multiplexers
---  signal rcv_mux_out    : std_logic_vector(g_intern_num-1 downto 0);
-
-  -----------------------------
-  -- Wishbone slave adapter signals/structures
-  -----------------------------
-  signal wb_slv_adp_out : t_wishbone_master_out;
-  signal wb_slv_adp_in  : t_wishbone_master_in;
-  signal resized_addr   : std_logic_vector(c_wishbone_address_width-1 downto 0);
-
 begin  -- architecture rtl
 
   -- Test for maximum number of interfaces defined in wb_slave_trigger.vhd
-  assert (g_trig_num <= 24) -- number of wb_slave_trigger.vhd registers
+  assert (g_trig_num <= c_max_num_channels) -- number of wb_slave_trigger.vhd registers
   report "[wb_trigger_iface] Only g_trig_num less or equal 24 is supported!"
   severity failure;
 
@@ -275,171 +282,243 @@ begin  -- architecture rtl
 
   ch_regs_out(0).ch_ctl_dir                <= regs_out.ch0_ctl_dir_o;
   ch_regs_out(0).ch_ctl_dir_pol            <= regs_out.ch0_ctl_dir_pol_o;
+  ch_regs_out(0).ch_ctl_pol                <= regs_out.ch0_ctl_pol_o;
   ch_regs_out(0).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch0_ctl_rcv_count_rst_o);
   ch_regs_out(0).ch_ctl_transm_count_rst_n <= not(regs_out.ch0_ctl_transm_count_rst_o);
   ch_regs_out(0).ch_cfg_rcv_len            <= regs_out.ch0_cfg_rcv_len_o;
   ch_regs_out(0).ch_cfg_transm_len         <= regs_out.ch0_cfg_transm_len_o;
+  ch_regs_out(0).ch_cfg_transm_delay_len   <= regs_out.ch0_cfg_transm_delay_len_o;
+  ch_regs_out(0).ch_cfg_rcv_delay_len      <= regs_out.ch0_cfg_rcv_delay_len_o;
 
   ch_regs_out(1).ch_ctl_dir                <= regs_out.ch1_ctl_dir_o;
   ch_regs_out(1).ch_ctl_dir_pol            <= regs_out.ch1_ctl_dir_pol_o;
+  ch_regs_out(1).ch_ctl_pol                <= regs_out.ch1_ctl_pol_o;
   ch_regs_out(1).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch1_ctl_rcv_count_rst_o);
   ch_regs_out(1).ch_ctl_transm_count_rst_n <= not(regs_out.ch1_ctl_transm_count_rst_o);
   ch_regs_out(1).ch_cfg_rcv_len            <= regs_out.ch1_cfg_rcv_len_o;
   ch_regs_out(1).ch_cfg_transm_len         <= regs_out.ch1_cfg_transm_len_o;
+  ch_regs_out(1).ch_cfg_transm_delay_len   <= regs_out.ch1_cfg_transm_delay_len_o;
+  ch_regs_out(1).ch_cfg_rcv_delay_len      <= regs_out.ch1_cfg_rcv_delay_len_o;
 
   ch_regs_out(2).ch_ctl_dir                <= regs_out.ch2_ctl_dir_o;
   ch_regs_out(2).ch_ctl_dir_pol            <= regs_out.ch2_ctl_dir_pol_o;
+  ch_regs_out(2).ch_ctl_pol                <= regs_out.ch2_ctl_pol_o;
   ch_regs_out(2).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch2_ctl_rcv_count_rst_o);
   ch_regs_out(2).ch_ctl_transm_count_rst_n <= not(regs_out.ch2_ctl_transm_count_rst_o);
   ch_regs_out(2).ch_cfg_rcv_len            <= regs_out.ch2_cfg_rcv_len_o;
   ch_regs_out(2).ch_cfg_transm_len         <= regs_out.ch2_cfg_transm_len_o;
+  ch_regs_out(2).ch_cfg_transm_delay_len   <= regs_out.ch2_cfg_transm_delay_len_o;
+  ch_regs_out(2).ch_cfg_rcv_delay_len      <= regs_out.ch2_cfg_rcv_delay_len_o;
 
   ch_regs_out(3).ch_ctl_dir                <= regs_out.ch3_ctl_dir_o;
   ch_regs_out(3).ch_ctl_dir_pol            <= regs_out.ch3_ctl_dir_pol_o;
+  ch_regs_out(3).ch_ctl_pol                <= regs_out.ch3_ctl_pol_o;
   ch_regs_out(3).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch3_ctl_rcv_count_rst_o);
   ch_regs_out(3).ch_ctl_transm_count_rst_n <= not(regs_out.ch3_ctl_transm_count_rst_o);
   ch_regs_out(3).ch_cfg_rcv_len            <= regs_out.ch3_cfg_rcv_len_o;
   ch_regs_out(3).ch_cfg_transm_len         <= regs_out.ch3_cfg_transm_len_o;
+  ch_regs_out(3).ch_cfg_transm_delay_len   <= regs_out.ch3_cfg_transm_delay_len_o;
+  ch_regs_out(3).ch_cfg_rcv_delay_len      <= regs_out.ch3_cfg_rcv_delay_len_o;
 
   ch_regs_out(4).ch_ctl_dir                <= regs_out.ch4_ctl_dir_o;
   ch_regs_out(4).ch_ctl_dir_pol            <= regs_out.ch4_ctl_dir_pol_o;
+  ch_regs_out(4).ch_ctl_pol                <= regs_out.ch4_ctl_pol_o;
   ch_regs_out(4).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch4_ctl_rcv_count_rst_o);
   ch_regs_out(4).ch_ctl_transm_count_rst_n <= not(regs_out.ch4_ctl_transm_count_rst_o);
   ch_regs_out(4).ch_cfg_rcv_len            <= regs_out.ch4_cfg_rcv_len_o;
   ch_regs_out(4).ch_cfg_transm_len         <= regs_out.ch4_cfg_transm_len_o;
+  ch_regs_out(4).ch_cfg_transm_delay_len   <= regs_out.ch4_cfg_transm_delay_len_o;
+  ch_regs_out(4).ch_cfg_rcv_delay_len      <= regs_out.ch4_cfg_rcv_delay_len_o;
 
   ch_regs_out(5).ch_ctl_dir                <= regs_out.ch5_ctl_dir_o;
   ch_regs_out(5).ch_ctl_dir_pol            <= regs_out.ch5_ctl_dir_pol_o;
+  ch_regs_out(5).ch_ctl_pol                <= regs_out.ch5_ctl_pol_o;
   ch_regs_out(5).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch5_ctl_rcv_count_rst_o);
   ch_regs_out(5).ch_ctl_transm_count_rst_n <= not(regs_out.ch5_ctl_transm_count_rst_o);
   ch_regs_out(5).ch_cfg_rcv_len            <= regs_out.ch5_cfg_rcv_len_o;
   ch_regs_out(5).ch_cfg_transm_len         <= regs_out.ch5_cfg_transm_len_o;
+  ch_regs_out(5).ch_cfg_transm_delay_len   <= regs_out.ch5_cfg_transm_delay_len_o;
+  ch_regs_out(5).ch_cfg_rcv_delay_len      <= regs_out.ch5_cfg_rcv_delay_len_o;
 
   ch_regs_out(6).ch_ctl_dir                <= regs_out.ch6_ctl_dir_o;
   ch_regs_out(6).ch_ctl_dir_pol            <= regs_out.ch6_ctl_dir_pol_o;
+  ch_regs_out(6).ch_ctl_pol                <= regs_out.ch6_ctl_pol_o;
   ch_regs_out(6).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch6_ctl_rcv_count_rst_o);
   ch_regs_out(6).ch_ctl_transm_count_rst_n <= not(regs_out.ch6_ctl_transm_count_rst_o);
   ch_regs_out(6).ch_cfg_rcv_len            <= regs_out.ch6_cfg_rcv_len_o;
   ch_regs_out(6).ch_cfg_transm_len         <= regs_out.ch6_cfg_transm_len_o;
+  ch_regs_out(6).ch_cfg_transm_delay_len   <= regs_out.ch6_cfg_transm_delay_len_o;
+  ch_regs_out(6).ch_cfg_rcv_delay_len      <= regs_out.ch6_cfg_rcv_delay_len_o;
 
   ch_regs_out(7).ch_ctl_dir                <= regs_out.ch7_ctl_dir_o;
   ch_regs_out(7).ch_ctl_dir_pol            <= regs_out.ch7_ctl_dir_pol_o;
+  ch_regs_out(7).ch_ctl_pol                <= regs_out.ch7_ctl_pol_o;
   ch_regs_out(7).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch7_ctl_rcv_count_rst_o);
   ch_regs_out(7).ch_ctl_transm_count_rst_n <= not(regs_out.ch7_ctl_transm_count_rst_o);
   ch_regs_out(7).ch_cfg_rcv_len            <= regs_out.ch7_cfg_rcv_len_o;
   ch_regs_out(7).ch_cfg_transm_len         <= regs_out.ch7_cfg_transm_len_o;
+  ch_regs_out(7).ch_cfg_transm_delay_len   <= regs_out.ch7_cfg_transm_delay_len_o;
+  ch_regs_out(7).ch_cfg_rcv_delay_len      <= regs_out.ch7_cfg_rcv_delay_len_o;
 
   ch_regs_out(8).ch_ctl_dir                <= regs_out.ch8_ctl_dir_o;
   ch_regs_out(8).ch_ctl_dir_pol            <= regs_out.ch8_ctl_dir_pol_o;
+  ch_regs_out(8).ch_ctl_pol                <= regs_out.ch8_ctl_pol_o;
   ch_regs_out(8).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch8_ctl_rcv_count_rst_o);
   ch_regs_out(8).ch_ctl_transm_count_rst_n <= not(regs_out.ch8_ctl_transm_count_rst_o);
   ch_regs_out(8).ch_cfg_rcv_len            <= regs_out.ch8_cfg_rcv_len_o;
   ch_regs_out(8).ch_cfg_transm_len         <= regs_out.ch8_cfg_transm_len_o;
+  ch_regs_out(8).ch_cfg_transm_delay_len   <= regs_out.ch8_cfg_transm_delay_len_o;
+  ch_regs_out(8).ch_cfg_rcv_delay_len      <= regs_out.ch8_cfg_rcv_delay_len_o;
 
   ch_regs_out(9).ch_ctl_dir                <= regs_out.ch9_ctl_dir_o;
   ch_regs_out(9).ch_ctl_dir_pol            <= regs_out.ch9_ctl_dir_pol_o;
+  ch_regs_out(9).ch_ctl_pol                <= regs_out.ch9_ctl_pol_o;
   ch_regs_out(9).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch9_ctl_rcv_count_rst_o);
   ch_regs_out(9).ch_ctl_transm_count_rst_n <= not(regs_out.ch9_ctl_transm_count_rst_o);
   ch_regs_out(9).ch_cfg_rcv_len            <= regs_out.ch9_cfg_rcv_len_o;
   ch_regs_out(9).ch_cfg_transm_len         <= regs_out.ch9_cfg_transm_len_o;
+  ch_regs_out(9).ch_cfg_transm_delay_len   <= regs_out.ch9_cfg_transm_delay_len_o;
+  ch_regs_out(9).ch_cfg_rcv_delay_len      <= regs_out.ch9_cfg_rcv_delay_len_o;
 
   ch_regs_out(10).ch_ctl_dir                <= regs_out.ch10_ctl_dir_o;
   ch_regs_out(10).ch_ctl_dir_pol            <= regs_out.ch10_ctl_dir_pol_o;
+  ch_regs_out(10).ch_ctl_pol                <= regs_out.ch10_ctl_pol_o;
   ch_regs_out(10).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch10_ctl_rcv_count_rst_o);
   ch_regs_out(10).ch_ctl_transm_count_rst_n <= not(regs_out.ch10_ctl_transm_count_rst_o);
   ch_regs_out(10).ch_cfg_rcv_len            <= regs_out.ch10_cfg_rcv_len_o;
   ch_regs_out(10).ch_cfg_transm_len         <= regs_out.ch10_cfg_transm_len_o;
+  ch_regs_out(10).ch_cfg_transm_delay_len   <= regs_out.ch10_cfg_transm_delay_len_o;
+  ch_regs_out(10).ch_cfg_rcv_delay_len      <= regs_out.ch10_cfg_rcv_delay_len_o;
 
   ch_regs_out(11).ch_ctl_dir                <= regs_out.ch11_ctl_dir_o;
   ch_regs_out(11).ch_ctl_dir_pol            <= regs_out.ch11_ctl_dir_pol_o;
+  ch_regs_out(11).ch_ctl_pol                <= regs_out.ch11_ctl_pol_o;
   ch_regs_out(11).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch11_ctl_rcv_count_rst_o);
   ch_regs_out(11).ch_ctl_transm_count_rst_n <= not(regs_out.ch11_ctl_transm_count_rst_o);
   ch_regs_out(11).ch_cfg_rcv_len            <= regs_out.ch11_cfg_rcv_len_o;
   ch_regs_out(11).ch_cfg_transm_len         <= regs_out.ch11_cfg_transm_len_o;
+  ch_regs_out(11).ch_cfg_transm_delay_len   <= regs_out.ch11_cfg_transm_delay_len_o;
+  ch_regs_out(11).ch_cfg_rcv_delay_len      <= regs_out.ch11_cfg_rcv_delay_len_o;
 
   ch_regs_out(12).ch_ctl_dir                <= regs_out.ch12_ctl_dir_o;
   ch_regs_out(12).ch_ctl_dir_pol            <= regs_out.ch12_ctl_dir_pol_o;
+  ch_regs_out(12).ch_ctl_pol                <= regs_out.ch12_ctl_pol_o;
   ch_regs_out(12).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch12_ctl_rcv_count_rst_o);
   ch_regs_out(12).ch_ctl_transm_count_rst_n <= not(regs_out.ch12_ctl_transm_count_rst_o);
   ch_regs_out(12).ch_cfg_rcv_len            <= regs_out.ch12_cfg_rcv_len_o;
   ch_regs_out(12).ch_cfg_transm_len         <= regs_out.ch12_cfg_transm_len_o;
+  ch_regs_out(12).ch_cfg_transm_delay_len   <= regs_out.ch12_cfg_transm_delay_len_o;
+  ch_regs_out(12).ch_cfg_rcv_delay_len      <= regs_out.ch12_cfg_rcv_delay_len_o;
 
   ch_regs_out(13).ch_ctl_dir                <= regs_out.ch13_ctl_dir_o;
   ch_regs_out(13).ch_ctl_dir_pol            <= regs_out.ch13_ctl_dir_pol_o;
+  ch_regs_out(13).ch_ctl_pol                <= regs_out.ch13_ctl_pol_o;
   ch_regs_out(13).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch13_ctl_rcv_count_rst_o);
   ch_regs_out(13).ch_ctl_transm_count_rst_n <= not(regs_out.ch13_ctl_transm_count_rst_o);
   ch_regs_out(13).ch_cfg_rcv_len            <= regs_out.ch13_cfg_rcv_len_o;
   ch_regs_out(13).ch_cfg_transm_len         <= regs_out.ch13_cfg_transm_len_o;
+  ch_regs_out(13).ch_cfg_transm_delay_len   <= regs_out.ch13_cfg_transm_delay_len_o;
+  ch_regs_out(13).ch_cfg_rcv_delay_len      <= regs_out.ch13_cfg_rcv_delay_len_o;
 
   ch_regs_out(14).ch_ctl_dir                <= regs_out.ch14_ctl_dir_o;
   ch_regs_out(14).ch_ctl_dir_pol            <= regs_out.ch14_ctl_dir_pol_o;
+  ch_regs_out(14).ch_ctl_pol                <= regs_out.ch14_ctl_pol_o;
   ch_regs_out(14).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch14_ctl_rcv_count_rst_o);
   ch_regs_out(14).ch_ctl_transm_count_rst_n <= not(regs_out.ch14_ctl_transm_count_rst_o);
   ch_regs_out(14).ch_cfg_rcv_len            <= regs_out.ch14_cfg_rcv_len_o;
   ch_regs_out(14).ch_cfg_transm_len         <= regs_out.ch14_cfg_transm_len_o;
+  ch_regs_out(14).ch_cfg_transm_delay_len   <= regs_out.ch14_cfg_transm_delay_len_o;
+  ch_regs_out(14).ch_cfg_rcv_delay_len      <= regs_out.ch14_cfg_rcv_delay_len_o;
 
   ch_regs_out(15).ch_ctl_dir                <= regs_out.ch15_ctl_dir_o;
   ch_regs_out(15).ch_ctl_dir_pol            <= regs_out.ch15_ctl_dir_pol_o;
+  ch_regs_out(15).ch_ctl_pol                <= regs_out.ch15_ctl_pol_o;
   ch_regs_out(15).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch15_ctl_rcv_count_rst_o);
   ch_regs_out(15).ch_ctl_transm_count_rst_n <= not(regs_out.ch15_ctl_transm_count_rst_o);
   ch_regs_out(15).ch_cfg_rcv_len            <= regs_out.ch15_cfg_rcv_len_o;
   ch_regs_out(15).ch_cfg_transm_len         <= regs_out.ch15_cfg_transm_len_o;
+  ch_regs_out(15).ch_cfg_transm_delay_len   <= regs_out.ch15_cfg_transm_delay_len_o;
+  ch_regs_out(15).ch_cfg_rcv_delay_len      <= regs_out.ch15_cfg_rcv_delay_len_o;
 
   ch_regs_out(16).ch_ctl_dir                <= regs_out.ch16_ctl_dir_o;
   ch_regs_out(16).ch_ctl_dir_pol            <= regs_out.ch16_ctl_dir_pol_o;
+  ch_regs_out(16).ch_ctl_pol                <= regs_out.ch16_ctl_pol_o;
   ch_regs_out(16).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch16_ctl_rcv_count_rst_o);
   ch_regs_out(16).ch_ctl_transm_count_rst_n <= not(regs_out.ch16_ctl_transm_count_rst_o);
   ch_regs_out(16).ch_cfg_rcv_len            <= regs_out.ch16_cfg_rcv_len_o;
   ch_regs_out(16).ch_cfg_transm_len         <= regs_out.ch16_cfg_transm_len_o;
+  ch_regs_out(16).ch_cfg_transm_delay_len   <= regs_out.ch16_cfg_transm_delay_len_o;
+  ch_regs_out(16).ch_cfg_rcv_delay_len      <= regs_out.ch16_cfg_rcv_delay_len_o;
 
   ch_regs_out(17).ch_ctl_dir                <= regs_out.ch17_ctl_dir_o;
   ch_regs_out(17).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch17_ctl_rcv_count_rst_o);
   ch_regs_out(17).ch_ctl_dir_pol            <= regs_out.ch17_ctl_dir_pol_o;
+  ch_regs_out(17).ch_ctl_pol                <= regs_out.ch17_ctl_pol_o;
   ch_regs_out(17).ch_ctl_transm_count_rst_n <= not(regs_out.ch17_ctl_transm_count_rst_o);
   ch_regs_out(17).ch_cfg_rcv_len            <= regs_out.ch17_cfg_rcv_len_o;
   ch_regs_out(17).ch_cfg_transm_len         <= regs_out.ch17_cfg_transm_len_o;
+  ch_regs_out(17).ch_cfg_transm_delay_len   <= regs_out.ch17_cfg_transm_delay_len_o;
+  ch_regs_out(17).ch_cfg_rcv_delay_len      <= regs_out.ch17_cfg_rcv_delay_len_o;
 
   ch_regs_out(18).ch_ctl_dir                <= regs_out.ch18_ctl_dir_o;
   ch_regs_out(18).ch_ctl_dir_pol            <= regs_out.ch18_ctl_dir_pol_o;
+  ch_regs_out(18).ch_ctl_pol                <= regs_out.ch18_ctl_pol_o;
   ch_regs_out(18).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch18_ctl_rcv_count_rst_o);
   ch_regs_out(18).ch_ctl_transm_count_rst_n <= not(regs_out.ch18_ctl_transm_count_rst_o);
   ch_regs_out(18).ch_cfg_rcv_len            <= regs_out.ch18_cfg_rcv_len_o;
   ch_regs_out(18).ch_cfg_transm_len         <= regs_out.ch18_cfg_transm_len_o;
+  ch_regs_out(18).ch_cfg_transm_delay_len   <= regs_out.ch18_cfg_transm_delay_len_o;
+  ch_regs_out(18).ch_cfg_rcv_delay_len      <= regs_out.ch18_cfg_rcv_delay_len_o;
 
   ch_regs_out(19).ch_ctl_dir                <= regs_out.ch19_ctl_dir_o;
   ch_regs_out(19).ch_ctl_dir_pol            <= regs_out.ch19_ctl_dir_pol_o;
+  ch_regs_out(19).ch_ctl_pol                <= regs_out.ch19_ctl_pol_o;
   ch_regs_out(19).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch19_ctl_rcv_count_rst_o);
   ch_regs_out(19).ch_ctl_transm_count_rst_n <= not(regs_out.ch19_ctl_transm_count_rst_o);
   ch_regs_out(19).ch_cfg_rcv_len            <= regs_out.ch19_cfg_rcv_len_o;
   ch_regs_out(19).ch_cfg_transm_len         <= regs_out.ch19_cfg_transm_len_o;
+  ch_regs_out(19).ch_cfg_transm_delay_len   <= regs_out.ch19_cfg_transm_delay_len_o;
+  ch_regs_out(19).ch_cfg_rcv_delay_len      <= regs_out.ch19_cfg_rcv_delay_len_o;
 
   ch_regs_out(20).ch_ctl_dir                <= regs_out.ch20_ctl_dir_o;
   ch_regs_out(20).ch_ctl_dir_pol            <= regs_out.ch20_ctl_dir_pol_o;
+  ch_regs_out(20).ch_ctl_pol                <= regs_out.ch20_ctl_pol_o;
   ch_regs_out(20).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch20_ctl_rcv_count_rst_o);
   ch_regs_out(20).ch_ctl_transm_count_rst_n <= not(regs_out.ch20_ctl_transm_count_rst_o);
   ch_regs_out(20).ch_cfg_rcv_len            <= regs_out.ch20_cfg_rcv_len_o;
   ch_regs_out(20).ch_cfg_transm_len         <= regs_out.ch20_cfg_transm_len_o;
+  ch_regs_out(20).ch_cfg_transm_delay_len   <= regs_out.ch20_cfg_transm_delay_len_o;
+  ch_regs_out(20).ch_cfg_rcv_delay_len      <= regs_out.ch20_cfg_rcv_delay_len_o;
 
   ch_regs_out(21).ch_ctl_dir                <= regs_out.ch21_ctl_dir_o;
   ch_regs_out(21).ch_ctl_dir_pol            <= regs_out.ch21_ctl_dir_pol_o;
+  ch_regs_out(21).ch_ctl_pol                <= regs_out.ch21_ctl_pol_o;
   ch_regs_out(21).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch21_ctl_rcv_count_rst_o);
   ch_regs_out(21).ch_ctl_transm_count_rst_n <= not(regs_out.ch21_ctl_transm_count_rst_o);
   ch_regs_out(21).ch_cfg_rcv_len            <= regs_out.ch21_cfg_rcv_len_o;
   ch_regs_out(21).ch_cfg_transm_len         <= regs_out.ch21_cfg_transm_len_o;
+  ch_regs_out(21).ch_cfg_transm_delay_len   <= regs_out.ch21_cfg_transm_delay_len_o;
+  ch_regs_out(21).ch_cfg_rcv_delay_len      <= regs_out.ch21_cfg_rcv_delay_len_o;
 
   ch_regs_out(22).ch_ctl_dir                <= regs_out.ch22_ctl_dir_o;
   ch_regs_out(22).ch_ctl_dir_pol            <= regs_out.ch22_ctl_dir_pol_o;
+  ch_regs_out(22).ch_ctl_pol                <= regs_out.ch22_ctl_pol_o;
   ch_regs_out(22).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch22_ctl_rcv_count_rst_o);
   ch_regs_out(22).ch_ctl_transm_count_rst_n <= not(regs_out.ch22_ctl_transm_count_rst_o);
   ch_regs_out(22).ch_cfg_rcv_len            <= regs_out.ch22_cfg_rcv_len_o;
   ch_regs_out(22).ch_cfg_transm_len         <= regs_out.ch22_cfg_transm_len_o;
+  ch_regs_out(22).ch_cfg_transm_delay_len   <= regs_out.ch22_cfg_transm_delay_len_o;
+  ch_regs_out(22).ch_cfg_rcv_delay_len      <= regs_out.ch22_cfg_rcv_delay_len_o;
 
   ch_regs_out(23).ch_ctl_dir                <= regs_out.ch23_ctl_dir_o;
   ch_regs_out(23).ch_ctl_dir_pol            <= regs_out.ch23_ctl_dir_pol_o;
+  ch_regs_out(23).ch_ctl_pol                <= regs_out.ch23_ctl_pol_o;
   ch_regs_out(23).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch23_ctl_rcv_count_rst_o);
   ch_regs_out(23).ch_ctl_transm_count_rst_n <= not(regs_out.ch23_ctl_transm_count_rst_o);
   ch_regs_out(23).ch_cfg_rcv_len            <= regs_out.ch23_cfg_rcv_len_o;
   ch_regs_out(23).ch_cfg_transm_len         <= regs_out.ch23_cfg_transm_len_o;
+  ch_regs_out(23).ch_cfg_transm_delay_len   <= regs_out.ch23_cfg_transm_delay_len_o;
+  ch_regs_out(23).ch_cfg_rcv_delay_len      <= regs_out.ch23_cfg_rcv_delay_len_o;
 
 
 
@@ -519,128 +598,62 @@ begin  -- architecture rtl
   -- Instantiation Process --
   ---------------------------
 
-  transm_pulse_bus <= trig_in_i;
-
   trigger_generate : for i in g_trig_num-1 downto 0 generate
 
-    --------------------------------
-    -- Connecting signals
-    --------------------------------
+    cmp_trigger_io: trigger_io
+    generic map (
+      g_with_bidirectional_trigger             => c_with_bidirectional_trigger,
+      g_iobuf_instantiation_type               => c_iobuf_instantiation_type,
+      g_sync_edge                              => c_sync_edge,
+      g_rx_debounce_width                      => c_rx_debounce_width,
+      g_tx_extensor_width                      => c_tx_extensor_width,
+      g_rx_counter_width                       => c_rx_counter_width,
+      g_tx_counter_width                       => c_tx_counter_width,
+      g_rx_delay_width                         => c_rx_delay_width,
+      g_tx_delay_width                         => c_tx_delay_width
+    )
+    port map (
+      -- Clock/Resets
+      clk_i                                    => ref_clk_i,
+      rst_n_i                                  => ref_rst_n_i,
 
-    -- Implementation of wired-OR logic with trigger lines, as described
-    -- in www.ti.com/lit/pdf/snla113, page 11. It works as follows:
-    --
-    -- If we want to output data, we use the direction pin as data and
-    -- drive the actual output to HI. This would only drive the line
-    -- when we send data.
-    --
-    -- If we want to input data, we use the pins as usual: data as data and
-    -- direction as direction.
-    --
-    -- Notice that for FPGA output:
-    --   Direction pin 0 = Input to FPGA
-    --   Direction pin 1 = Output to FPGA
-    --
-    -- So, we must negate the data pin so, sending 1 will set the FPGA
-    -- to output ('0' in iobuf) and sending 0 will set the FPGA to input
-    -- ('1' in iobuf)
-    trig_dir_int(i)  <= ch_regs_out(i).ch_ctl_dir;
-    trig_pol_int(i)  <= ch_regs_out(i).ch_ctl_dir_pol;
-    trig_data_int(i) <= not (extended_transm(i));
+      -------------------------------
+      -- Trigger configuration
+      -------------------------------
+      trig_dir_i                               => ch_regs_out(i).ch_ctl_dir,
+      trig_ext_dir_pol_i                       => ch_regs_out(i).ch_ctl_dir_pol,
+      trig_pol_i                               => ch_regs_out(i).ch_ctl_pol,
+      trig_rx_debounce_length_i                => unsigned(ch_regs_out(i).ch_cfg_rcv_len),
+      trig_tx_extensor_length_i                => unsigned(ch_regs_out(i).ch_cfg_transm_len),
+      trig_rx_delay_length_i                   => unsigned(ch_regs_out(i).ch_cfg_rcv_delay_len),
+      trig_tx_delay_length_i                   => unsigned(ch_regs_out(i).ch_cfg_transm_delay_len),
 
-    -- Regular data/direction driving with polarity inversion
-    trig_dir_polarized(i)  <= trig_dir_int(i) when trig_pol_int(i) = '0' else
-                               not (trig_dir_int(i));
-    trig_data_polarized(i) <= trig_data_int(i) when trig_pol_int(i) = '0' else
-                                not (trig_data_int(i));
+      -------------------------------
+      -- Counters
+      -------------------------------
+      trig_rx_rst_n_i                          => ch_regs_out(i).ch_ctl_rcv_count_rst_n,
+      trig_tx_rst_n_i                          => ch_regs_out(i).ch_ctl_transm_count_rst_n,
+      trig_rx_cnt_o                            => ch_regs_in(i).ch_count_rcv_uns,
+      trig_tx_cnt_o                            => ch_regs_in(i).ch_count_transm_uns,
 
-    -- Use data/direction pin as data depending if we are input or output.
-    -- If it's input, we just need to use the direction according to the
-    -- polarity ('0' means same polarity, '1' means reversed polarity).
-    --
-    -- We could have used just "not (trig_dir_int(i))" instead of trig_dir_polarized(i)
-    -- here, but we opted for clarity in the hope the tools will optimize this
-    trig_dir_ext(i)  <= trig_data_polarized(i) when trig_dir_int(i) = c_trig_dir_fpga_output else
-                       trig_dir_polarized(i);
-    trig_data_ext(i) <= '1' when trig_dir_int(i) = c_trig_dir_fpga_output else '0';
+      -------------------------------
+      -- External ports
+      -------------------------------
+      trig_dir_o                               => trig_dir_o(i),
+      trig_b                                   => trig_b(i),
 
-    -- Internal buffer direction/data
-    trig_dir_int_buff(i)  <= trig_data_int(i) when trig_dir_int(i) = c_trig_dir_fpga_output else
-                              trig_dir_int(i);
-    --trig_data_int_buff(i) <= '1' when trig_dir_int(i) = c_trig_dir_fpga_output else '0';
+      -------------------------------
+      -- Trigger input/output ports
+      -------------------------------
+      trig_in_i                                => trig_in_i(i).pulse,
+      trig_out_o                               => trig_out_o(i).pulse
+    );
 
-    -- Trigger direction external output
-    trig_dir_o(i) <= trig_dir_ext(i);
-
-    --------------------------------
-    -- Transmitter and Receiver Cores
-    --------------------------------
-
-    trigger_transm : extend_pulse_dyn
-      generic map (
-        g_width_bus_size => c_transm_pulse_len)
-      port map (
-        clk_i         => ref_clk_i,
-        rst_n_i       => ref_rst_n_i,
-        pulse_i       => transm_pulse_bus(i).pulse,
-        pulse_width_i => unsigned(ch_regs_out(i).ch_cfg_transm_len),
-        extended_o    => extended_transm(i));
-
-    trigger_rcv_1 : trigger_rcv
-      generic map (
-        g_glitch_len_width => c_rcv_pulse_len,
-        g_sync_edge        => g_sync_edge)
-      port map (
-        clk_i   => ref_clk_i,
-        rst_n_i => ref_rst_n_i,
-        len_i   => ch_regs_out(i).ch_cfg_rcv_len,
-        data_i  => extended_rcv(i),
-        pulse_o => rcv_pulse_bus(i).pulse);
-
-    --------------------------------
-    -- Connects cores to backplane
-    --------------------------------
-
-    cmp_iobuf : iobuf
-      port map (
-        o  => extended_rcv_buff(i),     -- Buffer output for further use
-        io => trig_b(i),                -- inout (connect directly to top-level port)
-        i  => trig_data_ext(i),         -- Buffer input
-        t  => trig_dir_int_buff(i)      -- 3-state enable input, high=input, low=output
-        );
-
-    trig_dbg_o(i) <= extended_rcv_buff(i);
-    extended_rcv(i) <= extended_rcv_buff(i) when trig_dir_int(i) = c_trig_dir_fpga_input
-                       else '0'; -- FPGA is output
-
-    --------------------------------
-    -- Pulse counters
-    --------------------------------
-
-    counter_rcv : counter_simple
-      generic map (
-        g_output_width => c_counter_width)
-      port map (
-        clk_i   => ref_clk_i,
-        rst_n_i => ch_regs_out(i).ch_ctl_rcv_count_rst_n,
-        ce_i    => '1',
-        up_i    => rcv_pulse_bus(i).pulse,
-        down_i  => '0',
-        count_o => ch_regs_in(i).ch_count_rcv);
-
-    counter_transm : counter_simple
-      generic map (
-        g_output_width => c_counter_width)
-      port map (
-        clk_i   => ref_clk_i,
-        rst_n_i => ch_regs_out(i).ch_ctl_transm_count_rst_n,
-        ce_i    => '1',
-        up_i    => transm_pulse_bus(i).pulse,
-        down_i  => '0',
-        count_o => ch_regs_in(i).ch_count_transm);
+    -- This is the actual field to be assigned to WB. So, we just convert
+    -- from unsigned to std_logic_vector
+    ch_regs_in(i).ch_count_rcv    <= std_logic_vector(ch_regs_in(i).ch_count_rcv_uns);
+    ch_regs_in(i).ch_count_transm <= std_logic_vector(ch_regs_in(i).ch_count_transm_uns);
 
   end generate;
-
-  trig_out_o <=  rcv_pulse_bus;
 
 end architecture rtl;
