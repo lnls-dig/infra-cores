@@ -265,6 +265,8 @@ architecture rtl of wb_fmc250m_4ch is
                                     clk0_out_div_f       => 4.000,
                                     clk1_out_div         => 2);
 
+  constant c_reset_sync_pipeline            : natural := 8;
+
   -----------------------------
   -- Crossbar component constants
   -----------------------------
@@ -540,6 +542,9 @@ begin
   -- Reset synchronization with SYS clock domain
   -- Align the reset deassertion to the next clock edge
   cmp_reset_sys_synch : reset_synch
+  generic map (
+    g_pipeline                              => c_reset_sync_pipeline
+  )
   port map(
     clk_i                                   => sys_clk_i,
     arst_n_i                                => sys_rst_n,
@@ -552,6 +557,9 @@ begin
   gen_adc_reset_synch : for i in 0 to c_num_adc_channels-1 generate
     gen_adc_reset_synch_ch : if g_use_data_chains(i) = '1' generate
       cmp_reset_fs_synch : reset_synch
+      generic map (
+        g_pipeline                                  => c_reset_sync_pipeline
+      )
       port map(
         clk_i                                       => fs_clk(i),
         arst_n_i                                    => fs_rst_n,
@@ -559,6 +567,9 @@ begin
       );
 
       cmp_reset_fs2x_synch : reset_synch
+      generic map (
+        g_pipeline                                  => c_reset_sync_pipeline
+      )
       port map(
         clk_i                                       => fs_clk2x(i),
         arst_n_i                                    => fs_rst_n,
