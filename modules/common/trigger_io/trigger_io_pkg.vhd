@@ -35,6 +35,10 @@ package trigger_io_pkg is
     -- polarity. If not using an external buffer, just leave it
     -- to '0'
     trig_ext_dir_pol_i                       : in std_logic;
+    -- Output trigger polarity. Set to '1' to use reverse polarity
+    -- ('1' to '0' output pulse). Set to '0' to use regular polarity
+    -- ('0' to '1' output pulse)
+    trig_pol_i                               : in std_logic;
 
     -------------------------------
     ---- External ports

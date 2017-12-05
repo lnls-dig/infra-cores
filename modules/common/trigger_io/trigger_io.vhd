@@ -80,6 +80,10 @@ port
   -- polarity. If not using an external buffer, just leave it
   -- to '0'
   trig_ext_dir_pol_i                       : in std_logic;
+  -- Output trigger polarity. Set to '1' to use reverse polarity
+  -- ('1' to '0' output pulse). Set to '0' to use regular polarity
+  -- ('0' to '1' output pulse)
+  trig_pol_i                               : in std_logic;
   -- Receive debounce clocks
   trig_rx_debounce_length_i                : in unsigned(g_rx_debounce_width-1 downto 0);
   -- Transmitter extensor clocks
@@ -150,6 +154,7 @@ begin
     -------------------------------
     trig_dir_i                             => trig_dir_i,
     trig_ext_dir_pol_i                     => trig_ext_dir_pol_i,
+    trig_pol_i                             => trig_pol_i,
 
     -------------------------------
     ---- External ports

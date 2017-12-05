@@ -66,6 +66,10 @@ port
   -- polarity. If not using an external buffer, just leave it
   -- to '0'
   trig_ext_dir_pol_i                       : in std_logic;
+  -- Output trigger polarity. Set to '1' to use reverse polarity
+  -- ('1' to '0' output pulse). Set to '0' to use regular polarity
+  -- ('0' to '1' output pulse)
+  trig_pol_i                               : in std_logic;
 
   -------------------------------
   ---- External ports
@@ -102,6 +106,7 @@ architecture rtl of trigger_io_physical is
 
   signal trig_dir                          : std_logic;
   signal trig_dir_int                      : std_logic;
+  signal trig_ext_dir_pol_int              : std_logic;
   signal trig_pol_int                      : std_logic;
   signal trig_dir_polarized                : std_logic;
   signal trig_tx_polarized                 : std_logic;
@@ -131,7 +136,8 @@ begin
   -- to output ('0' in iobuf) and sending 0 will set the FPGA to input
   -- ('1' in iobuf)
   trig_dir_int  <= trig_dir_i;
-  trig_pol_int  <= trig_ext_dir_pol_i;
+  trig_ext_dir_pol_int  <= trig_ext_dir_pol_i;
+  trig_pol_int <= trig_pol_i;
 
   gen_with_bidir_data_int : if g_with_bidirectional_trigger generate
     trig_tx_int <= not (trig_tx_fpga);
@@ -142,7 +148,7 @@ begin
   end generate;
 
   -- Regular data/direction driving with polarity inversion
-  trig_dir_polarized  <= trig_dir_int when trig_pol_int = '0' else
+  trig_dir_polarized  <= trig_dir_int when trig_ext_dir_pol_int = '0' else
                              not (trig_dir_int);
   trig_tx_polarized <= trig_tx_int when trig_pol_int = '0' else
                               not (trig_tx_int);
