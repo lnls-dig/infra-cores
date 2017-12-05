@@ -11,6 +11,7 @@ use work.acq_core_pkg.all;
 use work.ipcores_pkg.all;
 use work.pcie_cntr_axi_pkg.all;
 use work.trigger_pkg.all;
+use work.trigger_common_pkg.all;
 
 package ifc_wishbone_pkg is
 
@@ -3469,7 +3470,7 @@ package ifc_wishbone_pkg is
   -- Trigger Interface
   constant c_xwb_trigger_iface_sdb : t_sdb_device := (
     abi_class     => x"0000",                 -- undocumented device
-    abi_ver_major => x"01",
+    abi_ver_major => x"02",
     abi_ver_minor => x"00",
     wbd_endian    => c_sdb_endian_big,
     wbd_width     => x"7",                     -- 8/16/32-bit port granularity (0111)
