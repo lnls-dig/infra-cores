@@ -47,7 +47,10 @@ generic
   g_iobuf_instantiation_type               : string := "native";
   -- Wired-OR implementation if g_with_wired_or_driver = true.
   -- Possible values are: true or false
-  g_with_wired_or_driver                   : boolean := true
+  g_with_wired_or_driver                   : boolean := true;
+  -- Single-ended trigger input/out, if g_with_single_ended_driver = true
+  -- Possible values are: true or false
+  g_with_single_ended_driver               : boolean := false
 );
 port
 (
@@ -80,9 +83,13 @@ port
   trig_dir_o                               : out std_logic;
   -- If using g_with_bidirectional_trigger = true
   trig_b                                   : inout std_logic := '0';
+  -- If using g_with_bidirectional_trigger = true and g_with_single_ended_driver = false
+  trig_n_b                                 : inout std_logic := '0';
   -- If using g_with_bidirectional_trigger = false
   trig_i                                   : in std_logic := '0';
   trig_o                                   : out std_logic;
+  -- If using g_with_bidirectional_trigger = false and g_with_single_ended_driver = true
+  trig_n_o                                 : out std_logic;
 
   -------------------------------
   -- Trigger input/output ports
@@ -120,6 +127,19 @@ begin
   -- Test for IOBUF instantiation types
   assert (g_iobuf_instantiation_type = "native" or g_iobuf_instantiation_type = "inferred")
   report "[trigger_io_physical] Only g_iobuf_instantiation_type = native or inferred are available"
+  severity failure;
+
+  -- Test sanity of wired-OR and bidirectional generics
+  assert ((g_with_wired_or_driver = true and g_with_bidirectional_trigger = true) or
+          (g_with_wired_or_driver = false))
+  report "[trigger_io_physical] Unsupported combination. g_with_wired_or_driver = true, but gen_with_bidir_trigger is not."
+  severity failure;
+
+  -- Test sanity of g_with_inferred_iobuf and g_with_single_ended_driver generics
+  assert ((g_with_single_ended_driver = false and g_iobuf_instantiation_type = "native") or
+          (g_with_single_ended_driver = true))
+          report "[trigger_io_physical] Only native implementation (g_iobuf_instantiation_type = native) " &
+                "is supported if g_with_single_ended_driver = false"
   severity failure;
 
   -----------------------------------------------------------------------------
@@ -194,19 +214,35 @@ begin
 
     gen_with_native_iobuf : if g_iobuf_instantiation_type = "native" generate
 
-      cmp_iobuf_generic : iobuf_generic
-      port map (
-        buffer_o                                      => trig_rx,
-        buffer_b                                      => trig_b,
-        buffer_i                                      => trig_tx,
-        buffer_t                                      => trig_dir
-      );
+      gen_with_single_ended : if g_with_single_ended_driver generate
+        cmp_iobuf_generic : iobuf_generic
+        port map (
+          buffer_o                                      => trig_rx,
+          buffer_b                                      => trig_b,
+          buffer_i                                      => trig_tx,
+          buffer_t                                      => trig_dir
+        );
+      end generate;
+
+      gen_without_single_ended : if not(g_with_single_ended_driver) generate
+        cmp_iobufds_generic : iobufds_generic
+        port map (
+          buffer_o                                      => trig_rx,
+          buffer_b                                      => trig_b,
+          buffer_n_b                                    => trig_n_b,
+          buffer_i                                      => trig_tx,
+          buffer_t                                      => trig_dir
+        );
+      end generate;
+
     end generate;
 
     gen_with_inferred_iobuf : if g_iobuf_instantiation_type = "inferred" generate
 
-      trig_b <= trig_tx when trig_dir = '0' else 'Z';
-      trig_rx <= trig_b;
+      gen_with_single_ended : if g_with_single_ended_driver generate
+        trig_b <= trig_tx when trig_dir = '0' else 'Z';
+        trig_rx <= trig_b;
+      end generate;
 
     end generate;
 
@@ -223,6 +259,16 @@ begin
     -- Use regular data/dir pins, as we don't implement the wired-OR logic in
     -- this case
     trig_o            <= trig_tx_polarized;
+
+    -- Single-Ended/Differential Buffer for unidirectional drivers
+    gen_with_single_ended : if g_with_single_ended_driver generate
+      trig_n_o            <= 'X';
+    end generate;
+
+    gen_without_single_ended : if not(g_with_single_ended_driver) generate
+      trig_n_o            <= not trig_tx_polarized;
+    end generate;
+
     -- Trigger direction external output
     trig_dir_o        <= trig_dir_polarized;
 

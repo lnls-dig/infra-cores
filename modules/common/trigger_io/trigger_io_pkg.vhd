@@ -16,7 +16,10 @@ package trigger_io_pkg is
     g_iobuf_instantiation_type               : string := "native";
     -- Wired-OR implementation if g_with_wired_or_driver = true.
     -- Possible values are: true or false
-    g_with_wired_or_driver                   : boolean := true
+    g_with_wired_or_driver                   : boolean := true;
+    -- Single-ended trigger input/out, if g_with_single_ended_driver = true
+    -- Possible values are: true or false
+    g_with_single_ended_driver               : boolean := true
   );
   port
   (
@@ -49,9 +52,13 @@ package trigger_io_pkg is
     trig_dir_o                               : out std_logic;
     -- If using g_with_bidirectional_trigger = true
     trig_b                                   : inout std_logic := '0';
+    -- If using g_with_bidirectional_trigger = true and g_with_single_ended_driver = false
+    trig_n_b                                 : inout std_logic := '0';
     -- If using g_with_bidirectional_trigger = false
     trig_i                                   : in std_logic := '0';
     trig_o                                   : out std_logic;
+    -- If using g_with_bidirectional_trigger = false and g_with_single_ended_driver = true
+    trig_n_o                                 : out std_logic;
 
     -------------------------------
     -- Trigger input/output ports

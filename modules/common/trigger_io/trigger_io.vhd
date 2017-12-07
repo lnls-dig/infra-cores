@@ -48,6 +48,9 @@ generic
   -- Wired-OR implementation if g_with_wired_or_driver = true.
   -- Possible values are: true or false
   g_with_wired_or_driver                   : boolean := true;
+  -- Single-ended trigger input/out, if g_with_single_ended_driver = true
+  -- Possible values are: true or false
+  g_with_single_ended_driver               : boolean := true;
   -- Sync pulse on "positive" or "negative" edge of incoming pulse
   g_sync_edge                              : string  := "positive";
   -- Length of receive debounce counters
@@ -114,9 +117,13 @@ port
   trig_dir_o                               : out std_logic;
   -- If using g_with_bidirectional_trigger = true
   trig_b                                   : inout std_logic := '0';
+  -- If using g_with_bidirectional_trigger = true and g_with_single_ended_driver = false
+  trig_n_b                                 : inout std_logic := '0';
   -- If using g_with_bidirectional_trigger = false
   trig_i                                   : in std_logic := '0';
   trig_o                                   : out std_logic;
+  -- If using g_with_bidirectional_trigger = false and g_with_single_ended_driver = true
+  trig_n_o                                 : out std_logic;
 
   -------------------------------
   -- Trigger input/output ports
@@ -147,7 +154,8 @@ begin
   generic map (
     g_with_bidirectional_trigger           => g_with_bidirectional_trigger,
     g_iobuf_instantiation_type             => g_iobuf_instantiation_type,
-    g_with_wired_or_driver                 => g_with_wired_or_driver
+    g_with_wired_or_driver                 => g_with_wired_or_driver,
+    g_with_single_ended_driver             => g_with_single_ended_driver
   )
   port map (
     clk_i                                  => clk_i,
@@ -165,8 +173,10 @@ begin
     -------------------------------
     trig_dir_o                             => trig_dir_o,
     trig_b                                 => trig_b,
+    trig_n_b                               => trig_n_b,
     trig_i                                 => trig_i,
     trig_o                                 => trig_o,
+    trig_n_o                               => trig_n_o,
 
     -------------------------------
     -- Trigger input/output ports
