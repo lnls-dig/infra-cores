@@ -24,6 +24,9 @@ entity xwb_trigger_iface is
       -- Wired-OR implementation if g_with_wired_or_driver = true.
       -- Possible values are: true or false
       g_with_wired_or_driver                   : boolean := true;
+      -- Single-ended trigger input/out, if g_with_single_ended_driver = true
+      -- Possible values are: true or false
+      g_with_single_ended_driver               : boolean := false;
       -- Sync pulse on "positive" or "negative" edge of incoming pulse
       g_sync_edge                              : string  := "positive";
       -- channels facing outside the FPGA.
@@ -48,8 +51,16 @@ entity xwb_trigger_iface is
       -- External ports
       -----------------------------
 
-      trig_b     : inout std_logic_vector(g_trig_num-1 downto 0);
-      trig_dir_o : out   std_logic_vector(g_trig_num-1 downto 0);
+      trig_dir_o  : out   std_logic_vector(g_trig_num-1 downto 0);
+      -- If using g_with_bidirectional_trigger = true
+      trig_b      : inout std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+      -- If using g_with_bidirectional_trigger = true and g_with_single_ended_driver = false
+      trig_n_b    : inout std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+      -- If using g_with_bidirectional_trigger = false
+      trig_i      : in    std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+      trig_o      : out   std_logic_vector(g_trig_num-1 downto 0);
+      -- If using g_with_bidirectional_trigger = false and g_with_single_ended_driver = true
+      trig_n_o    : out   std_logic_vector(g_trig_num-1 downto 0);
 
       -----------------------------
       -- Internal ports
@@ -76,6 +87,7 @@ begin
       g_with_bidirectional_trigger => g_with_bidirectional_trigger,
       g_iobuf_instantiation_type   => g_iobuf_instantiation_type,
       g_with_wired_or_driver       => g_with_wired_or_driver,
+      g_with_single_ended_driver   => g_with_single_ended_driver,
       g_sync_edge                  => g_sync_edge,
       g_trig_num                   => g_trig_num
     )
@@ -97,10 +109,13 @@ begin
       wb_rty_o   => wb_slv_o.rty,
       wb_stall_o => wb_slv_o.stall,
 
-      trig_b      => trig_b,
-      trig_dir_o  => trig_dir_o,
-      trig_out_o  => trig_out_o,
-      trig_in_i   => trig_in_i,
+      trig_dir_o => trig_dir_o,
+      trig_b     => trig_b,
+      trig_n_b   => trig_n_b,
+      trig_i     => trig_i,
+      trig_o     => trig_o,
+      trig_n_o   => trig_n_o,
+
       trig_dbg_o  => trig_dbg_o
     );
 

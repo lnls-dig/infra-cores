@@ -3011,6 +3011,9 @@ package ifc_wishbone_pkg is
     -- Wired-OR implementation if g_with_wired_or_driver = true.
     -- Possible values are: true or false
     g_with_wired_or_driver                   : boolean := true;
+    -- Single-ended trigger input/out, if g_with_single_ended_driver = true
+    -- Possible values are: true or false
+    g_with_single_ended_driver               : boolean := false;
     -- Sync pulse on "positive" or "negative" edge of incoming pulse
     g_sync_edge                              : string  := "positive";
     -- channels facing outside the FPGA.
@@ -3043,8 +3046,16 @@ package ifc_wishbone_pkg is
     ---- External ports
     -------------------------------
 
-    trig_b                                    : inout std_logic_vector(g_trig_num-1 downto 0);
     trig_dir_o                                : out   std_logic_vector(g_trig_num-1 downto 0);
+    -- If using g_with_bidirectional_trigger = true
+    trig_b                                    : inout std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+    -- If using g_with_bidirectional_trigger = true and g_with_single_ended_driver = false
+    trig_n_b                                  : inout std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+    -- If using g_with_bidirectional_trigger = false
+    trig_i                                    : in    std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+    trig_o                                    : out   std_logic_vector(g_trig_num-1 downto 0);
+    -- If using g_with_bidirectional_trigger = false and g_with_single_ended_driver = true
+    trig_n_o                                  : out   std_logic_vector(g_trig_num-1 downto 0);
 
     -------------------------------
     ---- Internal ports
@@ -3074,6 +3085,9 @@ package ifc_wishbone_pkg is
     -- Wired-OR implementation if g_with_wired_or_driver = true.
     -- Possible values are: true or false
     g_with_wired_or_driver                    : boolean := true;
+    -- Single-ended trigger input/out, if g_with_single_ended_driver = true
+    -- Possible values are: true or false
+    g_with_single_ended_driver                : boolean := false;
     -- Sync pulse on "positive" or "negative" edge of incoming pulse
     g_sync_edge                               : string  := "positive";
     -- channels facing outside the FPGA.
@@ -3098,8 +3112,16 @@ package ifc_wishbone_pkg is
     -- External ports
     -----------------------------
 
-    trig_b                                    : inout std_logic_vector(g_trig_num-1 downto 0);
     trig_dir_o                                : out   std_logic_vector(g_trig_num-1 downto 0);
+    -- If using g_with_bidirectional_trigger = true
+    trig_b                                    : inout std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+    -- If using g_with_bidirectional_trigger = true and g_with_single_ended_driver = false
+    trig_n_b                                  : inout std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+    -- If using g_with_bidirectional_trigger = false
+    trig_i                                    : in    std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+    trig_o                                    : out   std_logic_vector(g_trig_num-1 downto 0);
+    -- If using g_with_bidirectional_trigger = false and g_with_single_ended_driver = true
+    trig_n_o                                  : out   std_logic_vector(g_trig_num-1 downto 0);
 
     -----------------------------
     -- Internal ports
@@ -3128,6 +3150,9 @@ package ifc_wishbone_pkg is
     -- Wired-OR implementation if g_with_wired_or_driver = true.
     -- Possible values are: true or false
     g_with_wired_or_driver                   : boolean := true;
+    -- Single-ended trigger input/out, if g_with_single_ended_driver = true
+    -- Possible values are: true or false
+    g_with_single_ended_driver               : boolean := false;
     -- Sync pulse on "positive" or "negative" edge of incoming pulse
     g_sync_edge                              : string  := "positive";
     -- Channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
@@ -3190,8 +3215,16 @@ package ifc_wishbone_pkg is
     ---- External ports
     -------------------------------
 
-    trig_b                                    : inout std_logic_vector(g_trig_num-1 downto 0);
     trig_dir_o                                : out   std_logic_vector(g_trig_num-1 downto 0);
+    -- If using g_with_bidirectional_trigger = true
+    trig_b                                    : inout std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+    -- If using g_with_bidirectional_trigger = true and g_with_single_ended_driver = false
+    trig_n_b                                  : inout std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+    -- If using g_with_bidirectional_trigger = false
+    trig_i                                    : in    std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+    trig_o                                    : out   std_logic_vector(g_trig_num-1 downto 0);
+    -- If using g_with_bidirectional_trigger = false and g_with_single_ended_driver = true
+    trig_n_o                                  : out   std_logic_vector(g_trig_num-1 downto 0);
 
     -------------------------------
     ---- Internal ports
@@ -3223,6 +3256,9 @@ package ifc_wishbone_pkg is
       -- Wired-OR implementation if g_with_wired_or_driver = true.
       -- Possible values are: true or false
       g_with_wired_or_driver                   : boolean := true;
+      -- Single-ended trigger input/out, if g_with_single_ended_driver = true
+      -- Possible values are: true or false
+      g_with_single_ended_driver               : boolean := false;
       -- Sync pulse on "positive" or "negative" edge of incoming pulse
       g_sync_edge                              : string  := "positive";
       -- Channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
@@ -3268,8 +3304,16 @@ package ifc_wishbone_pkg is
       -- External ports
       -----------------------------
 
-      trig_b                                  : inout std_logic_vector(g_trig_num-1 downto 0);
-      trig_dir_o                              : out   std_logic_vector(g_trig_num-1 downto 0);
+      trig_dir_o                                : out   std_logic_vector(g_trig_num-1 downto 0);
+      -- If using g_with_bidirectional_trigger = true
+      trig_b                                    : inout std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+      -- If using g_with_bidirectional_trigger = true and g_with_single_ended_driver = false
+      trig_n_b                                  : inout std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+      -- If using g_with_bidirectional_trigger = false
+      trig_i                                    : in    std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+      trig_o                                    : out   std_logic_vector(g_trig_num-1 downto 0);
+      -- If using g_with_bidirectional_trigger = false and g_with_single_ended_driver = true
+      trig_n_o                                  : out   std_logic_vector(g_trig_num-1 downto 0);
 
       -----------------------------
       -- Internal ports
