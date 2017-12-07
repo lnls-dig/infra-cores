@@ -59,9 +59,9 @@ generic
   -- Length of transmitter counters
   g_tx_counter_width                       : natural := 8;
   -- Length of receiving delay counters
-  g_rx_delay_width                 : natural := 32;
+  g_rx_delay_width                         : natural := 32;
   -- Length of transmitter delay counters
-  g_tx_delay_width                 : natural := 32
+  g_tx_delay_width                         : natural := 32
 );
 port
 (
