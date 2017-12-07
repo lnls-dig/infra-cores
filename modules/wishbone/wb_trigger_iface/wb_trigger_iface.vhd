@@ -59,12 +59,22 @@ use unisim.vcomponents.all;
 
 entity wb_trigger_iface is
   generic (
-    g_interface_mode       : t_wishbone_interface_mode      := CLASSIC;
-    g_address_granularity  : t_wishbone_address_granularity := WORD;
-    g_sync_edge            : string                         := "positive";
-    g_trig_num             : natural range 1 to 24          := 8 -- channels facing outside the FPGA. Limit defined by wb_slave_trigger.vhd
-    );
-
+    g_interface_mode                         : t_wishbone_interface_mode      := CLASSIC;
+    g_address_granularity                    : t_wishbone_address_granularity := WORD;
+    -- "true" to use external bidirectional trigger (*_b port) or "false"
+    -- to use separate ports for external trigger input/output
+    g_with_bidirectional_trigger             : boolean := true;
+    -- IOBUF instantiation type if g_with_bidirectional_trigger = true.
+    -- Possible values are: "native" or "inferred"
+    g_iobuf_instantiation_type               : string := "native";
+    -- Wired-OR implementation if g_with_wired_or_driver = true.
+    -- Possible values are: true or false
+    g_with_wired_or_driver                   : boolean := true;
+    -- Sync pulse on "positive" or "negative" edge of incoming pulse
+    g_sync_edge                              : string  := "positive";
+    -- channels facing outside the FPGA.
+    g_trig_num                               : natural := 8
+  );
   port (
     clk_i   : in std_logic;
     rst_n_i : in std_logic;
@@ -112,9 +122,6 @@ end entity wb_trigger_iface;
 
 architecture rtl of wb_trigger_iface is
 
-  constant c_with_bidirectional_trigger : boolean   := true;
-  constant c_iobuf_instantiation_type   : string    := "native";
-  constant c_sync_edge                  : string    := g_sync_edge;
   constant c_rx_debounce_width          : natural   := 8;  -- Defined according to the wb_slave_trigger.vhd
   constant c_tx_extensor_width          : natural   := 8;  -- Defined according to the wb_slave_trigger.vhd
   constant c_rx_counter_width           : natural   := 16;  -- Defined according to the wb_slave_trigger.vhd
@@ -602,9 +609,10 @@ begin  -- architecture rtl
 
     cmp_trigger_io: trigger_io
     generic map (
-      g_with_bidirectional_trigger             => c_with_bidirectional_trigger,
-      g_iobuf_instantiation_type               => c_iobuf_instantiation_type,
-      g_sync_edge                              => c_sync_edge,
+      g_with_bidirectional_trigger             => g_with_bidirectional_trigger,
+      g_iobuf_instantiation_type               => g_iobuf_instantiation_type,
+      g_with_wired_or_driver                   => g_with_wired_or_driver,
+      g_sync_edge                              => g_sync_edge,
       g_rx_debounce_width                      => c_rx_debounce_width,
       g_tx_extensor_width                      => c_tx_extensor_width,
       g_rx_counter_width                       => c_rx_counter_width,

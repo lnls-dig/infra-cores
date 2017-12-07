@@ -13,10 +13,21 @@ use work.trigger_common_pkg.all;
 entity xwb_trigger_iface is
   generic
     (
-      g_interface_mode       : t_wishbone_interface_mode      := CLASSIC;
-      g_address_granularity  : t_wishbone_address_granularity := WORD;
-      g_sync_edge            : string                         := "positive";
-      g_trig_num             : natural range 1 to 24          := 8
+      g_interface_mode                         : t_wishbone_interface_mode      := CLASSIC;
+      g_address_granularity                    : t_wishbone_address_granularity := WORD;
+      -- "true" to use external bidirectional trigger (*_b port) or "false"
+      -- to use separate ports for external trigger input/output
+      g_with_bidirectional_trigger             : boolean := true;
+      -- IOBUF instantiation type if g_with_bidirectional_trigger = true.
+      -- Possible values are: "native" or "inferred"
+      g_iobuf_instantiation_type               : string := "native";
+      -- Wired-OR implementation if g_with_wired_or_driver = true.
+      -- Possible values are: true or false
+      g_with_wired_or_driver                   : boolean := true;
+      -- Sync pulse on "positive" or "negative" edge of incoming pulse
+      g_sync_edge                              : string  := "positive";
+      -- channels facing outside the FPGA.
+      g_trig_num                               : natural := 8
     );
   port
     (
@@ -60,10 +71,13 @@ begin
 
   cmp_wb_trigger_iface : wb_trigger_iface
     generic map (
-      g_interface_mode       => g_interface_mode,
-      g_address_granularity  => g_address_granularity,
-      g_sync_edge            => g_sync_edge,
-      g_trig_num             => g_trig_num
+      g_interface_mode             => g_interface_mode,
+      g_address_granularity        => g_address_granularity,
+      g_with_bidirectional_trigger => g_with_bidirectional_trigger,
+      g_iobuf_instantiation_type   => g_iobuf_instantiation_type,
+      g_with_wired_or_driver       => g_with_wired_or_driver,
+      g_sync_edge                  => g_sync_edge,
+      g_trig_num                   => g_trig_num
     )
     port map (
       clk_i       => clk_i,

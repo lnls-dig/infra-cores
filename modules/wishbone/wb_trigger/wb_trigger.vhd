@@ -55,18 +55,36 @@ use work.trigger_pkg.all;
 
 entity wb_trigger is
   generic (
-    g_interface_mode       : t_wishbone_interface_mode      := CLASSIC;
-    g_address_granularity  : t_wishbone_address_granularity := WORD;
-    g_sync_edge            : string                         := "positive";
-    g_trig_num             : natural range 1 to 24          := 8; -- channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
-    g_intern_num           : natural range 1 to 24          := 8; -- channels facing inside the FPGA. Limit defined by wb_trigger_regs.vhd
-    g_rcv_intern_num       : natural range 1 to 24          := 2; -- signals from inside the FPGA that can be used as input at a rcv mux.
-                                                                  -- Limit defined by wb_trigger_regs.vhd
-    g_num_mux_interfaces   : natural                        := 2;  -- Number of wb_trigger_mux modules
-    g_out_resolver         : string                         := "fanout"; -- Resolver policy for output triggers
-    g_in_resolver          : string                         := "or";     -- Resolver policy for input triggers
-    g_with_input_sync      : boolean                        := true;
-    g_with_output_sync     : boolean                        := true
+    g_interface_mode                         : t_wishbone_interface_mode      := CLASSIC;
+    g_address_granularity                    : t_wishbone_address_granularity := WORD;
+    -- "true" to use external bidirectional trigger (*_b port) or "false"
+    -- to use separate ports for external trigger input/output
+    g_with_bidirectional_trigger             : boolean := true;
+    -- IOBUF instantiation type if g_with_bidirectional_trigger = true.
+    -- Possible values are: "native" or "inferred"
+    g_iobuf_instantiation_type               : string := "native";
+    -- Wired-OR implementation if g_with_wired_or_driver = true.
+    -- Possible values are: true or false
+    g_with_wired_or_driver                   : boolean := true;
+    -- Sync pulse on "positive" or "negative" edge of incoming pulse
+    g_sync_edge                              : string  := "positive";
+    -- Channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
+    g_trig_num                               : natural range 1 to 24 := 8;
+    -- Channels facing inside the FPGA. Limit defined by wb_trigger_regs.vhd
+    g_intern_num                             : natural range 1 to 24 := 8;
+    -- Signals from inside the FPGA that can be used as input at a rcv mux.
+    -- Limit defined by wb_trigger_regs.vhd
+    g_rcv_intern_num                         : natural range 1 to 24 := 2;
+    -- Number of wb_trigger_mux modules
+    g_num_mux_interfaces                     : natural := 2;
+    -- Resolver policy for output triggers
+    g_out_resolver                           : string  := "fanout";
+    -- Resolver policy for input triggers
+    g_in_resolver                            : string  := "or";
+    -- With input pulse synchonizer
+    g_with_input_sync                        : boolean := true;
+    -- With output pulse synchonizer
+    g_with_output_sync                       : boolean := true
   );
   port (
     clk_i   : in std_logic;
@@ -149,10 +167,13 @@ begin  -- architecture rtl
 
   cmp_wb_trigger_iface : wb_trigger_iface
     generic map (
-      g_interface_mode       => g_interface_mode,
-      g_address_granularity  => g_address_granularity,
-      g_sync_edge            => g_sync_edge,
-      g_trig_num             => g_trig_num
+      g_interface_mode             => g_interface_mode,
+      g_address_granularity        => g_address_granularity,
+      g_with_bidirectional_trigger => g_with_bidirectional_trigger,
+      g_iobuf_instantiation_type   => g_iobuf_instantiation_type,
+      g_with_wired_or_driver       => g_with_wired_or_driver,
+      g_sync_edge                  => g_sync_edge,
+      g_trig_num                   => g_trig_num
     )
     port map (
       clk_i      => clk_i,
