@@ -44,7 +44,10 @@ generic
   g_with_bidirectional_trigger             : boolean := true;
   -- IOBUF instantiation type if g_with_bidirectional_trigger = true.
   -- Possible values are: "native" or "inferred"
-  g_iobuf_instantiation_type               : string := "native"
+  g_iobuf_instantiation_type               : string := "native";
+  -- Wired-OR implementation if g_with_wired_or_driver = true.
+  -- Possible values are: true or false
+  g_with_wired_or_driver                   : boolean := true
 );
 port
 (
@@ -139,19 +142,32 @@ begin
   trig_ext_dir_pol_int  <= trig_ext_dir_pol_i;
   trig_pol_int <= trig_pol_i;
 
-  gen_with_bidir_data_int : if g_with_bidirectional_trigger generate
+  gen_tx_with_wired_or_driver : if g_with_wired_or_driver generate
     trig_tx_int <= not (trig_tx_fpga);
   end generate;
 
-  gen_without_bidir_data_int : if not(g_with_bidirectional_trigger) generate
+  gen_tx_without_wired_or_driver : if not(g_with_wired_or_driver) generate
     trig_tx_int <= trig_tx_fpga;
   end generate;
 
   -- Regular data/direction driving with polarity inversion
   trig_dir_polarized  <= trig_dir_int when trig_ext_dir_pol_int = '0' else
                              not (trig_dir_int);
-  trig_tx_polarized <= trig_tx_int when trig_pol_int = '0' else
-                              not (trig_tx_int);
+
+  -- If we are implementing the wired-OR scheme, data/dir pins must
+  -- be controlled by the same polarity pin, as the output direction pin
+  -- will be used as data.
+  -- If we are NOT in wired-OR, we can use the data/dir pins as usual,
+  -- each one with its independent controller
+  gen_tx_pol_with_wired_or_driver : if g_with_wired_or_driver generate
+    trig_tx_polarized <= trig_tx_int when trig_ext_dir_pol_int = '0' else
+                                not (trig_tx_int);
+  end generate;
+
+  gen_tx_pol_without_wired_or_driver : if not(g_with_wired_or_driver) generate
+    trig_tx_polarized <= trig_tx_int when trig_pol_int = '0' else
+                                not (trig_tx_int);
+  end generate;
 
   -----------------------------------------------------------------------------
   -- Wired-OR scheme

@@ -13,7 +13,10 @@ package trigger_io_pkg is
     g_with_bidirectional_trigger             : boolean := true;
     -- IOBUF instantiation type if g_with_bidirectional_trigger = true.
     -- Possible values are: "native" or "inferred"
-    g_iobuf_instantiation_type               : string := "native"
+    g_iobuf_instantiation_type               : string := "native";
+    -- Wired-OR implementation if g_with_wired_or_driver = true.
+    -- Possible values are: true or false
+    g_with_wired_or_driver                   : boolean := true
   );
   port
   (

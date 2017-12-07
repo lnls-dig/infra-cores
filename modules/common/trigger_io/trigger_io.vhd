@@ -45,6 +45,9 @@ generic
   -- IOBUF instantiation type if g_with_bidirectional_trigger = true.
   -- Possible values are: "native" or "inferred"
   g_iobuf_instantiation_type               : string := "native";
+  -- Wired-OR implementation if g_with_wired_or_driver = true.
+  -- Possible values are: true or false
+  g_with_wired_or_driver                   : boolean := true;
   -- Sync pulse on "positive" or "negative" edge of incoming pulse
   g_sync_edge                              : string  := "positive";
   -- Length of receive debounce counters
@@ -143,7 +146,8 @@ begin
   cmp_trigger_io_physical : trigger_io_physical
   generic map (
     g_with_bidirectional_trigger           => g_with_bidirectional_trigger,
-    g_iobuf_instantiation_type             => g_iobuf_instantiation_type
+    g_iobuf_instantiation_type             => g_iobuf_instantiation_type,
+    g_with_wired_or_driver                 => g_with_wired_or_driver
   )
   port map (
     clk_i                                  => clk_i,
