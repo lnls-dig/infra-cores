@@ -219,4 +219,30 @@ package ifc_common_pkg is
   );
   end component;
 
+  component pulse_train_gen
+  generic
+  (
+    -- Length of input pulse counter. This is used internally and is used
+    -- to determine the maximum width for the input counter. This effectively
+    -- limits the maximum input pulse width
+    g_input_pulse_max_width                  : natural := 32;
+    -- Length of pulse generator
+    g_pulse_train_gen_width                  : natural := 16
+  );
+  port
+  (
+    -- Clock/Resets
+    clk_i                                    : in std_logic;
+    rst_n_i                                  : in std_logic;
+
+    -------------------------------
+    -- Trigger configuration
+    -------------------------------
+    pulse_i                                  : in std_logic;
+    pulse_train_num_i                        : in unsigned(g_pulse_train_gen_width-1 downto 0);
+    pulse_train_o                            : out std_logic;
+    pulse_rdy_o                              : out std_logic
+  );
+  end component;
+
 end ifc_common_pkg;
