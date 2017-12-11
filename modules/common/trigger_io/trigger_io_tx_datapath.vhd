@@ -34,7 +34,11 @@ generic
   -- Length of transmitter counters
   g_tx_counter_width                       : natural := 8;
   -- Length of transmitter delay counters
-  g_tx_delay_width                         : natural := 32
+  g_tx_delay_width                         : natural := 32;
+  -- Length of input pulse train counter
+  g_tx_input_pulse_max_width               : natural := 32;
+  -- Length of pulse generator
+  g_tx_pulse_train_gen_width               : natural := 16
 );
 port
 (
@@ -49,6 +53,8 @@ port
   trig_tx_extensor_length_i                : in unsigned(g_tx_extensor_width-1 downto 0);
   -- Number of detected transmitted triggers to external module
   trig_tx_delay_length_i                   : in unsigned(g_tx_delay_width-1 downto 0);
+  -- Number of to be generated transmitted pulses per FPGA pulse
+  trig_tx_pulse_train_num_i                : in unsigned(g_tx_pulse_train_gen_width-1 downto 0);
 
   -------------------------------
   -- Counters
@@ -78,6 +84,7 @@ architecture rtl of trigger_io_tx_datapath is
   signal trig_tx                           : t_trig_channel;
   signal trig_tx_dly                       : t_trig_channel;
   signal trig_tx_dly_extended              : t_trig_channel;
+  signal trig_tx_dly_extended_train        : t_trig_channel;
 
   signal trig_tx_cnt_slv                   : std_logic_vector(g_tx_counter_width-1 downto 0);
 
@@ -98,26 +105,38 @@ begin
     g_delay_cnt_width                      => g_tx_delay_width)
   port map (
     -- Clock/Resets
-    clk_i                                   => clk_i,
-    rst_n_i                                 => rst_n_i,
-    pulse_i                                 => trig_tx.pulse,
-    rdy_o                                   => open,
-    delay_cnt_i                             => trig_tx_delay_length_i,
-    pulse_o                                 => trig_tx_dly.pulse
+    clk_i                                  => clk_i,
+    rst_n_i                                => rst_n_i,
+    pulse_i                                => trig_tx.pulse,
+    rdy_o                                  => open,
+    delay_cnt_i                            => trig_tx_delay_length_i,
+    pulse_o                                => trig_tx_dly.pulse
   );
 
   cmp_tx_extend_pulse : extend_pulse_dyn
-    generic map (
-      g_width_bus_size                     => g_tx_extensor_width)
-    port map (
-      clk_i                                => clk_i,
-      rst_n_i                              => rst_n_i,
-      pulse_i                              => trig_tx_dly.pulse,
-      pulse_width_i                        => trig_tx_extensor_length_i,
-      extended_o                           => trig_tx_dly_extended.pulse
+  generic map (
+    g_width_bus_size                       => g_tx_extensor_width)
+  port map (
+    clk_i                                  => clk_i,
+    rst_n_i                                => rst_n_i,
+    pulse_i                                => trig_tx_dly.pulse,
+    pulse_width_i                          => trig_tx_extensor_length_i,
+    extended_o                             => trig_tx_dly_extended.pulse
   );
 
-  trig_o <= trig_tx_dly_extended.pulse;
+  cmp_tx_pulse_train : pulse_train_gen
+  generic map (
+    g_input_pulse_max_width                => g_tx_input_pulse_max_width,
+    g_pulse_train_gen_width                => g_tx_pulse_train_gen_width)
+  port map (
+    clk_i                                  => clk_i,
+    rst_n_i                                => rst_n_i,
+    pulse_i                                => trig_tx_dly_extended.pulse,
+    pulse_train_num_i                      => trig_tx_pulse_train_num_i,
+    pulse_train_o                          => trig_tx_dly_extended_train.pulse
+  );
+
+  trig_o <= trig_tx_dly_extended_train.pulse;
 
   ----------------------------------------------------------------------------
   -- Pulse counters

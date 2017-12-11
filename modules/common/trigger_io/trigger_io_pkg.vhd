@@ -126,7 +126,11 @@ package trigger_io_pkg is
     -- Length of transmitter counters
     g_tx_counter_width                       : natural := 8;
     -- Length of transmitter delay counters
-    g_tx_delay_width                         : natural := 32
+    g_tx_delay_width                         : natural := 32;
+    -- Length of input pulse train counter
+    g_tx_input_pulse_max_width               : natural := 32;
+    -- Length of pulse generator
+    g_tx_pulse_train_gen_width               : natural := 16
   );
   port
   (
@@ -141,6 +145,8 @@ package trigger_io_pkg is
     trig_tx_extensor_length_i                : in unsigned(g_tx_extensor_width-1 downto 0);
     -- Number of detected transmitted triggers to external module
     trig_tx_delay_length_i                   : in unsigned(g_tx_delay_width-1 downto 0);
+    -- Number of to be generated transmitted pulses per FPGA pulse
+    trig_tx_pulse_train_num_i                : in unsigned(g_tx_pulse_train_gen_width-1 downto 0);
 
     -------------------------------
     -- Counters

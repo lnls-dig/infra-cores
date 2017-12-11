@@ -64,7 +64,11 @@ generic
   -- Length of receiving delay counters
   g_rx_delay_width                         : natural := 32;
   -- Length of transmitter delay counters
-  g_tx_delay_width                         : natural := 32
+  g_tx_delay_width                         : natural := 32;
+  -- Length of input pulse train counter
+  g_tx_input_pulse_max_width               : natural := 32;
+  -- Length of pulse generator
+  g_tx_pulse_train_gen_width               : natural := 16
 );
 port
 (
@@ -98,6 +102,8 @@ port
   trig_rx_delay_length_i                   : in unsigned(g_rx_delay_width-1 downto 0);
   -- Number of detected transmitted triggers to external module
   trig_tx_delay_length_i                   : in unsigned(g_tx_delay_width-1 downto 0);
+  -- Number of to be generated transmitted pulses per FPGA pulse
+  trig_tx_pulse_train_num_i                : in unsigned(g_tx_pulse_train_gen_width-1 downto 0);
 
   -------------------------------
   -- Counters
@@ -232,7 +238,9 @@ begin
   generic map (
     g_tx_extensor_width                      => g_tx_extensor_width,
     g_tx_counter_width                       => g_tx_counter_width,
-    g_tx_delay_width                         => g_tx_delay_width
+    g_tx_delay_width                         => g_tx_delay_width,
+    g_tx_input_pulse_max_width               => g_tx_input_pulse_max_width,
+    g_tx_pulse_train_gen_width               => g_tx_pulse_train_gen_width
   )
   port map (
     -- Clock/Resets
@@ -244,6 +252,7 @@ begin
     -------------------------------
     trig_tx_extensor_length_i                => trig_tx_extensor_length_i,
     trig_tx_delay_length_i                   => trig_tx_delay_length_i,
+    trig_tx_pulse_train_num_i                => trig_tx_pulse_train_num_i,
 
     -------------------------------
     -- Counters
