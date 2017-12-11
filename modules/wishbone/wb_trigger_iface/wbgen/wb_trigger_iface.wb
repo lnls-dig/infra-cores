@@ -154,6 +154,32 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 0 Transmitter Pulse Train Generator";
+    prefix = "ch0_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 1
   ---------------------------------------------------------------------------
@@ -298,6 +324,32 @@ peripheral {
       type = SLV;
       size = 32;
       align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 1 Transmitter Pulse Train Generator";
+    prefix = "ch1_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -452,6 +504,32 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 2 Transmitter Pulse Train Generator";
+    prefix = "ch2_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 3
   ---------------------------------------------------------------------------
@@ -596,6 +674,32 @@ peripheral {
       type = SLV;
       size = 32;
       align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 3 Transmitter Pulse Train Generator";
+    prefix = "ch3_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -750,6 +854,32 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 4 Transmitter Pulse Train Generator";
+    prefix = "ch4_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 5
   ---------------------------------------------------------------------------
@@ -894,6 +1024,32 @@ peripheral {
       type = SLV;
       size = 32;
       align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 5 Transmitter Pulse Train Generator";
+    prefix = "ch5_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -1048,6 +1204,32 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 6 Transmitter Pulse Train Generator";
+    prefix = "ch6_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 7
   ---------------------------------------------------------------------------
@@ -1192,6 +1374,32 @@ peripheral {
       type = SLV;
       size = 32;
       align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 7 Transmitter Pulse Train Generator";
+    prefix = "ch7_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -1346,6 +1554,32 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 8 Transmitter Pulse Train Generator";
+    prefix = "ch8_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 9
   ---------------------------------------------------------------------------
@@ -1490,6 +1724,32 @@ peripheral {
       type = SLV;
       size = 32;
       align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 9 Transmitter Pulse Train Generator";
+    prefix = "ch9_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -1644,6 +1904,32 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 10 Transmitter Pulse Train Generator";
+    prefix = "ch10_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 11
   ---------------------------------------------------------------------------
@@ -1788,6 +2074,32 @@ peripheral {
       type = SLV;
       size = 32;
       align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 11 Transmitter Pulse Train Generator";
+    prefix = "ch11_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -1942,6 +2254,32 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 12 Transmitter Pulse Train Generator";
+    prefix = "ch12_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 13
   ---------------------------------------------------------------------------
@@ -2086,6 +2424,32 @@ peripheral {
       type = SLV;
       size = 32;
       align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 13 Transmitter Pulse Train Generator";
+    prefix = "ch13_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -2240,6 +2604,32 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 14 Transmitter Pulse Train Generator";
+    prefix = "ch14_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 15
   ---------------------------------------------------------------------------
@@ -2384,6 +2774,32 @@ peripheral {
       type = SLV;
       size = 32;
       align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 15 Transmitter Pulse Train Generator";
+    prefix = "ch15_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -2538,6 +2954,32 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 16 Transmitter Pulse Train Generator";
+    prefix = "ch16_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 17
   ---------------------------------------------------------------------------
@@ -2682,6 +3124,32 @@ peripheral {
       type = SLV;
       size = 32;
       align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 17 Transmitter Pulse Train Generator";
+    prefix = "ch17_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -2836,6 +3304,32 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 18 Transmitter Pulse Train Generator";
+    prefix = "ch18_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 19
   ---------------------------------------------------------------------------
@@ -2980,6 +3474,32 @@ peripheral {
       type = SLV;
       size = 32;
       align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 19 Transmitter Pulse Train Generator";
+    prefix = "ch19_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -3134,6 +3654,32 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 20 Transmitter Pulse Train Generator";
+    prefix = "ch20_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 21
   ---------------------------------------------------------------------------
@@ -3278,6 +3824,32 @@ peripheral {
       type = SLV;
       size = 32;
       align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 21 Transmitter Pulse Train Generator";
+    prefix = "ch21_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
@@ -3432,6 +4004,32 @@ peripheral {
     };
   };
 
+  reg {
+    name = "Channel 22 Transmitter Pulse Train Generator";
+    prefix = "ch22_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
   ---------------------------------------------------------------------------
   -- CHANNEL 23
   ---------------------------------------------------------------------------
@@ -3576,6 +4174,32 @@ peripheral {
       type = SLV;
       size = 32;
       align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+  };
+
+  reg {
+    name = "Channel 23 Transmitter Pulse Train Generator";
+    prefix = "ch23_cfg_transm_pulse_train";
+
+    field {
+      name = "Number of output pulses";
+      description = "Specifies how many output pulses per input pulses";
+      prefix = "num";
+      type = SLV;
+      size = 16;
+      align = 0;
+      access_bus = READ_WRITE;
+      access_dev = READ_ONLY;
+    };
+
+    field {
+      name = "Reserved";
+      description = "Ignore on read, write with 0's";
+      prefix = "reserved";
+      type = SLV;
+      size = 16;
       access_bus = READ_WRITE;
       access_dev = READ_ONLY;
     };
