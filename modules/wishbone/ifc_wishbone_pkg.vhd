@@ -3013,7 +3013,7 @@ package ifc_wishbone_pkg is
     g_with_wired_or_driver                   : boolean := true;
     -- Single-ended trigger input/out, if g_with_single_ended_driver = true
     -- Possible values are: true or false
-    g_with_single_ended_driver               : boolean := false;
+    g_with_single_ended_driver               : boolean := true;
     -- Sync pulse on "positive" or "negative" edge of incoming pulse
     g_sync_edge                              : string  := "positive";
     -- channels facing outside the FPGA.
@@ -3087,7 +3087,7 @@ package ifc_wishbone_pkg is
     g_with_wired_or_driver                    : boolean := true;
     -- Single-ended trigger input/out, if g_with_single_ended_driver = true
     -- Possible values are: true or false
-    g_with_single_ended_driver                : boolean := false;
+    g_with_single_ended_driver                : boolean := true;
     -- Sync pulse on "positive" or "negative" edge of incoming pulse
     g_sync_edge                               : string  := "positive";
     -- channels facing outside the FPGA.
@@ -3152,7 +3152,7 @@ package ifc_wishbone_pkg is
     g_with_wired_or_driver                   : boolean := true;
     -- Single-ended trigger input/out, if g_with_single_ended_driver = true
     -- Possible values are: true or false
-    g_with_single_ended_driver               : boolean := false;
+    g_with_single_ended_driver               : boolean := true;
     -- Sync pulse on "positive" or "negative" edge of incoming pulse
     g_sync_edge                              : string  := "positive";
     -- Channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
@@ -3258,7 +3258,7 @@ package ifc_wishbone_pkg is
       g_with_wired_or_driver                   : boolean := true;
       -- Single-ended trigger input/out, if g_with_single_ended_driver = true
       -- Possible values are: true or false
-      g_with_single_ended_driver               : boolean := false;
+      g_with_single_ended_driver               : boolean := true;
       -- Sync pulse on "positive" or "negative" edge of incoming pulse
       g_sync_edge                              : string  := "positive";
       -- Channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
