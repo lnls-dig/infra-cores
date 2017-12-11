@@ -3157,6 +3157,8 @@ package ifc_wishbone_pkg is
     -- Single-ended trigger input/out, if g_with_single_ended_driver = true
     -- Possible values are: true or false
     g_with_single_ended_driver               : boolean := true;
+    -- Length of input pulse train counter
+    g_tx_input_pulse_max_width               : natural := 32;
     -- Sync pulse on "positive" or "negative" edge of incoming pulse
     g_sync_edge                              : string  := "positive";
     -- Channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
@@ -3263,6 +3265,8 @@ package ifc_wishbone_pkg is
       -- Single-ended trigger input/out, if g_with_single_ended_driver = true
       -- Possible values are: true or false
       g_with_single_ended_driver               : boolean := true;
+      -- Length of input pulse train counter
+      g_tx_input_pulse_max_width               : natural := 32;
       -- Sync pulse on "positive" or "negative" edge of incoming pulse
       g_sync_edge                              : string  := "positive";
       -- Channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
