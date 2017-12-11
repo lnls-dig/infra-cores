@@ -254,10 +254,17 @@ begin  -- architecture test
     test_end <= '0';
     -- Trigger should arrive at pad with 10 clock cycles
     wait until trig_pad_inout = '1';
-    for i in 0 to 8 loop
+    for i in 0 to 9 loop
       wait until rising_edge(clk);
       if trig_pad_inout = '0' then
-        report "Test #3 failed at iteration " & Integer'Image(i) severity failure;
+        report "Test #3 failed at pulse high iteration" & Integer'Image(i) severity failure;
+      end if;
+    end loop;
+
+    for i in 0 to 9 loop
+      wait until rising_edge(clk);
+      if trig_pad_inout = '1' then
+        report "Test #3 failed at pulse low iteration " & Integer'Image(i) severity failure;
       end if;
     end loop;
 
@@ -274,7 +281,7 @@ begin  -- architecture test
     -- Trigger should arrive as 1 clock cycle
     wait until trig_pad_inout = '1';
     wait until rising_edge(clk);
-    for i in 0 to 8 loop
+    for i in 0 to 9 loop
       wait until rising_edge(clk);
       if trig_pad_inout = '1' then
         report "Test #4 failed at iteration " & Integer'Image(i) severity failure;
@@ -301,7 +308,7 @@ begin  -- architecture test
     end loop;
 
     wait until rising_edge(clk);
-    for i in 0 to 8 loop
+    for i in 0 to 9 loop
       wait until rising_edge(clk);
       if trig_pad_inout = '1' then
         report "Test #5 failed, as pulse is glitchy at iteration " & Integer'Image(i) severity failure;
