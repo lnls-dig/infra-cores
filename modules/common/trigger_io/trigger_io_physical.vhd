@@ -50,7 +50,7 @@ generic
   g_with_wired_or_driver                   : boolean := true;
   -- Single-ended trigger input/out, if g_with_single_ended_driver = true
   -- Possible values are: true or false
-  g_with_single_ended_driver               : boolean := false
+  g_with_single_ended_driver               : boolean := true
 );
 port
 (
