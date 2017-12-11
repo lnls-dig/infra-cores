@@ -42,17 +42,21 @@ architecture test of trigger_io_tb is
   constant c_tx_delay_width                  : natural := 32;
   constant c_rx_counter_width                : natural := 32;
   constant c_tx_counter_width                : natural := 32;
+  constant c_tx_pulse_train_gen_width        : natural := 16;
 
   -- component ports
   signal clk                                 : std_logic := '1';
   signal rst_n                               : std_logic := '0';
 
   signal trig_dir                            : std_logic := '1'; -- FPGA is input
+  signal trig_pol                            : std_logic := '0';
   signal trig_ext_dir_pol                    : std_logic := '1'; -- reverse polarity to external
   signal trig_rx_debounce_length             : unsigned(c_rx_debounce_width-1 downto 0) := to_unsigned(10, c_rx_debounce_width);
   signal trig_tx_extensor_length             : unsigned(c_tx_extensor_width-1 downto 0) := to_unsigned(10, c_tx_extensor_width);
   signal trig_rx_delay_length                : unsigned(c_rx_delay_width-1 downto 0) := to_unsigned(0, c_rx_delay_width);
   signal trig_tx_delay_length                : unsigned(c_tx_delay_width-1 downto 0) := to_unsigned(0, c_tx_delay_width);
+  signal trig_tx_pulse_train_num             : unsigned(c_tx_pulse_train_gen_width-1 downto 0) :=
+                                                 to_unsigned(1, c_tx_pulse_train_gen_width);
   signal trig_rx_rst_n                       : std_logic := '1';
   signal trig_tx_rst_n                       : std_logic := '1';
   signal trig_rx_cnt                         : unsigned(c_rx_counter_width-1 downto 0);
@@ -211,6 +215,31 @@ begin  -- architecture test
     end if;
     wait until rising_edge(clk);
 
+    ---------------------------------------------------------------------------
+    -- Test #6
+    -- Sending trigger to pad, 2 clock cycles (extend 1 clock), with 10 pulses
+    ---------------------------------------------------------------------------
+    report "Test #6 starting";
+    trig_dir <= '0'; -- FPGA is output
+    trig_tx_pulse_train_num <= to_unsigned(10, trig_tx_pulse_train_num'length);
+    trig_tx_extensor_length <= to_unsigned(1, trig_tx_extensor_length'length);
+    test_begin_pulse <= '1';
+    wait until rising_edge(clk);
+    test_begin_pulse <= '0';
+    wait until rising_edge(clk);
+
+    -- Test trigger from FPGA, 1 clock cycle
+    trig_in <= '1';
+    wait until rising_edge(clk);
+    trig_in <= '0';
+    wait until rising_edge(clk);
+
+    report "Waiting for verification on test #6";
+    if test_end /= '1' then
+      wait until test_end = '1';
+    end if;
+    wait until rising_edge(clk);
+
     wait;
 
   end process;
@@ -320,6 +349,34 @@ begin  -- architecture test
     test_end <= '1';
     wait until rising_edge(clk);
 
+    ---------------------------------------------------------------------------
+    -- Test #6
+    ---------------------------------------------------------------------------
+    wait until test_begin_pulse = '1';
+    test_end <= '0';
+    -- Trigger should arrive as 2 clock cycle, 10 pulses
+    for pls in 0 to 9 loop
+      wait until trig_pad_inout = '1';
+      for i in 0 to 1 loop
+        wait until rising_edge(clk);
+        if trig_pad_inout = '0' then
+          report "Test #6 failed, as pulse is not a 2 clock cycle pulse, at iteration " & Integer'Image(i) severity failure;
+        end if;
+      end loop;
+
+      for i in 0 to 1 loop
+        wait until rising_edge(clk);
+        if trig_pad_inout = '1' then
+          report "Test #6 failed, as pulse is not a 50 % duty cycle at iteration " & Integer'Image(i) severity failure;
+        end if;
+      end loop;
+    end loop;
+
+    report "Test #6 succeeded";
+
+    test_end <= '1';
+    wait until rising_edge(clk);
+
     wait;
 
   end process;
@@ -346,11 +403,13 @@ begin  -- architecture test
     -- Trigger configuration
     -------------------------------
     trig_dir_i                               => trig_dir,
+    trig_pol_i                               => trig_pol,
     trig_ext_dir_pol_i                       => trig_ext_dir_pol,
     trig_rx_debounce_length_i                => trig_rx_debounce_length,
     trig_tx_extensor_length_i                => trig_tx_extensor_length,
     trig_rx_delay_length_i                   => trig_rx_delay_length,
     trig_tx_delay_length_i                   => trig_tx_delay_length,
+    trig_tx_pulse_train_num_i                => trig_tx_pulse_train_num,
 
     -------------------------------
     -- Counters

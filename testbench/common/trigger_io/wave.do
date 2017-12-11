@@ -160,8 +160,24 @@ add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_extend_p
 add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_extend_pulse/pulse_i
 add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_extend_pulse/pulse_width_i
 add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_extend_pulse/rst_n_i
+add wave -noupdate -divider pulse_train
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/clk_i
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/rst_n_i
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/g_input_pulse_max_width
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/g_pulse_train_gen_width
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/pulse_train_num_i
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/pulse_i
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/pulse_cycles_cnt
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/pulse_cycles_cnt_max
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/pulse_train
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/pulse_train_cnt
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/pulse_train_cnt_max
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/pulse_train_fsm_current_state
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/rdy
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/pulse_rdy_o
+add wave -noupdate /trigger_io_tb/DUT/cmp_trigger_io_tx_datapath/cmp_tx_pulse_train/pulse_train_o
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {1940000 ps} 0}
+WaveRestoreCursors {{Cursor 1} {258219 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -177,4 +193,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {897929 ps} {2528247 ps}
+WaveRestoreZoom {0 ps} {2584542 ps}
