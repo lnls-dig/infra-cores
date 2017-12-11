@@ -27,6 +27,8 @@ entity xwb_trigger_iface is
       -- Single-ended trigger input/out, if g_with_single_ended_driver = true
       -- Possible values are: true or false
       g_with_single_ended_driver               : boolean := true;
+      -- Length of input pulse train counter
+      g_tx_input_pulse_max_width               : natural := 32;
       -- Sync pulse on "positive" or "negative" edge of incoming pulse
       g_sync_edge                              : string  := "positive";
       -- channels facing outside the FPGA.
@@ -88,6 +90,7 @@ begin
       g_iobuf_instantiation_type   => g_iobuf_instantiation_type,
       g_with_wired_or_driver       => g_with_wired_or_driver,
       g_with_single_ended_driver   => g_with_single_ended_driver,
+      g_tx_input_pulse_max_width   => g_tx_input_pulse_max_width,
       g_sync_edge                  => g_sync_edge,
       g_trig_num                   => g_trig_num
     )

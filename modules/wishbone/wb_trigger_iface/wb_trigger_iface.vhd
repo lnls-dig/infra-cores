@@ -73,6 +73,8 @@ entity wb_trigger_iface is
     -- Single-ended trigger input/out, if g_with_single_ended_driver = true
     -- Possible values are: true or false
     g_with_single_ended_driver               : boolean := true;
+    -- Length of input pulse train counter
+    g_tx_input_pulse_max_width               : natural := 32;
     -- Sync pulse on "positive" or "negative" edge of incoming pulse
     g_sync_edge                              : string  := "positive";
     -- channels facing outside the FPGA.
@@ -139,8 +141,9 @@ architecture rtl of wb_trigger_iface is
   constant c_tx_counter_width           : natural   := 16;  -- Defined according to the wb_slave_trigger.vhd
   constant c_rx_delay_width             : natural   := 32; -- Defined according to the wb_slave_trigger.vhd
   constant c_tx_delay_width             : natural   := 32; -- Defined according to the wb_slave_trigger.vhd
+  constant c_tx_pulse_train_gen_width   : natural   := 16; -- Defined according to the wb_slave_trigger.vhd
 
-  constant c_periph_addr_size           : natural   := 7+2;
+  constant c_periph_addr_size           : natural   := 8+2;
 
   constant c_max_num_channels           : natural   := 24;
 
@@ -165,6 +168,7 @@ architecture rtl of wb_trigger_iface is
     ch_cfg_transm_len         : std_logic_vector(c_tx_extensor_width-1 downto 0);
     ch_cfg_rcv_delay_len      : std_logic_vector(c_rx_delay_width-1 downto 0);
     ch_cfg_transm_delay_len   : std_logic_vector(c_tx_delay_width-1 downto 0);
+    ch_cfg_transm_pulse_train_num : std_logic_vector(c_tx_pulse_train_gen_width-1 downto 0);
   end record;
 
   type t_wb_trig_out_array is array(natural range <>) of t_wb_trig_out_channel;
@@ -213,7 +217,7 @@ architecture rtl of wb_trigger_iface is
   port (
     rst_n_i                                  : in     std_logic;
     clk_sys_i                                : in     std_logic;
-    wb_adr_i                                 : in     std_logic_vector(6 downto 0);
+    wb_adr_i                                 : in     std_logic_vector(7 downto 0);
     wb_dat_i                                 : in     std_logic_vector(31 downto 0);
     wb_dat_o                                 : out    std_logic_vector(31 downto 0);
     wb_cyc_i                                 : in     std_logic;
@@ -282,7 +286,7 @@ begin  -- architecture rtl
       clk_sys_i  => clk_i,
       fs_clk_i   => ref_clk_i,
       wb_clk_i   => clk_i,
-      wb_adr_i   => wb_slv_adp_out.adr(6 downto 0),
+      wb_adr_i   => wb_slv_adp_out.adr(7 downto 0),
       wb_dat_i   => wb_slv_adp_out.dat,
       wb_dat_o   => wb_slv_adp_in.dat,
       wb_cyc_i   => wb_slv_adp_out.cyc,
@@ -306,6 +310,8 @@ begin  -- architecture rtl
   ch_regs_out(0).ch_cfg_rcv_len            <= regs_out.ch0_cfg_rcv_len_o;
   ch_regs_out(0).ch_cfg_transm_len         <= regs_out.ch0_cfg_transm_len_o;
   ch_regs_out(0).ch_cfg_transm_delay_len   <= regs_out.ch0_cfg_transm_delay_len_o;
+  ch_regs_out(0).ch_cfg_transm_pulse_train_num <=
+                                              regs_out.ch0_cfg_transm_pulse_train_num_o;
   ch_regs_out(0).ch_cfg_rcv_delay_len      <= regs_out.ch0_cfg_rcv_delay_len_o;
 
   ch_regs_out(1).ch_ctl_dir                <= regs_out.ch1_ctl_dir_o;
@@ -316,6 +322,8 @@ begin  -- architecture rtl
   ch_regs_out(1).ch_cfg_rcv_len            <= regs_out.ch1_cfg_rcv_len_o;
   ch_regs_out(1).ch_cfg_transm_len         <= regs_out.ch1_cfg_transm_len_o;
   ch_regs_out(1).ch_cfg_transm_delay_len   <= regs_out.ch1_cfg_transm_delay_len_o;
+  ch_regs_out(1).ch_cfg_transm_pulse_train_num <=
+                                              regs_out.ch1_cfg_transm_pulse_train_num_o;
   ch_regs_out(1).ch_cfg_rcv_delay_len      <= regs_out.ch1_cfg_rcv_delay_len_o;
 
   ch_regs_out(2).ch_ctl_dir                <= regs_out.ch2_ctl_dir_o;
@@ -326,6 +334,8 @@ begin  -- architecture rtl
   ch_regs_out(2).ch_cfg_rcv_len            <= regs_out.ch2_cfg_rcv_len_o;
   ch_regs_out(2).ch_cfg_transm_len         <= regs_out.ch2_cfg_transm_len_o;
   ch_regs_out(2).ch_cfg_transm_delay_len   <= regs_out.ch2_cfg_transm_delay_len_o;
+  ch_regs_out(2).ch_cfg_transm_pulse_train_num <=
+                                              regs_out.ch2_cfg_transm_pulse_train_num_o;
   ch_regs_out(2).ch_cfg_rcv_delay_len      <= regs_out.ch2_cfg_rcv_delay_len_o;
 
   ch_regs_out(3).ch_ctl_dir                <= regs_out.ch3_ctl_dir_o;
@@ -336,6 +346,8 @@ begin  -- architecture rtl
   ch_regs_out(3).ch_cfg_rcv_len            <= regs_out.ch3_cfg_rcv_len_o;
   ch_regs_out(3).ch_cfg_transm_len         <= regs_out.ch3_cfg_transm_len_o;
   ch_regs_out(3).ch_cfg_transm_delay_len   <= regs_out.ch3_cfg_transm_delay_len_o;
+  ch_regs_out(3).ch_cfg_transm_pulse_train_num <=
+                                              regs_out.ch3_cfg_transm_pulse_train_num_o;
   ch_regs_out(3).ch_cfg_rcv_delay_len      <= regs_out.ch3_cfg_rcv_delay_len_o;
 
   ch_regs_out(4).ch_ctl_dir                <= regs_out.ch4_ctl_dir_o;
@@ -346,6 +358,8 @@ begin  -- architecture rtl
   ch_regs_out(4).ch_cfg_rcv_len            <= regs_out.ch4_cfg_rcv_len_o;
   ch_regs_out(4).ch_cfg_transm_len         <= regs_out.ch4_cfg_transm_len_o;
   ch_regs_out(4).ch_cfg_transm_delay_len   <= regs_out.ch4_cfg_transm_delay_len_o;
+  ch_regs_out(4).ch_cfg_transm_pulse_train_num <=
+                                              regs_out.ch4_cfg_transm_pulse_train_num_o;
   ch_regs_out(4).ch_cfg_rcv_delay_len      <= regs_out.ch4_cfg_rcv_delay_len_o;
 
   ch_regs_out(5).ch_ctl_dir                <= regs_out.ch5_ctl_dir_o;
@@ -356,6 +370,8 @@ begin  -- architecture rtl
   ch_regs_out(5).ch_cfg_rcv_len            <= regs_out.ch5_cfg_rcv_len_o;
   ch_regs_out(5).ch_cfg_transm_len         <= regs_out.ch5_cfg_transm_len_o;
   ch_regs_out(5).ch_cfg_transm_delay_len   <= regs_out.ch5_cfg_transm_delay_len_o;
+  ch_regs_out(5).ch_cfg_transm_pulse_train_num <=
+                                              regs_out.ch5_cfg_transm_pulse_train_num_o;
   ch_regs_out(5).ch_cfg_rcv_delay_len      <= regs_out.ch5_cfg_rcv_delay_len_o;
 
   ch_regs_out(6).ch_ctl_dir                <= regs_out.ch6_ctl_dir_o;
@@ -366,6 +382,8 @@ begin  -- architecture rtl
   ch_regs_out(6).ch_cfg_rcv_len            <= regs_out.ch6_cfg_rcv_len_o;
   ch_regs_out(6).ch_cfg_transm_len         <= regs_out.ch6_cfg_transm_len_o;
   ch_regs_out(6).ch_cfg_transm_delay_len   <= regs_out.ch6_cfg_transm_delay_len_o;
+  ch_regs_out(6).ch_cfg_transm_pulse_train_num <=
+                                              regs_out.ch6_cfg_transm_pulse_train_num_o;
   ch_regs_out(6).ch_cfg_rcv_delay_len      <= regs_out.ch6_cfg_rcv_delay_len_o;
 
   ch_regs_out(7).ch_ctl_dir                <= regs_out.ch7_ctl_dir_o;
@@ -376,6 +394,8 @@ begin  -- architecture rtl
   ch_regs_out(7).ch_cfg_rcv_len            <= regs_out.ch7_cfg_rcv_len_o;
   ch_regs_out(7).ch_cfg_transm_len         <= regs_out.ch7_cfg_transm_len_o;
   ch_regs_out(7).ch_cfg_transm_delay_len   <= regs_out.ch7_cfg_transm_delay_len_o;
+  ch_regs_out(7).ch_cfg_transm_pulse_train_num <=
+                                              regs_out.ch7_cfg_transm_pulse_train_num_o;
   ch_regs_out(7).ch_cfg_rcv_delay_len      <= regs_out.ch7_cfg_rcv_delay_len_o;
 
   ch_regs_out(8).ch_ctl_dir                <= regs_out.ch8_ctl_dir_o;
@@ -386,6 +406,8 @@ begin  -- architecture rtl
   ch_regs_out(8).ch_cfg_rcv_len            <= regs_out.ch8_cfg_rcv_len_o;
   ch_regs_out(8).ch_cfg_transm_len         <= regs_out.ch8_cfg_transm_len_o;
   ch_regs_out(8).ch_cfg_transm_delay_len   <= regs_out.ch8_cfg_transm_delay_len_o;
+  ch_regs_out(8).ch_cfg_transm_pulse_train_num <=
+                                              regs_out.ch8_cfg_transm_pulse_train_num_o;
   ch_regs_out(8).ch_cfg_rcv_delay_len      <= regs_out.ch8_cfg_rcv_delay_len_o;
 
   ch_regs_out(9).ch_ctl_dir                <= regs_out.ch9_ctl_dir_o;
@@ -396,6 +418,8 @@ begin  -- architecture rtl
   ch_regs_out(9).ch_cfg_rcv_len            <= regs_out.ch9_cfg_rcv_len_o;
   ch_regs_out(9).ch_cfg_transm_len         <= regs_out.ch9_cfg_transm_len_o;
   ch_regs_out(9).ch_cfg_transm_delay_len   <= regs_out.ch9_cfg_transm_delay_len_o;
+  ch_regs_out(9).ch_cfg_transm_pulse_train_num <=
+                                              regs_out.ch9_cfg_transm_pulse_train_num_o;
   ch_regs_out(9).ch_cfg_rcv_delay_len      <= regs_out.ch9_cfg_rcv_delay_len_o;
 
   ch_regs_out(10).ch_ctl_dir                <= regs_out.ch10_ctl_dir_o;
@@ -406,6 +430,8 @@ begin  -- architecture rtl
   ch_regs_out(10).ch_cfg_rcv_len            <= regs_out.ch10_cfg_rcv_len_o;
   ch_regs_out(10).ch_cfg_transm_len         <= regs_out.ch10_cfg_transm_len_o;
   ch_regs_out(10).ch_cfg_transm_delay_len   <= regs_out.ch10_cfg_transm_delay_len_o;
+  ch_regs_out(10).ch_cfg_transm_pulse_train_num <=
+                                               regs_out.ch10_cfg_transm_pulse_train_num_o;
   ch_regs_out(10).ch_cfg_rcv_delay_len      <= regs_out.ch10_cfg_rcv_delay_len_o;
 
   ch_regs_out(11).ch_ctl_dir                <= regs_out.ch11_ctl_dir_o;
@@ -416,6 +442,8 @@ begin  -- architecture rtl
   ch_regs_out(11).ch_cfg_rcv_len            <= regs_out.ch11_cfg_rcv_len_o;
   ch_regs_out(11).ch_cfg_transm_len         <= regs_out.ch11_cfg_transm_len_o;
   ch_regs_out(11).ch_cfg_transm_delay_len   <= regs_out.ch11_cfg_transm_delay_len_o;
+  ch_regs_out(11).ch_cfg_transm_pulse_train_num <=
+                                               regs_out.ch11_cfg_transm_pulse_train_num_o;
   ch_regs_out(11).ch_cfg_rcv_delay_len      <= regs_out.ch11_cfg_rcv_delay_len_o;
 
   ch_regs_out(12).ch_ctl_dir                <= regs_out.ch12_ctl_dir_o;
@@ -426,6 +454,8 @@ begin  -- architecture rtl
   ch_regs_out(12).ch_cfg_rcv_len            <= regs_out.ch12_cfg_rcv_len_o;
   ch_regs_out(12).ch_cfg_transm_len         <= regs_out.ch12_cfg_transm_len_o;
   ch_regs_out(12).ch_cfg_transm_delay_len   <= regs_out.ch12_cfg_transm_delay_len_o;
+  ch_regs_out(12).ch_cfg_transm_pulse_train_num <=
+                                               regs_out.ch12_cfg_transm_pulse_train_num_o;
   ch_regs_out(12).ch_cfg_rcv_delay_len      <= regs_out.ch12_cfg_rcv_delay_len_o;
 
   ch_regs_out(13).ch_ctl_dir                <= regs_out.ch13_ctl_dir_o;
@@ -436,6 +466,8 @@ begin  -- architecture rtl
   ch_regs_out(13).ch_cfg_rcv_len            <= regs_out.ch13_cfg_rcv_len_o;
   ch_regs_out(13).ch_cfg_transm_len         <= regs_out.ch13_cfg_transm_len_o;
   ch_regs_out(13).ch_cfg_transm_delay_len   <= regs_out.ch13_cfg_transm_delay_len_o;
+  ch_regs_out(13).ch_cfg_transm_pulse_train_num <=
+                                               regs_out.ch13_cfg_transm_pulse_train_num_o;
   ch_regs_out(13).ch_cfg_rcv_delay_len      <= regs_out.ch13_cfg_rcv_delay_len_o;
 
   ch_regs_out(14).ch_ctl_dir                <= regs_out.ch14_ctl_dir_o;
@@ -446,6 +478,8 @@ begin  -- architecture rtl
   ch_regs_out(14).ch_cfg_rcv_len            <= regs_out.ch14_cfg_rcv_len_o;
   ch_regs_out(14).ch_cfg_transm_len         <= regs_out.ch14_cfg_transm_len_o;
   ch_regs_out(14).ch_cfg_transm_delay_len   <= regs_out.ch14_cfg_transm_delay_len_o;
+  ch_regs_out(14).ch_cfg_transm_pulse_train_num <=
+                                               regs_out.ch14_cfg_transm_pulse_train_num_o;
   ch_regs_out(14).ch_cfg_rcv_delay_len      <= regs_out.ch14_cfg_rcv_delay_len_o;
 
   ch_regs_out(15).ch_ctl_dir                <= regs_out.ch15_ctl_dir_o;
@@ -456,6 +490,8 @@ begin  -- architecture rtl
   ch_regs_out(15).ch_cfg_rcv_len            <= regs_out.ch15_cfg_rcv_len_o;
   ch_regs_out(15).ch_cfg_transm_len         <= regs_out.ch15_cfg_transm_len_o;
   ch_regs_out(15).ch_cfg_transm_delay_len   <= regs_out.ch15_cfg_transm_delay_len_o;
+  ch_regs_out(15).ch_cfg_transm_pulse_train_num <=
+                                               regs_out.ch15_cfg_transm_pulse_train_num_o;
   ch_regs_out(15).ch_cfg_rcv_delay_len      <= regs_out.ch15_cfg_rcv_delay_len_o;
 
   ch_regs_out(16).ch_ctl_dir                <= regs_out.ch16_ctl_dir_o;
@@ -466,6 +502,8 @@ begin  -- architecture rtl
   ch_regs_out(16).ch_cfg_rcv_len            <= regs_out.ch16_cfg_rcv_len_o;
   ch_regs_out(16).ch_cfg_transm_len         <= regs_out.ch16_cfg_transm_len_o;
   ch_regs_out(16).ch_cfg_transm_delay_len   <= regs_out.ch16_cfg_transm_delay_len_o;
+  ch_regs_out(16).ch_cfg_transm_pulse_train_num <=
+                                               regs_out.ch16_cfg_transm_pulse_train_num_o;
   ch_regs_out(16).ch_cfg_rcv_delay_len      <= regs_out.ch16_cfg_rcv_delay_len_o;
 
   ch_regs_out(17).ch_ctl_dir                <= regs_out.ch17_ctl_dir_o;
@@ -476,6 +514,8 @@ begin  -- architecture rtl
   ch_regs_out(17).ch_cfg_rcv_len            <= regs_out.ch17_cfg_rcv_len_o;
   ch_regs_out(17).ch_cfg_transm_len         <= regs_out.ch17_cfg_transm_len_o;
   ch_regs_out(17).ch_cfg_transm_delay_len   <= regs_out.ch17_cfg_transm_delay_len_o;
+  ch_regs_out(17).ch_cfg_transm_pulse_train_num <=
+                                               regs_out.ch17_cfg_transm_pulse_train_num_o;
   ch_regs_out(17).ch_cfg_rcv_delay_len      <= regs_out.ch17_cfg_rcv_delay_len_o;
 
   ch_regs_out(18).ch_ctl_dir                <= regs_out.ch18_ctl_dir_o;
@@ -486,6 +526,8 @@ begin  -- architecture rtl
   ch_regs_out(18).ch_cfg_rcv_len            <= regs_out.ch18_cfg_rcv_len_o;
   ch_regs_out(18).ch_cfg_transm_len         <= regs_out.ch18_cfg_transm_len_o;
   ch_regs_out(18).ch_cfg_transm_delay_len   <= regs_out.ch18_cfg_transm_delay_len_o;
+  ch_regs_out(18).ch_cfg_transm_pulse_train_num <=
+                                               regs_out.ch18_cfg_transm_pulse_train_num_o;
   ch_regs_out(18).ch_cfg_rcv_delay_len      <= regs_out.ch18_cfg_rcv_delay_len_o;
 
   ch_regs_out(19).ch_ctl_dir                <= regs_out.ch19_ctl_dir_o;
@@ -496,6 +538,8 @@ begin  -- architecture rtl
   ch_regs_out(19).ch_cfg_rcv_len            <= regs_out.ch19_cfg_rcv_len_o;
   ch_regs_out(19).ch_cfg_transm_len         <= regs_out.ch19_cfg_transm_len_o;
   ch_regs_out(19).ch_cfg_transm_delay_len   <= regs_out.ch19_cfg_transm_delay_len_o;
+  ch_regs_out(19).ch_cfg_transm_pulse_train_num <=
+                                               regs_out.ch19_cfg_transm_pulse_train_num_o;
   ch_regs_out(19).ch_cfg_rcv_delay_len      <= regs_out.ch19_cfg_rcv_delay_len_o;
 
   ch_regs_out(20).ch_ctl_dir                <= regs_out.ch20_ctl_dir_o;
@@ -506,6 +550,8 @@ begin  -- architecture rtl
   ch_regs_out(20).ch_cfg_rcv_len            <= regs_out.ch20_cfg_rcv_len_o;
   ch_regs_out(20).ch_cfg_transm_len         <= regs_out.ch20_cfg_transm_len_o;
   ch_regs_out(20).ch_cfg_transm_delay_len   <= regs_out.ch20_cfg_transm_delay_len_o;
+  ch_regs_out(20).ch_cfg_transm_pulse_train_num <=
+                                               regs_out.ch20_cfg_transm_pulse_train_num_o;
   ch_regs_out(20).ch_cfg_rcv_delay_len      <= regs_out.ch20_cfg_rcv_delay_len_o;
 
   ch_regs_out(21).ch_ctl_dir                <= regs_out.ch21_ctl_dir_o;
@@ -516,6 +562,8 @@ begin  -- architecture rtl
   ch_regs_out(21).ch_cfg_rcv_len            <= regs_out.ch21_cfg_rcv_len_o;
   ch_regs_out(21).ch_cfg_transm_len         <= regs_out.ch21_cfg_transm_len_o;
   ch_regs_out(21).ch_cfg_transm_delay_len   <= regs_out.ch21_cfg_transm_delay_len_o;
+  ch_regs_out(21).ch_cfg_transm_pulse_train_num <=
+                                               regs_out.ch21_cfg_transm_pulse_train_num_o;
   ch_regs_out(21).ch_cfg_rcv_delay_len      <= regs_out.ch21_cfg_rcv_delay_len_o;
 
   ch_regs_out(22).ch_ctl_dir                <= regs_out.ch22_ctl_dir_o;
@@ -526,6 +574,8 @@ begin  -- architecture rtl
   ch_regs_out(22).ch_cfg_rcv_len            <= regs_out.ch22_cfg_rcv_len_o;
   ch_regs_out(22).ch_cfg_transm_len         <= regs_out.ch22_cfg_transm_len_o;
   ch_regs_out(22).ch_cfg_transm_delay_len   <= regs_out.ch22_cfg_transm_delay_len_o;
+  ch_regs_out(22).ch_cfg_transm_pulse_train_num <=
+                                               regs_out.ch22_cfg_transm_pulse_train_num_o;
   ch_regs_out(22).ch_cfg_rcv_delay_len      <= regs_out.ch22_cfg_rcv_delay_len_o;
 
   ch_regs_out(23).ch_ctl_dir                <= regs_out.ch23_ctl_dir_o;
@@ -536,6 +586,8 @@ begin  -- architecture rtl
   ch_regs_out(23).ch_cfg_rcv_len            <= regs_out.ch23_cfg_rcv_len_o;
   ch_regs_out(23).ch_cfg_transm_len         <= regs_out.ch23_cfg_transm_len_o;
   ch_regs_out(23).ch_cfg_transm_delay_len   <= regs_out.ch23_cfg_transm_delay_len_o;
+  ch_regs_out(23).ch_cfg_transm_pulse_train_num <=
+                                               regs_out.ch23_cfg_transm_pulse_train_num_o;
   ch_regs_out(23).ch_cfg_rcv_delay_len      <= regs_out.ch23_cfg_rcv_delay_len_o;
 
 
@@ -630,7 +682,9 @@ begin  -- architecture rtl
       g_rx_counter_width                       => c_rx_counter_width,
       g_tx_counter_width                       => c_tx_counter_width,
       g_rx_delay_width                         => c_rx_delay_width,
-      g_tx_delay_width                         => c_tx_delay_width
+      g_tx_delay_width                         => c_tx_delay_width,
+      g_tx_input_pulse_max_width               => g_tx_input_pulse_max_width,
+      g_tx_pulse_train_gen_width               => c_tx_pulse_train_gen_width
     )
     port map (
       -- Clock/Resets
@@ -647,6 +701,7 @@ begin  -- architecture rtl
       trig_tx_extensor_length_i                => unsigned(ch_regs_out(i).ch_cfg_transm_len),
       trig_rx_delay_length_i                   => unsigned(ch_regs_out(i).ch_cfg_rcv_delay_len),
       trig_tx_delay_length_i                   => unsigned(ch_regs_out(i).ch_cfg_transm_delay_len),
+      trig_tx_pulse_train_num_i                => unsigned(ch_regs_out(i).ch_cfg_transm_pulse_train_num),
 
       -------------------------------
       -- Counters
