@@ -507,9 +507,9 @@ begin  -- architecture rtl
   ch_regs_out(16).ch_cfg_rcv_delay_len      <= regs_out.ch16_cfg_rcv_delay_len_o;
 
   ch_regs_out(17).ch_ctl_dir                <= regs_out.ch17_ctl_dir_o;
-  ch_regs_out(17).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch17_ctl_rcv_count_rst_o);
   ch_regs_out(17).ch_ctl_dir_pol            <= regs_out.ch17_ctl_dir_pol_o;
   ch_regs_out(17).ch_ctl_pol                <= regs_out.ch17_ctl_pol_o;
+  ch_regs_out(17).ch_ctl_rcv_count_rst_n    <= not(regs_out.ch17_ctl_rcv_count_rst_o);
   ch_regs_out(17).ch_ctl_transm_count_rst_n <= not(regs_out.ch17_ctl_transm_count_rst_o);
   ch_regs_out(17).ch_cfg_rcv_len            <= regs_out.ch17_cfg_rcv_len_o;
   ch_regs_out(17).ch_cfg_transm_len         <= regs_out.ch17_cfg_transm_len_o;
