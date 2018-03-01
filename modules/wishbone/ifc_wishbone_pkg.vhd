@@ -10,7 +10,7 @@ use work.wr_fabric_pkg.all;
 use work.acq_core_pkg.all;
 use work.ipcores_pkg.all;
 use work.pcie_cntr_axi_pkg.all;
-use work.trigger_pkg.all;
+use work.trigger_common_pkg.all;
 
 package ifc_wishbone_pkg is
 
