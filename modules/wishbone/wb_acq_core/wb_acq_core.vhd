@@ -229,9 +229,7 @@ architecture rtl of wb_acq_core is
 
   -- Reset signals
   signal fs_rst_n                           : std_logic;
-  signal fs_rst_comb_n                      : std_logic;
   signal ext_rst_n                          : std_logic;
-  signal ext_rst_comb_n                     : std_logic;
 
   -- Registers Signals
   signal regs_in                            : t_acq_core_in_registers;
@@ -466,22 +464,8 @@ begin
     report "[wb_acq_core] Only g_acq_num_channels less or equal 24 is supported!"
     severity Failure;
 
-  fs_rst_comb_n <= fs_rst_n_i and acq_fsm_rstn_fs_sync and acq_start_rstn_fs_sync;
-  ext_rst_comb_n <= ext_rst_n_i and acq_fsm_rstn_ext_sync and acq_start_rstn_ext_sync;
-
-  cmp_reset_fs_rst_synch : reset_synch
-  port map(
-    clk_i                                   => fs_clk_i,
-    arst_n_i                                => fs_rst_comb_n,
-    rst_n_o                                 => fs_rst_n
-  );
-
-  cmp_reset_ext_rst_synch : reset_synch
-  port map(
-    clk_i                                   => ext_clk_i,
-    arst_n_i                                => ext_rst_comb_n,
-    rst_n_o                                 => ext_rst_n
-  );
+  fs_rst_n <= fs_rst_n_i and acq_fsm_rstn_fs_sync and acq_start_rstn_fs_sync;
+  ext_rst_n <= ext_rst_n_i and acq_fsm_rstn_ext_sync and acq_start_rstn_ext_sync;
 
   -----------------------------
   -- Slave adapter for Wishbone Register Interface
