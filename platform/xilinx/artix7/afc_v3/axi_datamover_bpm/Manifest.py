@@ -2,7 +2,7 @@ if (action == "synthesis"):
     files = ["axi_datamover_bpm.xci"]
 
 else:
-    files = ["axi_datamover_v5_1/hdl/src/vhdl/",
+    files = ["synth/",
 #            "blk_mem_gen_v8_2/hdl/blk_mem_gen_v8_2.vhd",
 #            "fifo_generator_v12_0/simulation/",
 #            "lib_cdc_v1_0/hdl/src/vhdl/",

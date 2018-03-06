@@ -3,4 +3,4 @@ if (action == "synthesis"):
 
 else:
     files = ["source/",
-            "sim/pcie_core.v"]
+            "sim/pcie_core.vhd"]

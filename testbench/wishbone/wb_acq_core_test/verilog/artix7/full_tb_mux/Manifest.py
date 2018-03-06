@@ -8,14 +8,11 @@ sim_top = "wb_acq_core_tb"
 modules = {"local" : [
                     "../../../../../../modules/wishbone",
                     "../../../../../../modules/common",
-                    "../../../../../../modules/rffe_top",
-                    "../../../../../../modules/fabric",
-                    "../../../../../../modules/fmc_adc_common",
+                    "../../../../../../modules/generic",
                     "../../../../../../ip_cores/general-cores",
-                    "../../../../../../ip_cores/etherbone-core",
                     "../../../../../../platform",
                     "../../../../../../sim/ddr_model",
-                     "../../../../../../platform/artix7/afc_v3"]}
+                    "../../../../../../platform"]}
 
 files = ["wb_acq_core_tb.v", "axi_interconnect_wrapper.vhd", "ddr_core_wrapper.vhd",
 			"clk_rst.v", "../../../../../../sim/wishbone_test_master.v",
