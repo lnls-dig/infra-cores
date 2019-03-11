@@ -131,7 +131,7 @@ begin
   generic map (
     g_ma_interface_mode                       => g_ma_interface_mode,
     g_ma_address_granularity                  => g_ma_address_granularity,
-    g_simulation                              => g_simulation,
+    g_simulation                              => g_simulation
   )
   port map (
     -- DDR3 memory pins
