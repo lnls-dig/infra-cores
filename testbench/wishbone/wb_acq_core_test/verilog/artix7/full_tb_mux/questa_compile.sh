@@ -7,22 +7,22 @@
 ######################################################################
 
 vlib xil_defaultlib
-vlib fifo_generator_v12_0
-vlib axi_interconnect_v1_7
-vlib lib_pkg_v1_0
-vlib lib_fifo_v1_0
-vlib lib_srl_fifo_v1_0
-vlib lib_cdc_v1_0
-vlib axi_datamover_v5_1
+vlib fifo_generator_v13_1_2
+vlib axi_interconnect_v1_7_11
+vlib lib_pkg_v1_0_2
+vlib lib_fifo_v1_0_6
+vlib lib_srl_fifo_v1_0_2
+vlib lib_cdc_v1_0_2
+vlib axi_datamover_v5_1_12
 
 vmap xil_defaultlib xil_defaultlib
-vmap fifo_generator_v12_0 fifo_generator_v12_0
-vmap axi_interconnect_v1_7 axi_interconnect_v1_7
-vmap lib_pkg_v1_0 lib_pkg_v1_0
-vmap lib_fifo_v1_0 lib_fifo_v1_0
-vmap lib_srl_fifo_v1_0 lib_srl_fifo_v1_0
-vmap lib_cdc_v1_0 lib_cdc_v1_0
-vmap axi_datamover_v5_1 axi_datamover_v5_1
+vmap fifo_generator_v13_1_2 fifo_generator_v13_1_2
+vmap axi_interconnect_v1_7_11 axi_interconnect_v1_7_11
+vmap lib_pkg_v1_0_2 lib_pkg_v1_0_2
+vmap lib_fifo_v1_0_6 lib_fifo_v1_0_6
+vmap lib_srl_fifo_v1_0_2 lib_srl_fifo_v1_0_2
+vmap lib_cdc_v1_0_2 lib_cdc_v1_0_2
+vmap axi_datamover_v5_1_12 axi_datamover_v5_1_12
 
 #### Compile DDR IP core ####
 
@@ -31,215 +31,217 @@ vmap axi_datamover_v5_1 axi_datamover_v5_1
 #"../../sim/ddr_model/artix7/ddr3_model.sv"
 
 #### Compile AXI Interconnect IP core ####
-vcom -64 -work fifo_generator_v12_0 \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/simulation/fifo_generator_vhdl_beh.vhd"
+vlog -64 -work fifo_generator_v13_1_2 \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/simulation/fifo_generator_vlog_beh.v"
 
-vlog -64 -work fifo_generator_v12_0 \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/simulation/fifo_generator_vlog_beh.v"
+vcom -64 -work fifo_generator_v13_1_2 \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/fifo_generator_v13_1_rfs.vhd"
 
-vcom -64 -93 -work fifo_generator_v12_0  \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vh_rfs.vhd"
+vlog -64 -work fifo_generator_v13_1_2 \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/fifo_generator_v13_1_rfs.v"
 
-vlog -64 -work fifo_generator_v12_0 \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vh_rfs.v"
+#vlog -64 -work fifo_generator_v12_0 \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/simulation/fifo_generator_vlog_beh.v"
+#
+#vcom -64 -93 -work fifo_generator_v12_0  \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vh_rfs.vhd"
+#
+#vlog -64 -work fifo_generator_v12_0 \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vh_rfs.v"
+#
+#vlog -64 -work fifo_generator_v12_0 \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/hdl/fifo_generator_v12_0_rfs.v"
+#
+#vcom -64 -work fifo_generator_v12_0 \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd"
+#
+#vcom -64 -work fifo_generator_v12_0 \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/hdl/fifo_generator_v12_0_rfs.vhd"
+#
+#vcom -64 -work fifo_generator_v12_0 \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/hdl/fifo_generator_v12_0.vhd"
 
-vlog -64 -work fifo_generator_v12_0 \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/hdl/fifo_generator_v12_0_rfs.v"
-
-vcom -64 -work fifo_generator_v12_0 \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/hdl/fifo_generator_v12_0_vhsyn_rfs.vhd"
-
-vcom -64 -work fifo_generator_v12_0 \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/hdl/fifo_generator_v12_0_rfs.vhd"
-
-vcom -64 -work fifo_generator_v12_0 \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/hdl/fifo_generator_v12_0.vhd"
-
-vlog -64 -work axi_interconnect_v1_7 \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_a_axi3_conv.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_arbiter_sasd.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_arbiter.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_decoder.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_a_downsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_arbiter_resp.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_a_upsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi3_conv.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_fifo.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_clock_converter.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_register_slice.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_reg_srl_fifo.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_crossbar.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_sample_cycle_ratio.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_srl_fifo.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_sync_clock_converter.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_data_fifo.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_downsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_interconnect.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axilite_conv.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_protocol_converter.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_register_slice.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_upsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_b_downsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_and.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_latch_and.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_latch_or.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_or.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_command_fifo.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_mask_static.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_mask.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel_mask_static.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel_mask.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel_static.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_static.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_converter_bank.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_crossbar_sasd.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_crossbar.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_data_fifo_bank.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_decerr_slave.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_fifo_gen.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_mux_enc.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_mux.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_ndeep_srl.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_nto1_mux.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_protocol_conv_bank.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_r_axi3_conv.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_r_downsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_register_slice_bank.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_r_upsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_si_transactor.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_splitter.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_top.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_w_axi3_conv.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_wdata_mux.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_wdata_router.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_w_downsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_w_upsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_a_axi3_conv.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_arbiter_sasd.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_arbiter.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_decoder.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_a_downsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_arbiter_resp.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_a_upsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi3_conv.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_fifo.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_clock_converter.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_register_slice.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_reg_srl_fifo.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_crossbar.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_sample_cycle_ratio.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_srl_fifo.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_sync_clock_converter.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_data_fifo.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_downsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_interconnect.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axilite_conv.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_protocol_converter.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_register_slice.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_upsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_b_downsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_and.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_latch_and.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_latch_or.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_or.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_command_fifo.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_mask_static.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_mask.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel_mask_static.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel_mask.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel_static.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_static.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_converter_bank.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_crossbar_sasd.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_crossbar.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_data_fifo_bank.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_decerr_slave.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_fifo_gen.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_mux_enc.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_mux.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_ndeep_srl.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_nto1_mux.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_protocol_conv_bank.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_r_axi3_conv.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_r_downsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_register_slice_bank.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_r_upsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_si_transactor.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_splitter.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_top.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_w_axi3_conv.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_wdata_mux.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_wdata_router.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_w_downsizer.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_w_upsizer.v"
-
+vlog -64 -work axi_interconnect_v1_7_11 \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect/hdl/axi_interconnect_v1_7_vl_rfs.v"
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_arbiter_sasd.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_arbiter.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_decoder.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_a_downsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_arbiter_resp.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_a_upsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi3_conv.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_fifo.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_clock_converter.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_register_slice.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_reg_srl_fifo.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_crossbar.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_sample_cycle_ratio.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_srl_fifo.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_sync_clock_converter.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_data_fifo.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_downsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_interconnect.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axilite_conv.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_protocol_converter.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_register_slice.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_upsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_b_downsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_and.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_latch_and.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_latch_or.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_or.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_command_fifo.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_mask_static.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_mask.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel_mask_static.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel_mask.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel_static.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_static.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_converter_bank.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_crossbar_sasd.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_crossbar.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_data_fifo_bank.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_decerr_slave.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_fifo_gen.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_mux_enc.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_mux.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_ndeep_srl.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_nto1_mux.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_protocol_conv_bank.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_r_axi3_conv.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_r_downsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_register_slice_bank.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_r_upsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_si_transactor.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_splitter.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_top.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_w_axi3_conv.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_wdata_mux.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_wdata_router.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_w_downsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_w_upsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_a_axi3_conv.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_arbiter_sasd.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_arbiter.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_decoder.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_a_downsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_arbiter_resp.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_a_upsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi3_conv.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_fifo.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_clock_converter.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_register_slice.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_reg_srl_fifo.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_crossbar.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_sample_cycle_ratio.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_srl_fifo.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axic_sync_clock_converter.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_data_fifo.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_downsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_interconnect.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axilite_conv.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_protocol_converter.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_register_slice.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_axi_upsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_b_downsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_and.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_latch_and.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_latch_or.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry_or.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_carry.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_command_fifo.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_mask_static.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_mask.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel_mask_static.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel_mask.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel_static.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_sel.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator_static.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_comparator.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_converter_bank.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_crossbar_sasd.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_crossbar.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_data_fifo_bank.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_decerr_slave.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_fifo_gen.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_mux_enc.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_mux.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_ndeep_srl.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_nto1_mux.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_protocol_conv_bank.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_r_axi3_conv.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_r_downsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_register_slice_bank.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_r_upsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_si_transactor.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_splitter.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_top.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_w_axi3_conv.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_wdata_mux.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_wdata_router.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_w_downsizer.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_w_upsizer.v"
+#
 vlog -64 -work xil_defaultlib \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect_bpm/sim/axi_interconnect_bpm.v" \
-"../../../../../../platform/artix7/afc_v3/axi_interconnect/sim/axi_interconnect.v"
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/synth/axi_interconnect_bpm.v" \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect/synth/axi_interconnect.v"
 
-vcom -64 -93 -work lib_pkg_v1_0  \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/lib_pkg_v1_0/hdl/src/vhdl/lib_pkg.vhd"
+vcom -64 -93 -work lib_pkg_v1_0_2  \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/hdl/lib_pkg_v1_0_rfs.vhd"
 
-vcom -64 -93 -work lib_fifo_v1_0 \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/lib_fifo_v1_0/hdl/src/vhdl/async_fifo_fg.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/lib_fifo_v1_0/hdl/src/vhdl/sync_fifo_fg.vhd"
+vcom -64 -93 -work lib_fifo_v1_0_6 \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/lib_fifo_v1_0_rfs.vhd"
 
-vcom -64 -93 -work lib_srl_fifo_v1_0 \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/lib_srl_fifo_v1_0/hdl/src/vhdl/cntr_incr_decr_addn_f.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/lib_srl_fifo_v1_0/hdl/src/vhdl/dynshreg_f.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/lib_srl_fifo_v1_0/hdl/src/vhdl/srl_fifo_rbu_f.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/lib_srl_fifo_v1_0/hdl/src/vhdl/srl_fifo_f.vhd"
+vcom -64 -93 -work lib_srl_fifo_v1_0_2 \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/lib_srl_fifo_v1_0_rfs.vhd"
 
-vcom -64 -93 -work lib_cdc_v1_0  \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/lib_cdc_v1_0/hdl/src/vhdl/cdc_sync.vhd"
+vcom -64 -93 -work lib_cdc_v1_0_2  \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/lib_cdc_v1_0_rfs.vhd"
 
-vcom -64 -93 -work axi_datamover_v5_1 \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_reset.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_afifo_autord.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_sfifo_autord.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_fifo.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_cmd_status.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_scc.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_strb_gen2.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_pcc.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_addr_cntl.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_rdmux.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_rddata_cntl.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_rd_status_cntl.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_wr_demux.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_wrdata_cntl.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_wr_status_cntl.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_skid2mm_buf.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_skid_buf.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_rd_sf.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_wr_sf.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_stbs_set.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_stbs_set_nodre.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_ibttcc.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_indet_btt.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_dre_mux2_1_x_n.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_dre_mux4_1_x_n.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_dre_mux8_1_x_n.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_mm2s_dre.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_s2mm_dre.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_ms_strb_set.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_mssai_skid_buf.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_slice.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_s2mm_scatter.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_s2mm_realign.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_s2mm_basic_wrap.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_s2mm_omit_wrap.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_s2mm_full_wrap.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_mm2s_basic_wrap.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_mm2s_omit_wrap.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_mm2s_full_wrap.vhd" \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover.vhd"
+vcom -64 -93 -work axi_datamover_v5_1_12 \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/axi_datamover_v5_1_vh_rfs.vhd"
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_afifo_autord.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_sfifo_autord.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_fifo.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_cmd_status.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_scc.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_strb_gen2.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_pcc.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_addr_cntl.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_rdmux.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_rddata_cntl.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_rd_status_cntl.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_wr_demux.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_wrdata_cntl.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_wr_status_cntl.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_skid2mm_buf.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_skid_buf.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_rd_sf.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_wr_sf.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_stbs_set.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_stbs_set_nodre.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_ibttcc.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_indet_btt.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_dre_mux2_1_x_n.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_dre_mux4_1_x_n.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_dre_mux8_1_x_n.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_mm2s_dre.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_s2mm_dre.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_ms_strb_set.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_mssai_skid_buf.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_slice.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_s2mm_scatter.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_s2mm_realign.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_s2mm_basic_wrap.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_s2mm_omit_wrap.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_s2mm_full_wrap.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_mm2s_basic_wrap.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_mm2s_omit_wrap.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_mm2s_full_wrap.vhd" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover.vhd"
 
 vcom -64 -93 -work xil_defaultlib \
-"../../../../../../platform/artix7/afc_v3/axi_datamover_bpm/synth/axi_datamover_bpm.vhd"
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/synth/axi_datamover_bpm.vhd"
