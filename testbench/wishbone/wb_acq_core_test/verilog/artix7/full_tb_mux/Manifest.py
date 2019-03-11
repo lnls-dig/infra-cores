@@ -16,7 +16,7 @@ modules = {"local" : [
 
 files = ["wb_acq_core_tb.v", "axi_interconnect_wrapper.vhd", "ddr_core_wrapper.vhd",
 			"clk_rst.v", "../../../../../../sim/wishbone_test_master.v",
-            "/opt/Xilinx/14.7/ISE_DS/ISE/verilog/src/glbl.v"]
+            "glbl.v"]
 
 include_dirs = ["../../../../../../sim", "../../../../../../sim/regs", "../../../../../../sim/ddr_model/artix7",
             "../../../../../../platform/artix7/ip_cores/axis_mux_2_to_1/hdl/verilog", "."]
