@@ -18,6 +18,10 @@ files = ["wb_acq_core_tb.v", "axi_interconnect_wrapper.vhd", "ddr_core_wrapper.v
             "glbl.v"]
 
 include_dirs = ["../../../../../../sim", "../../../../../../sim/regs", "../../../../../../sim/ddr_model/artix7",
-            "."]
+            ".", "../../../../../../ip_cores/general-cores/modules/wishbone/wb_lm32/src",
+                "../../../../../../ip_cores/general-cores/modules/wishbone/wb_lm32/platform/generic",
+                "../../../../../../ip_cores/general-cores/modules/wishbone/wb_spi_bidir",
+                "../../../../../../modules/wishbone/wb_ethmac",
+                "../../../../../../ip_cores/general-cores/modules/wishbone/wb_spi"]
 
 vlog_opt = "+incdir+../../../../../../sim/regs +incdir+../../../../../../sim +incdir+../../../../../../sim/ddr_model/artix7  +incdir+."
