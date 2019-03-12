@@ -14,6 +14,7 @@ vlib lib_fifo_v1_0_6
 vlib lib_srl_fifo_v1_0_2
 vlib lib_cdc_v1_0_2
 vlib axi_datamover_v5_1_12
+vlib work
 
 vmap xil_defaultlib xil_defaultlib
 vmap fifo_generator_v13_1_2 fifo_generator_v13_1_2
@@ -23,6 +24,7 @@ vmap lib_fifo_v1_0_6 lib_fifo_v1_0_6
 vmap lib_srl_fifo_v1_0_2 lib_srl_fifo_v1_0_2
 vmap lib_cdc_v1_0_2 lib_cdc_v1_0_2
 vmap axi_datamover_v5_1_12 axi_datamover_v5_1_12
+vmap work work
 
 #### Compile DDR IP core ####
 
@@ -253,7 +255,9 @@ vcom -64 -93 -work axi_datamover_v5_1_12 \
 # the message "** Error: nofile(8)): in protected region.". If that happens we will not
 # be able to simulate axi_datamover. For that reason, let's use the netlist directly
 # and hope we don't depend on encrypted libraries
-vlog -64 -work xil_defaultlib \
-"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_bpm_sim_netlist.v"
+vcom -64 -93 -work xil_defaultlib \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_bpm_sim_netlist.vhdl"
+vcom -64 -93 -work work \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_bpm_sim_netlist.vhdl"
 #vcom -64 -93 -work xil_defaultlib \
 #"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/synth/axi_datamover_bpm.vhd"
