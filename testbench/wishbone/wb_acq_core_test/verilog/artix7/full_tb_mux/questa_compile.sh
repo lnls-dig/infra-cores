@@ -34,9 +34,15 @@ vmap axi_datamover_v5_1_12 axi_datamover_v5_1_12
 vlog -64 -work fifo_generator_v13_1_2 \
 "../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/simulation/fifo_generator_vlog_beh.v"
 
+# SHIT SHIT. Some versions of simulators may not be able to read the encrypted file, hence
+# the message "** Error: nofile(8)): in protected region.". If that happens we will not
+# be able to simulate axi_datamover
 vcom -64 -work fifo_generator_v13_1_2 \
 "../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/fifo_generator_v13_1_rfs.vhd"
 
+# SHIT SHIT. Some versions of simulators may not be able to read the encrypted file, hence
+# the message "** Error: nofile(8)): in protected region.". If that happens we will not
+# be able to simulate axi_datamover
 vlog -64 -work fifo_generator_v13_1_2 \
 "../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/fifo_generator_v13_1_rfs.v"
 
@@ -243,5 +249,11 @@ vcom -64 -93 -work axi_datamover_v5_1_12 \
 #"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_mm2s_full_wrap.vhd" \
 #"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover.vhd"
 
-vcom -64 -93 -work xil_defaultlib \
-"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/synth/axi_datamover_bpm.vhd"
+# SHIT SHIT. Some versions of simulators may not be able to read the encrypted file, hence
+# the message "** Error: nofile(8)): in protected region.". If that happens we will not
+# be able to simulate axi_datamover. For that reason, let's use the netlist directly
+# and hope we don't depend on encrypted libraries
+vlog -64 -work xil_defaultlib \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_bpm_sim_netlist.v"
+#vcom -64 -93 -work xil_defaultlib \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/synth/axi_datamover_bpm.vhd"
