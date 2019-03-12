@@ -32,9 +32,9 @@
 // 200 MHz clock
 //`define CLK_200MHZ_PERIOD 5.00 //ns
 `define CLK_200MHZ_PERIOD 5000.00 //ps
-// 130 MHz clock
-//`define CLK_ADC_PERIOD 8.882 //ns
-`define CLK_ADC_PERIOD 8882.00 //ps
+// 200 MHz clock
+//`define CLK_ADC_PERIOD 5.00 //ns
+`define CLK_ADC_PERIOD 5000.00 //ps
 
 // Reset Delay, in Clock Cycles
 `define RST_SYS_DELAY  		5000
