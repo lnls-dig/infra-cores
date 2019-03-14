@@ -642,8 +642,9 @@ module wb_acq_core_tb;
   wire                                      ddr_aximm_ma_rvalid;
 
   // PCIe / DDR AXI interconnect
-  wire ddr_ui_clk             , ddr_mmcm_locked;
+  wire ui_clk             , ddr_mmcm_locked;
   wire ddr_ui_rst             , irconnect_arstn  , ddr_axi_aresetn , pcie_axi_aresetn;
+  wire ui_clk_sync_rst, ui_clk_sync_rst_n;
   wire [7:0] ddr_axi_awid     , ddr_axi_arid     , ddr_axi_bid     , ddr_axi_rid;
   wire [31:0]  ddr_axi_awaddr;
   wire [7:0]  ddr_axi_awlen;
