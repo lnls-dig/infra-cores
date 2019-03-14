@@ -169,7 +169,7 @@ package acq_core_pkg is
   type t_facq_chan_array is array (natural range <>) of t_facq_chan;
   type t_facq_chan_array2d is array (natural range <>, natural range <>) of t_facq_chan;
 
-  constant c_default_acq_num_cores : natural := 2;
+  constant c_default_acq_num_cores : natural := 4;
   constant c_default_acq_num_channels : natural := 5;
   constant c_default_facq_num_channels : natural := 5;
   constant c_default_acq_chan_param64 : t_acq_chan_param := (
@@ -229,8 +229,10 @@ package acq_core_pkg is
                                                  trig => '0');
 
   constant c_default_multishot_ram_size : t_property_value_array(c_default_acq_num_cores-1 downto 0) :=
-                                                (2048,
-                                                 2048);
+                                                (4096,
+                                                 4096,
+                                                 4096,
+                                                 4096);
 
   -----------------------------
   -- Functions declaration
