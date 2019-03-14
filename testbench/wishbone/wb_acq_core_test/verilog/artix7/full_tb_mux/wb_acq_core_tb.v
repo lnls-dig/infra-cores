@@ -2394,7 +2394,7 @@ module wb_acq_core_tb;
         data_test_0 <= data_test_0 + 1;
       end
 
-      data_test_dvalid_t[0] <= f_gen_data_rdy_gen(data_valid_threshold, 1);
+      data_test_dvalid_t[0] <= f_gen_data_rdy_gen(data_valid_threshold, 0);
       data_test_dvalid[0] <= data_test_dvalid_t[0];
       data_test_trig[0] <= data_trig;
     end else begin
