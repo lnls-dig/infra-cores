@@ -846,7 +846,8 @@ begin
   cmp_acq_fsm : acq_fsm
   generic map
   (
-    g_acq_channels                          => g_acq_channels
+    g_acq_channels                          => g_acq_channels,
+    g_multishot_ram_size                    => g_multishot_ram_size
   )
   port map
   (

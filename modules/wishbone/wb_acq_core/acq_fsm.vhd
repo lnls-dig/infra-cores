@@ -42,7 +42,8 @@ use work.acq_core_pkg.all;
 entity acq_fsm is
 generic
 (
-  g_acq_channels                            : t_acq_chan_param_array := c_default_acq_chan_param_array
+  g_acq_channels                            : t_acq_chan_param_array := c_default_acq_chan_param_array;
+  g_multishot_ram_size                      : natural := 2048
 );
 port
 (
@@ -202,6 +203,7 @@ architecture rtl of acq_fsm is
   signal shots_decr                         : std_logic;
   signal shots_decr_d                       : std_logic;
   signal single_shot                        : std_logic;
+  signal multishot_buffer_candidate         : std_logic;
 
   -- Packet size for ext interface
   signal lmt_acq_pre_pkt_size               : unsigned(c_acq_samples_size-1 downto 0);
@@ -261,7 +263,10 @@ begin
           shots_cnt <= shots_cnt - 1;
         end if;
 
-        if shots_nb_i = to_unsigned(1, shots_nb_i'length) then
+        -- If a transaction fits inside the multishot RAM prefer it instead
+        -- of the slower, external RAM
+        if shots_nb_i = to_unsigned(1, shots_nb_i'length) and
+            multishot_buffer_candidate = '0' then
           single_shot <= '1';
         else
           single_shot <= '0';
@@ -272,6 +277,10 @@ begin
 
   multishot_buffer_sel_o <= std_logic(shots_cnt(0));
   shots_done             <= '1' when shots_cnt = to_unsigned(1, shots_cnt'length) else '0';
+
+  -- Would the transaction would fit in multishot RAM?
+  multishot_buffer_candidate <= '1' when pre_trig_samples_i + post_trig_samples_i <=
+                                g_multishot_ram_size else '0';
 
   acq_single_shot_o <= single_shot;
 

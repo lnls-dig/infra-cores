@@ -416,7 +416,8 @@ package acq_core_pkg is
   component acq_fsm
   generic
   (
-    g_acq_channels                            : t_acq_chan_param_array := c_default_acq_chan_param_array
+    g_acq_channels                            : t_acq_chan_param_array := c_default_acq_chan_param_array;
+    g_multishot_ram_size                      : natural := 2048
   );
   port
   (
