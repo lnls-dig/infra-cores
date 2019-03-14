@@ -699,6 +699,26 @@ module wb_acq_core_tb;
   wire [ACQ_ADDR_WIDTH-1:0]                    ext1_addr_conv;
   wire                                     ext1_valid_conv;
 
+  wire [DDR3_PAYLOAD_WIDTH-1:0]            ext2_dout;
+  wire [ACQ_ADDR_WIDTH-1:0]                    ext2_addr;
+  wire                                     ext2_valid;
+  wire                                     ext2_sof;
+  wire                                     ext2_eof;
+
+  wire [DDR3_PAYLOAD_WIDTH-1:0]            ext2_dout_conv;
+  wire [ACQ_ADDR_WIDTH-1:0]                    ext2_addr_conv;
+  wire                                     ext2_valid_conv;
+
+  wire [DDR3_PAYLOAD_WIDTH-1:0]            ext3_dout;
+  wire [ACQ_ADDR_WIDTH-1:0]                    ext3_addr;
+  wire                                     ext3_valid;
+  wire                                     ext3_sof;
+  wire                                     ext3_eof;
+
+  wire [DDR3_PAYLOAD_WIDTH-1:0]            ext3_dout_conv;
+  wire [ACQ_ADDR_WIDTH-1:0]                    ext3_addr_conv;
+  wire                                     ext3_valid_conv;
+
   wire [DDR3_PAYLOAD_WIDTH-1:0]            ext_dout_conv_rb;
   wire [ACQ_ADDR_WIDTH-1:0]                    ext_addr_conv_rb;
   wire                                     ext_valid_conv;
@@ -723,6 +743,26 @@ module wb_acq_core_tb;
   wire                                      dbg_ddr_rb1_rdy;
   reg                                       dbg_ddr_rb1_in_progress;
   reg                                       dbg_ddr_rb1_start_pulse_gen;
+
+  wire [(BURST_MODE_INTEGER)*DATA_WIDTH-1:0] dbg_ddr_rb2_data;
+  wire [ACQ_ADDR_WIDTH-1:0]                     dbg_ddr_rb2_addr;
+  wire                                      dbg_ddr_rb2_valid;
+  reg                                       dbg_ddr_rb2_start_p;
+  wire                                      dbg_ddr_rb2_start_int_p;
+  reg [RB_COUNTER_WIDTH-1:0]                dbg_ddr_rb2_start_counter = 'h0;
+  wire                                      dbg_ddr_rb2_rdy;
+  reg                                       dbg_ddr_rb2_in_progress;
+  reg                                       dbg_ddr_rb2_start_pulse_gen;
+
+  wire [(BURST_MODE_INTEGER)*DATA_WIDTH-1:0] dbg_ddr_rb3_data;
+  wire [ACQ_ADDR_WIDTH-1:0]                     dbg_ddr_rb3_addr;
+  wire                                      dbg_ddr_rb3_valid;
+  reg                                       dbg_ddr_rb3_start_p;
+  wire                                      dbg_ddr_rb3_start_int_p;
+  reg [RB_COUNTER_WIDTH-1:0]                dbg_ddr_rb3_start_counter = 'h0;
+  wire                                      dbg_ddr_rb3_rdy;
+  reg                                       dbg_ddr_rb3_in_progress;
+  reg                                       dbg_ddr_rb3_start_pulse_gen;
 
   wire                                      chk0_data_err;
   wire [16-1:0]                             chk0_data_err_cnt;
@@ -777,6 +817,11 @@ module wb_acq_core_tb;
   // Clock generation and reset
   //**************************************************************************//
 
+  wire [31:0] dummy_wb_dat2;
+  wire [31:0] dummy_wb_dat3;
+  wire        dummy_wb_ack2;
+  wire        dummy_wb_ack3;
+
   WB_TEST_MASTER WB0(
     .wb_clk                                 (sys_clk)
   );
@@ -795,13 +840,13 @@ module wb_acq_core_tb;
     //.g_acq_num_channels(c_acq_num_channels),
     //.g_acq_channels(c_acq_channels),
     .g_sim_readback(1),
-    .g_acq_num_cores(2)
+    .g_acq_num_cores(4)
   )
   dut (
 
-    .fs_clk_array_i                         ({adc_clk, adc_clk}),
-    .fs_ce_array_i                          ({1'b1, 1'b1}),
-    .fs_rst_n_array_i                       ({adc_rstn, adc_rstn}),
+    .fs_clk_array_i                         ({adc_clk, adc_clk,adc_clk, adc_clk}),
+    .fs_ce_array_i                          ({1'b1, 1'b1, 1'b1, 1'b1}),
+    .fs_rst_n_array_i                       ({adc_rstn, adc_rstn, adc_rstn, adc_rstn}),
 
     .sys_clk_i                              (sys_clk),
     .sys_rst_n_i                            (sys_rstn),
@@ -809,19 +854,26 @@ module wb_acq_core_tb;
     .ext_clk_i                              (ui_clk),
     .ext_rst_n_i                            (ui_clk_sync_rst_n),
 
-    .wb_adr_array_i                         ({WB1.wb_addr,   WB0.wb_addr}),
-    .wb_dat_array_i                         ({WB1.wb_data_o, WB0.wb_data_o}),
-    .wb_dat_array_o                         ({WB1.wb_data_i, WB0.wb_data_i}),
-    .wb_cyc_array_i                         ({WB1.wb_cyc,    WB0.wb_cyc}),
-    .wb_sel_array_i                         ({WB1.wb_bwsel,  WB0.wb_bwsel}),
-    .wb_stb_array_i                         ({WB1.wb_stb,    WB0.wb_stb}),
-    .wb_we_array_i                          ({WB1.wb_we,     WB0.wb_we}),
-    .wb_ack_array_o                         ({WB1.wb_ack_i,  WB0.wb_ack_i}),
+    .wb_adr_array_i                         ({32'h0, 32'h0, WB1.wb_addr,   WB0.wb_addr}),
+    .wb_dat_array_i                         ({32'h0, 32'h0, WB1.wb_data_o, WB0.wb_data_o}),
+    .wb_dat_array_o                         ({dummy_wb_dat3, dummy_wb_dat2, WB1.wb_data_i, WB0.wb_data_i}),
+    .wb_cyc_array_i                         ({1'b0, 1'b0, WB1.wb_cyc,    WB0.wb_cyc}),
+    .wb_sel_array_i                         ({4'h0, 4'h0, WB1.wb_bwsel,  WB0.wb_bwsel}),
+    .wb_stb_array_i                         ({1'b0, 1'b0, WB1.wb_stb,    WB0.wb_stb}),
+    .wb_we_array_i                          ({1'b0, 1'b0, WB1.wb_we,     WB0.wb_we}),
+    .wb_ack_array_o                         ({dummy_wb_ack3, dummy_wb_ack2, WB1.wb_ack_i,  WB0.wb_ack_i}),
     .wb_err_array_o                         (),
     .wb_rty_array_o                         (),
     .wb_stall_array_o                       (),
 
     .acq_val_array_i                        ({
+                                                // Acq core 3
+                                                data_test[4] + c_ddr3_acq1_data_offset, data_test[3] + c_ddr3_acq1_data_offset,
+                                                data_test[2] + c_ddr3_acq1_data_offset, data_test[1] + c_ddr3_acq1_data_offset,
+                                                data_test[0] + c_ddr3_acq1_data_offset ,
+                                                // Acq core 2
+                                                data_test[4], data_test[3], data_test[2],
+                                                data_test[1], data_test[0],
                                                 // Acq core 1
                                                 data_test[4] + c_ddr3_acq1_data_offset, data_test[3] + c_ddr3_acq1_data_offset,
                                                 data_test[2] + c_ddr3_acq1_data_offset, data_test[1] + c_ddr3_acq1_data_offset,
@@ -830,6 +882,12 @@ module wb_acq_core_tb;
                                                 data_test[4], data_test[3], data_test[2],
                                                 data_test[1], data_test[0]}),
     .acq_dvalid_array_i                     ({
+                                                // Acq core 3
+                                                data_test_dvalid[4], data_test_dvalid[3], data_test_dvalid[2],
+                                                data_test_dvalid[1], data_test_dvalid[0],
+                                                // Acq core 2
+                                                data_test_dvalid[4], data_test_dvalid[3], data_test_dvalid[2],
+                                                data_test_dvalid[1], data_test_dvalid[0],
                                                 // Acq core 1
                                                 data_test_dvalid[4], data_test_dvalid[3], data_test_dvalid[2],
                                                 data_test_dvalid[1], data_test_dvalid[0],
@@ -842,28 +900,34 @@ module wb_acq_core_tb;
                                                 data_test_trig[1], data_test_trig[0],
                                                 // Acq core 0
                                                 data_test_trig[4], data_test_trig[3], data_test_trig[2],
+                                                data_test_trig[1], data_test_trig[0],
+                                                // Acq core 1
+                                                data_test_trig[4], data_test_trig[3], data_test_trig[2],
+                                                data_test_trig[1], data_test_trig[0],
+                                                // Acq core 0
+                                                data_test_trig[4], data_test_trig[3], data_test_trig[2],
                                                 data_test_trig[1], data_test_trig[0]}),
 
     .dpram_dout_array_o                     (),
     .dpram_valid_array_o                    (),
 
-    .ext_dout_array_o                       ({ext1_dout, ext0_dout}),
-    .ext_valid_array_o                      ({ext1_valid, ext0_valid}),
+    .ext_dout_array_o                       ({ext3_dout, ext2_dout, ext1_dout, ext0_dout}),
+    .ext_valid_array_o                      ({ext3_valid, ext2_valid, ext1_valid, ext0_valid}),
     // This is just for debug. It does not epresent the actual address written
     // to DDR3 controller. The later is determined by the "acq_ddr3_iface" module
     // considering only the "ddr3_start_addr" signal
-    .ext_addr_array_o                       ({ext1_addr, ext0_addr}),
-    .ext_sof_array_o                        ({ext1_sof, ext0_sof}),
-    .ext_eof_array_o                        ({ext1_eof, ext0_eof}),
-    .ext_dreq_array_o                       ({ext1_dreq, ext0_dreq}),
-    .ext_stall_array_o                      ({ext1_stall, ext0_stall}),
+    .ext_addr_array_o                       ({ext3_addr, ext2_addr, ext1_addr, ext0_addr}),
+    .ext_sof_array_o                        ({ext3_sof, ext2_sof, ext1_sof, ext0_sof}),
+    .ext_eof_array_o                        ({ext3_eof, ext2_eof, ext1_eof, ext0_eof}),
+    .ext_dreq_array_o                       ({ext3_dreq, ext2_dreq, ext1_dreq, ext0_dreq}),
+    .ext_stall_array_o                      ({ext3_stall, ext2_stall, ext1_stall, ext0_stall}),
 
     // Debug interface
-    .dbg_ddr_rb_start_p_array_i            ({dbg_ddr_rb1_start_p, dbg_ddr_rb0_start_p}),
-    .dbg_ddr_rb_rdy_array_o                ({dbg_ddr_rb1_rdy, dbg_ddr_rb0_rdy}),
-    .dbg_ddr_rb_data_array_o               ({dbg_ddr_rb1_data, dbg_ddr_rb0_data}),
-    .dbg_ddr_rb_addr_array_o               ({dbg_ddr_rb1_addr, dbg_ddr_rb0_addr}),
-    .dbg_ddr_rb_valid_array_o              ({dbg_ddr_rb1_valid, dbg_ddr_rb0_valid}),
+    .dbg_ddr_rb_start_p_array_i            ({1'b0, 1'b0, dbg_ddr_rb1_start_p, dbg_ddr_rb0_start_p}),
+    .dbg_ddr_rb_rdy_array_o                ({dbg_ddr_rb3_rdy, dbg_ddr_rb2_rdy, dbg_ddr_rb1_rdy, dbg_ddr_rb0_rdy}),
+    .dbg_ddr_rb_data_array_o               ({dbg_ddr_rb3_data, dbg_ddr_rb2_data, dbg_ddr_rb1_data, dbg_ddr_rb0_data}),
+    .dbg_ddr_rb_addr_array_o               ({dbg_ddr_rb3_addr, dbg_ddr_rb2_addr, dbg_ddr_rb1_addr, dbg_ddr_rb0_addr}),
+    .dbg_ddr_rb_valid_array_o              ({dbg_ddr_rb3_valid, dbg_ddr_rb2_valid, dbg_ddr_rb1_valid, dbg_ddr_rb0_valid}),
 
     // DDR interface
     .ddr_aximm_ma_awid_o                    (ddr_aximm_ma_awid),
