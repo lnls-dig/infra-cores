@@ -70,8 +70,14 @@ vlog -64 -work fifo_generator_v13_2_3 \
 #vcom -64 -work fifo_generator_v12_0 \
 #"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/hdl/fifo_generator_v12_0.vhd"
 
+#vlog -64 -work axi_interconnect_v1_7_11 \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect/hdl/axi_interconnect_v1_7_vl_rfs.v"
 vlog -64 -work axi_interconnect_v1_7_11 \
-"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect/hdl/axi_interconnect_v1_7_vl_rfs.v"
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect/axi_interconnect_sim_netlist.v"
+vlog -64 -work work \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect/axi_interconnect_sim_netlist.v"
+vlog -64 -work xil_defaultlib \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect/axi_interconnect_sim_netlist.v"
 #"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_arbiter_sasd.v" \
 #"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_arbiter.v" \
 #"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_addr_decoder.v" \
@@ -194,9 +200,16 @@ vlog -64 -work axi_interconnect_v1_7_11 \
 #"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_w_downsizer.v" \
 #"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_v1_7/hdl/verilog/axi_interconnect_v1_7_w_upsizer.v"
 #
+#vlog -64 -work xil_defaultlib \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/synth/axi_interconnect_bpm.v" \
+#"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect/synth/axi_interconnect.v"
+
+vlog -64 -work axi_interconnect_v1_7_11 \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_bpm_sim_netlist.v"
+vlog -64 -work work \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_bpm_sim_netlist.v"
 vlog -64 -work xil_defaultlib \
-"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/synth/axi_interconnect_bpm.v" \
-"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect/synth/axi_interconnect.v"
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/axi_interconnect_bpm_sim_netlist.v"
 
 vcom -64 -93 -work lib_pkg_v1_0_2  \
 "../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/hdl/lib_pkg_v1_0_rfs.vhd"
