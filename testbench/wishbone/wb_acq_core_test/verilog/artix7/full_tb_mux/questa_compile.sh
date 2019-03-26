@@ -10,20 +10,20 @@ vlib xil_defaultlib
 vlib fifo_generator_v13_2_3
 vlib axi_interconnect_v1_7_11
 vlib lib_pkg_v1_0_2
-vlib lib_fifo_v1_0_6
+vlib lib_fifo_v1_0_12
 vlib lib_srl_fifo_v1_0_2
 vlib lib_cdc_v1_0_2
-vlib axi_datamover_v5_1_12
+vlib axi_datamover_v5_1_20
 vlib work
 
 vmap xil_defaultlib xil_defaultlib
 vmap fifo_generator_v13_2_3 fifo_generator_v13_2_3
 vmap axi_interconnect_v1_7_11 axi_interconnect_v1_7_11
 vmap lib_pkg_v1_0_2 lib_pkg_v1_0_2
-vmap lib_fifo_v1_0_6 lib_fifo_v1_0_6
+vmap lib_fifo_v1_0_12 lib_fifo_v1_0_12
 vmap lib_srl_fifo_v1_0_2 lib_srl_fifo_v1_0_2
 vmap lib_cdc_v1_0_2 lib_cdc_v1_0_2
-vmap axi_datamover_v5_1_12 axi_datamover_v5_1_12
+vmap axi_datamover_v5_1_20 axi_datamover_v5_1_20
 vmap work work
 
 #### Compile DDR IP core ####
@@ -201,7 +201,7 @@ vlog -64 -work xil_defaultlib \
 vcom -64 -93 -work lib_pkg_v1_0_2  \
 "../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/hdl/lib_pkg_v1_0_rfs.vhd"
 
-vcom -64 -93 -work lib_fifo_v1_0_6 \
+vcom -64 -93 -work lib_fifo_v1_0_12 \
 "../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/lib_fifo_v1_0_rfs.vhd"
 
 vcom -64 -93 -work lib_srl_fifo_v1_0_2 \
@@ -210,7 +210,7 @@ vcom -64 -93 -work lib_srl_fifo_v1_0_2 \
 vcom -64 -93 -work lib_cdc_v1_0_2  \
 "../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/lib_cdc_v1_0_rfs.vhd"
 
-vcom -64 -93 -work axi_datamover_v5_1_12 \
+vcom -64 -93 -work axi_datamover_v5_1_20 \
 "../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/axi_datamover_v5_1_vh_rfs.vhd"
 #"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_afifo_autord.vhd" \
 #"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_v5_1/hdl/src/vhdl/axi_datamover_sfifo_autord.vhd" \
