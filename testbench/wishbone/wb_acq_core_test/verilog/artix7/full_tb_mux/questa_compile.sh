@@ -7,7 +7,7 @@
 ######################################################################
 
 vlib xil_defaultlib
-vlib fifo_generator_v13_1_2
+vlib fifo_generator_v13_2_3
 vlib axi_interconnect_v1_7_11
 vlib lib_pkg_v1_0_2
 vlib lib_fifo_v1_0_6
@@ -17,7 +17,7 @@ vlib axi_datamover_v5_1_12
 vlib work
 
 vmap xil_defaultlib xil_defaultlib
-vmap fifo_generator_v13_1_2 fifo_generator_v13_1_2
+vmap fifo_generator_v13_2_3 fifo_generator_v13_2_3
 vmap axi_interconnect_v1_7_11 axi_interconnect_v1_7_11
 vmap lib_pkg_v1_0_2 lib_pkg_v1_0_2
 vmap lib_fifo_v1_0_6 lib_fifo_v1_0_6
@@ -33,20 +33,21 @@ vmap work work
 #"../../sim/ddr_model/artix7/ddr3_model.sv"
 
 #### Compile AXI Interconnect IP core ####
-vlog -64 -work fifo_generator_v13_1_2 \
+vlog -64 -work fifo_generator_v13_2_3 \
 "../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/simulation/fifo_generator_vlog_beh.v"
 
-# SHIT SHIT. Some versions of simulators may not be able to read the encrypted file, hence
-# the message "** Error: nofile(8)): in protected region.". If that happens we will not
-# be able to simulate axi_datamover
-vcom -64 -work fifo_generator_v13_1_2 \
-"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/fifo_generator_v13_1_rfs.vhd"
 
 # SHIT SHIT. Some versions of simulators may not be able to read the encrypted file, hence
 # the message "** Error: nofile(8)): in protected region.". If that happens we will not
 # be able to simulate axi_datamover
-vlog -64 -work fifo_generator_v13_1_2 \
-"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/fifo_generator_v13_1_rfs.v"
+vcom -64 -work fifo_generator_v13_2_3 \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/fifo_generator_v13_2_vhsyn_rfs.vhd"
+
+# SHIT SHIT. Some versions of simulators may not be able to read the encrypted file, hence
+# the message "** Error: nofile(8)): in protected region.". If that happens we will not
+# be able to simulate axi_datamover
+vlog -64 -work fifo_generator_v13_2_3 \
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_0/hdl/fifo_generator_v13_2_rfs.v"
 
 #vlog -64 -work fifo_generator_v12_0 \
 #"../../../../../../platform/xilinx/artix7/afc_v3/axi_interconnect_bpm/fifo_generator_v12_0/simulation/fifo_generator_vlog_beh.v"
@@ -256,8 +257,8 @@ vcom -64 -93 -work axi_datamover_v5_1_12 \
 # be able to simulate axi_datamover. For that reason, let's use the netlist directly
 # and hope we don't depend on encrypted libraries
 vcom -64 -93 -work xil_defaultlib \
-"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_bpm_sim_netlist.vhdl"
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_bpm_funcsim.vhdl"
 vcom -64 -93 -work work \
-"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_bpm_sim_netlist.vhdl"
+"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/axi_datamover_bpm_funcsim.vhdl"
 #vcom -64 -93 -work xil_defaultlib \
 #"../../../../../../platform/xilinx/artix7/afc_v3/axi_datamover_bpm/synth/axi_datamover_bpm.vhd"
