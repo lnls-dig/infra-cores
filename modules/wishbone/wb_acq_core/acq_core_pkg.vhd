@@ -211,8 +211,7 @@ package acq_core_pkg is
                                               );
   constant c_default_facq_chan_param_array : t_facq_chan_param_array(c_default_facq_num_channels-1 downto 0) :=
                                               (
---                                                0 => c_default_facq_chan_param64,
-                                                0 => c_default_facq_chan_param256,
+                                                0 => c_default_facq_chan_param64,
                                                 1 => c_default_facq_chan_param128,
                                                 2 => c_default_facq_chan_param128,
                                                 3 => c_default_facq_chan_param128,
