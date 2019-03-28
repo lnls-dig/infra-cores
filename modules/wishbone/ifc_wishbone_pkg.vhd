@@ -3044,7 +3044,9 @@ package ifc_wishbone_pkg is
     -------------------------------
     ---- Debug ports
     -------------------------------
-    trig_dbg_o                                : out std_logic_vector(g_trig_num-1 downto 0)
+    trig_dbg_o                                : out std_logic_vector(g_trig_num-1 downto 0);
+    dbg_data_sync_o                           : out std_logic_vector(g_trig_num-1 downto 0);
+    dbg_data_degliteched_o                    : out std_logic_vector(g_trig_num-1 downto 0)
   );
   end component;
 
@@ -3088,7 +3090,9 @@ package ifc_wishbone_pkg is
     -------------------------------
     ---- Debug ports
     -------------------------------
-    trig_dbg_o                                : out std_logic_vector(g_trig_num-1 downto 0)
+    trig_dbg_o                                : out std_logic_vector(g_trig_num-1 downto 0);
+    dbg_data_sync_o                           : out std_logic_vector(g_trig_num-1 downto 0);
+    dbg_data_degliteched_o                    : out std_logic_vector(g_trig_num-1 downto 0)
   );
   end component;
 
@@ -3164,7 +3168,11 @@ package ifc_wishbone_pkg is
       -------------------------------
       ---- Debug ports
       -------------------------------
-      trig_dbg_o : out std_logic_vector(g_trig_num-1 downto 0)
+      trig_dbg_o                              : out std_logic_vector(g_trig_num-1 downto 0);
+      dbg_data_sync_o                         : out std_logic_vector(g_trig_num-1 downto 0);
+      dbg_data_degliteched_o                  : out std_logic_vector(g_trig_num-1 downto 0);
+      trig_out_resolved_o                     : out t_trig_channel_array(g_trig_num-1 downto 0);
+      trig_out_int_array2d_o                  : out t_trig_channel_array2d(g_num_mux_interfaces-1 downto 0, g_trig_num-1 downto 0)
   );
   end component;
 
@@ -3224,7 +3232,11 @@ package ifc_wishbone_pkg is
       -------------------------------
       ---- Debug ports
       -------------------------------
-      trig_dbg_o                              : out std_logic_vector(g_trig_num-1 downto 0)
+      trig_dbg_o                              : out std_logic_vector(g_trig_num-1 downto 0);
+      dbg_data_sync_o                         : out std_logic_vector(g_trig_num-1 downto 0);
+      dbg_data_degliteched_o                  : out std_logic_vector(g_trig_num-1 downto 0);
+      trig_out_resolved_o                     : out t_trig_channel_array(g_trig_num-1 downto 0);
+      trig_out_int_array2d_o                  : out t_trig_channel_array2d(g_num_mux_interfaces-1 downto 0, g_trig_num-1 downto 0)
     );
   end component;
 

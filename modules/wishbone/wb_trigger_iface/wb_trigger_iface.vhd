@@ -105,7 +105,9 @@ entity wb_trigger_iface is
     -------------------------------
     ---- Debug ports
     -------------------------------
-    trig_dbg_o : out std_logic_vector(g_trig_num-1 downto 0)
+    trig_dbg_o             : out std_logic_vector(g_trig_num-1 downto 0);
+    dbg_data_sync_o        : out std_logic_vector(g_trig_num-1 downto 0);
+    dbg_data_degliteched_o : out std_logic_vector(g_trig_num-1 downto 0)
     );
 
 end entity wb_trigger_iface;
@@ -595,7 +597,10 @@ begin  -- architecture rtl
         rst_n_i => ref_rst_n_i,
         len_i   => ch_regs_out(i).ch_cfg_rcv_len,
         data_i  => extended_rcv(i),
-        pulse_o => rcv_pulse_bus(i).pulse);
+        pulse_o => rcv_pulse_bus(i).pulse,
+        dbg_data_sync_o        => dbg_data_sync_o(i) ,
+        dbg_data_degliteched_o => dbg_data_degliteched_o(i)
+        );
 
     --------------------------------
     -- Connects cores to backplane

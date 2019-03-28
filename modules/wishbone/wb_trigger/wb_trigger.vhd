@@ -126,7 +126,11 @@ entity wb_trigger is
     ---- Debug ports
     -------------------------------
 
-    trig_dbg_o          : out std_logic_vector(g_trig_num-1 downto 0)
+    trig_dbg_o              : out std_logic_vector(g_trig_num-1 downto 0);
+    dbg_data_sync_o         : out std_logic_vector(g_trig_num-1 downto 0);
+    dbg_data_degliteched_o  : out std_logic_vector(g_trig_num-1 downto 0);
+    trig_out_resolved_o     : out t_trig_channel_array(g_trig_num-1 downto 0);
+    trig_out_int_array2d_o  : out t_trig_channel_array2d(g_num_mux_interfaces-1 downto 0, g_trig_num-1 downto 0)
     );
 
 end entity wb_trigger;
@@ -177,8 +181,13 @@ begin  -- architecture rtl
       trig_dir_o  => trig_dir_o,
       trig_out_o  => trig_out_resolved,
       trig_in_i   => trig_in_resolved,
-      trig_dbg_o  => trig_dbg_o
+
+      trig_dbg_o             => trig_dbg_o,
+      dbg_data_sync_o        => dbg_data_sync_o,
+      dbg_data_degliteched_o => dbg_data_degliteched_o
     );
+
+  trig_out_resolved_o <= trig_out_resolved;
 
   cmp_trigger_resolver : trigger_resolver
     generic map (
@@ -202,6 +211,8 @@ begin  -- architecture rtl
       trig_mux_out_o => trig_out_int_array2d,
       trig_mux_in_i  => trig_in_int_array2d
     );
+
+  trig_out_int_array2d_o <= trig_out_int_array2d;
 
   gen_input_interfaces : for i in 0 to g_num_mux_interfaces-1 generate
     gen_reorder_trigger_channels : for j in 0 to g_trig_num-1 generate

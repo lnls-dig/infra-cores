@@ -50,7 +50,9 @@ entity xwb_trigger_iface is
     -------------------------------
     ---- Debug ports
     -------------------------------
-      trig_dbg_o : out std_logic_vector(g_trig_num-1 downto 0)
+      trig_dbg_o : out std_logic_vector(g_trig_num-1 downto 0);
+      dbg_data_sync_o        : out std_logic_vector(g_trig_num-1 downto 0);
+      dbg_data_degliteched_o : out std_logic_vector(g_trig_num-1 downto 0)
       );
 
 end xwb_trigger_iface;
@@ -87,7 +89,9 @@ begin
       trig_dir_o  => trig_dir_o,
       trig_out_o  => trig_out_o,
       trig_in_i   => trig_in_i,
-      trig_dbg_o  => trig_dbg_o
+      trig_dbg_o  => trig_dbg_o,
+      dbg_data_sync_o        => dbg_data_sync_o,
+      dbg_data_degliteched_o => dbg_data_degliteched_o
     );
 
 end rtl;

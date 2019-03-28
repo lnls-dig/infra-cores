@@ -54,7 +54,9 @@ entity trigger_rcv is
     rst_n_i : in  std_logic;
     len_i   : in  std_logic_vector(g_glitch_len_width-1 downto 0);
     data_i  : in  std_logic;
-    pulse_o : out std_logic
+    pulse_o : out std_logic;
+    dbg_data_sync_o        : out std_logic;
+    dbg_data_degliteched_o : out std_logic
     );
 end entity trigger_rcv;
 
@@ -100,6 +102,8 @@ begin
         npulse_o => open,
         ppulse_o => open);
 
+    dbg_data_sync_o <= data_sync;
+
   cmp_deglitcher : gc_dyn_glitch_filt
     generic map (
       g_len_width => g_glitch_len_width)
@@ -109,6 +113,8 @@ begin
       len_i   => len_i,
       dat_i   => data_sync,
       dat_o   => deglitched);
+
+    dbg_data_degliteched_o <= deglitched;
 
   cmp_edge_detector : gc_sync_ffs
     generic map(

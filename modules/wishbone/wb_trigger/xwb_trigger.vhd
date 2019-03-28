@@ -69,7 +69,11 @@ entity xwb_trigger is
     ---- Debug ports
     -------------------------------
 
-    trig_dbg_o          : out std_logic_vector(g_trig_num-1 downto 0)
+    trig_dbg_o             : out std_logic_vector(g_trig_num-1 downto 0);
+    dbg_data_sync_o        : out std_logic_vector(g_trig_num-1 downto 0);
+    dbg_data_degliteched_o : out std_logic_vector(g_trig_num-1 downto 0);
+    trig_out_resolved_o    : out t_trig_channel_array(g_trig_num-1 downto 0);
+   trig_out_int_array2d_o  : out t_trig_channel_array2d(g_num_mux_interfaces-1 downto 0, g_trig_num-1 downto 0)
     );
 
 end xwb_trigger;
@@ -151,7 +155,12 @@ begin
       trig_rcv_intern_i   => trig_rcv_intern_compat,
       trig_pulse_transm_i => trig_pulse_transm_compat,
       trig_pulse_rcv_o    => trig_pulse_rcv_compat,
-      trig_dbg_o          => trig_dbg_o
+
+      trig_dbg_o             => trig_dbg_o,
+      dbg_data_sync_o        => dbg_data_sync_o,
+      dbg_data_degliteched_o => dbg_data_degliteched_o,
+      trig_out_resolved_o    => trig_out_resolved_o,
+      trig_out_int_array2d_o => trig_out_int_array2d_o
     );
 
   gen_wb_slv_trigger_interfaces : for i in 0 to g_num_mux_interfaces-1 generate

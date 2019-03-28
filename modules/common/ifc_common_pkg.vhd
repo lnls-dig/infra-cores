@@ -48,7 +48,9 @@ package ifc_common_pkg is
       rst_n_i : in  std_logic;
       len_i   : in  std_logic_vector(g_glitch_len_width-1 downto 0);
       data_i  : in  std_logic;
-      pulse_o : out std_logic);
+      pulse_o : out std_logic;
+      dbg_data_sync_o        : out std_logic;
+      dbg_data_degliteched_o : out std_logic);
   end component trigger_rcv;
 
   component extend_pulse_dyn is
