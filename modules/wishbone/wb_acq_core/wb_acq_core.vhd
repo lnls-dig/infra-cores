@@ -832,6 +832,7 @@ begin
     acq_valid_i                             => acq_dvalid_in,
     acq_id_i                                => acq_id_in,
     acq_trig_i                              => acq_trig_in,
+    acq_trig_accepting_i                    => acq_in_wait_trig,
 
     lmt_curr_chan_id_i                      => lmt_curr_chan_id,
     lmt_valid_i                             => acq_start_safe,
