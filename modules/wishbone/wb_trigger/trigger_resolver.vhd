@@ -159,7 +159,7 @@ begin  -- architecture rtl
           rst_in_n_i  => ref_rst_n_i,
           -- pulse output clock
           clk_out_i   => fs_clk_array_i(i),
-              rst_out_n_i => fs_rst_n_array_i(i),
+          rst_out_n_i => fs_rst_n_array_i(i),
 
           -- pulse input ready (clk_in_i domain). When HI, a pulse coming to d_p_i will be
           -- correctly transferred to q_p_o.
