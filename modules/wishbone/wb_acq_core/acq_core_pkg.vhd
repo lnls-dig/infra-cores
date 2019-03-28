@@ -92,7 +92,7 @@ package acq_core_pkg is
   subtype t_property_value is natural;
   type t_property_value_array is array (natural range <>) of t_property_value;
 
-  type t_acq_chan_property is (WIDTH, NUM_ATOMS, ATOM_WIDTH, NUM_COALESCE);
+  type t_acq_chan_property is (WIDTH, WIDTH_BYTES, NUM_ATOMS, ATOM_WIDTH, NUM_COALESCE);
 
   -- Parameters for acquisition core channels. Max of 128-bit in width
   type t_acq_chan_param is record
@@ -363,6 +363,7 @@ package acq_core_pkg is
     g_data_in_width                           : natural := 128;
     g_acq_num_channels                        : natural := 5;
     g_ddr_payload_width                       : natural := 256;
+    g_trig_cnt_off_width                      : natural := 8;
     g_acq_channels                            : t_acq_chan_param_array := c_default_acq_chan_param_array
   );
   port
@@ -408,7 +409,8 @@ package acq_core_pkg is
     acq_data_o                                : out std_logic_vector(g_data_in_width-1 downto 0);
     acq_valid_o                               : out std_logic;
     acq_id_o                                  : out t_acq_id;
-    acq_trig_o                                : out std_logic
+    acq_trig_o                                : out std_logic;
+    acq_trig_cnt_off_o                        : out unsigned(g_trig_cnt_off_width-1 downto 0)
   );
   end component;
 
@@ -849,6 +851,7 @@ package acq_core_pkg is
     g_acq_num_channels                        : natural := 1;
     g_acq_channels                            : t_acq_chan_param_array;
     g_fc_pipe_size                            : natural := 4;
+    g_trig_cnt_off_width                      : natural := 8;
     -- Do not modify these! As they are dependent of the memory controller generated!
     g_ddr_header_width                        : natural := 4;
     g_ddr_payload_width                       : natural := 256;     -- be careful changing these!
@@ -875,6 +878,7 @@ package acq_core_pkg is
     wr_start_i                                : in std_logic;
     wr_init_addr_i                            : in std_logic_vector(g_ddr_addr_width-1 downto 0);
     wr_end_addr_i                             : in std_logic_vector(g_ddr_addr_width-1 downto 0);
+    wr_trig_cnt_off_i                         : in unsigned(g_trig_cnt_off_width-1 downto 0);
 
     lmt_all_trans_done_p_o                    : out std_logic;
     lmt_ddr_trig_addr_o                       : out std_logic_vector(g_ddr_addr_width-1 downto 0);
@@ -1131,6 +1135,8 @@ package body acq_core_pkg is
       case property is
           when WIDTH =>
               property_value_array(i) := to_integer(acq_chan_param_array(i).width);
+          when WIDTH_BYTES =>
+              property_value_array(i) := to_integer((acq_chan_param_array(i).width+7)/8);
           when NUM_ATOMS =>
               property_value_array(i) := to_integer(acq_chan_param_array(i).num_atoms);
           when ATOM_WIDTH =>

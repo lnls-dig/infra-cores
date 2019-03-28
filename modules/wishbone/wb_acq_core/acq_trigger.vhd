@@ -36,6 +36,7 @@ generic
   g_data_in_width                           : natural := 128;
   g_acq_num_channels                        : natural := 5;
   g_ddr_payload_width                       : natural := 256;
+  g_trig_cnt_off_width                      : natural := 8;
   g_acq_channels                            : t_acq_chan_param_array := c_default_acq_chan_param_array
 );
 port
@@ -81,7 +82,8 @@ port
   acq_data_o                                : out std_logic_vector(g_data_in_width-1 downto 0);
   acq_valid_o                               : out std_logic;
   acq_id_o                                  : out t_acq_id;
-  acq_trig_o                                : out std_logic
+  acq_trig_o                                : out std_logic;
+  acq_trig_cnt_off_o                        : out unsigned(g_trig_cnt_off_width-1 downto 0)
 );
 end acq_trigger;
 
@@ -192,9 +194,11 @@ architecture rtl of acq_trigger is
   signal trig                               : std_logic;
   signal trig_delay                         : std_logic_vector(31 downto 0);
   signal trig_delay_cnt                     : unsigned(31 downto 0);
+  signal trig_cnt_off                       : unsigned(g_trig_cnt_off_width-1 downto 0);
   signal trig_d                             : std_logic;
   signal trig_unaligned                     : std_logic;
   signal trig_align                         : std_logic;
+  signal trig_cnt_off_captured              : std_logic;
 
 begin
 
@@ -497,12 +501,15 @@ begin
       if fs_rst_n_i = '0' then
         trig_unaligned <= '0';
         trig_align <= '0';
+        trig_cnt_off <= to_unsigned(0, trig_cnt_off'length);
+        trig_cnt_off_captured <= '0';
       else
-        if trig_d = '1' then
+        if trig_d = '1' and trig_cnt_off_captured = '0' then
           trig_unaligned <= '1';
         -- Trigger captured
         elsif trig_align = '1' then
           trig_unaligned <= '0';
+          trig_cnt_off_captured <= '0';
         end if;
 
         -- Wait until we have transfered the correct (aligned) number of samples
@@ -511,15 +518,25 @@ begin
         -- By design acq_min_align_max would be at least 1, meaning a channel
         -- composed of 2 atoms. So the arithmetic acq_min_align_max-1 yields
         -- valid values in all cases.
-        if trig_unaligned = '1' and acq_trig_align_cnt = acq_min_align_max and
-            acq_valid_sel_out = '1' then -- will increment to the first atom
-          trig_align <= '1'; -- Output trigger aligned with the first atom
+        if trig_d = '1' or trig_unaligned = '1' then
+          if acq_trig_align_cnt = acq_min_align_max and acq_valid_sel_out = '1' then -- will increment to the first atom
+            trig_align <= '1'; -- Output trigger aligned with the first atom
+          end if;
+
+          -- Acquire offset from trigger only once per transaction
+          if trig_cnt_off_captured = '0' then
+            trig_cnt_off <= resize(acq_min_align_max - acq_trig_align_cnt, trig_cnt_off'length);
+            trig_cnt_off_captured <= '1';
+          end if;
+
         elsif acq_valid_sel_out = '1' then
           trig_align <= '0';
         end if;
       end if;
     end if;
   end process;
+
+  acq_trig_cnt_off_o <= trig_cnt_off;
 
   -- Delay data to compensate for internal trigger detection
   p_data_delay : process (fs_clk_i)

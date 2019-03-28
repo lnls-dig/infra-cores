@@ -199,6 +199,7 @@ architecture rtl of wb_acq_core is
   constant c_periph_addr_size               : natural := 3+5;
   constant c_max_num_channels               : natural := 24;
   constant c_multishot_ram_size_impl        : boolean := true;
+  constant c_trig_cnt_off_width             : natural := 8;
 
   constant c_acq_data_width                 : natural :=
                                   f_acq_chan_find_widest(c_acq_channels);
@@ -292,6 +293,7 @@ architecture rtl of wb_acq_core is
   signal acq_trig_in                        : std_logic;
   signal acq_trig                           : std_logic;
   signal acq_trig_fsm                       : std_logic;
+  signal acq_trig_cnt_off                   : unsigned(c_trig_cnt_off_width-1 downto 0);
   signal acq_dvalid_in                      : std_logic;
   signal acq_id_in                          : t_acq_id;
   signal dtrig_valid_in                     : std_logic;
@@ -800,6 +802,7 @@ begin
     g_data_in_width                         => c_acq_data_width,
     g_acq_num_channels                      => g_acq_num_channels,
     g_ddr_payload_width                     => g_ddr_payload_width,
+    g_trig_cnt_off_width                    => c_trig_cnt_off_width,
     g_acq_channels                          => g_acq_channels
   )
   port map
@@ -837,7 +840,8 @@ begin
     acq_data_o                              => acq_data,
     acq_valid_o                             => acq_valid,
     acq_id_o                                => acq_id,
-    acq_trig_o                              => acq_trig
+    acq_trig_o                              => acq_trig,
+    acq_trig_cnt_off_o                      => acq_trig_cnt_off
   );
 
   -----------------------------------------------------------------------------
@@ -1295,6 +1299,7 @@ begin
       g_acq_num_channels                      => g_acq_num_channels,
       g_acq_channels                          => g_acq_channels,
       g_fc_pipe_size                          => c_fc_pipe_size,
+      g_trig_cnt_off_width                    => c_trig_cnt_off_width,
       -- This is the number of header bits interleaved after marshalling
       g_ddr_header_width                      => c_acq_header_width,
       -- Do not modify these! As they are dependent of the memory controller generated!
@@ -1325,6 +1330,7 @@ begin
       -- impose any metastability problem in this module
       wr_init_addr_i                          => acq_ddr3_start_addr,
       wr_end_addr_i                           => acq_ddr3_end_addr,
+      wr_trig_cnt_off_i                       => acq_trig_cnt_off,
 
       lmt_all_trans_done_p_o                  => ddr3_wr_all_trans_done_p,
       lmt_ddr_trig_addr_o                     => ddr_trig_addr,

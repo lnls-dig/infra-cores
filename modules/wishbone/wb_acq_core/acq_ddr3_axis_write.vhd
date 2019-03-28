@@ -40,6 +40,7 @@ generic
   g_acq_num_channels                        : natural := 1;
   g_acq_channels                            : t_acq_chan_param_array;
   g_fc_pipe_size                            : natural := 4;
+  g_trig_cnt_off_width                      : natural := 8;
   -- Do not modify these! As they are dependent of the memory controller generated!
   g_ddr_header_width                        : natural := 4;
   g_ddr_payload_width                       : natural := 256;     -- be careful changing these!
@@ -66,6 +67,7 @@ port
   wr_start_i                                : in std_logic;
   wr_init_addr_i                            : in std_logic_vector(g_ddr_addr_width-1 downto 0);
   wr_end_addr_i                             : in std_logic_vector(g_ddr_addr_width-1 downto 0);
+  wr_trig_cnt_off_i                         : in unsigned(g_trig_cnt_off_width-1 downto 0);
 
   lmt_all_trans_done_p_o                    : out std_logic;
   lmt_ddr_trig_addr_o                       : out std_logic_vector(g_ddr_addr_width-1 downto 0);
@@ -125,6 +127,10 @@ architecture rtl of acq_ddr3_axis_write is
                                                                c_acq_chan_slice);
   constant c_fc_payload_ratio_log2          : t_payld_ratio_array(g_acq_num_channels-1 downto 0) :=
                                                 f_log2_size_array(c_fc_payload_ratio);
+  constant c_fc_chan_width                  : t_property_value_array(g_acq_num_channels-1 downto 0) :=
+                                                f_extract_property_array(c_acq_channels, t_acq_chan_property'(WIDTH_BYTES)); -- in bytes
+  constant c_fc_chan_width_log2             : t_property_value_array(g_acq_num_channels-1 downto 0) :=
+                                                f_log2_size_array(c_fc_chan_width);
   constant c_max_ddr_payload_ratio_log2     : natural := f_log2_size(c_max_payload_ratio);
   constant c_ddr_keep_width                 : natural := g_ddr_payload_width/8;
   constant c_ddr_eop_width                  : natural := 1;
@@ -138,6 +144,7 @@ architecture rtl of acq_ddr3_axis_write is
   constant c_bytes_per_word_log2            : natural := f_log2_size(c_bytes_per_word);
   constant c_addr_ddr_inc                   : natural := c_ddr_payload_width/g_ddr_dq_width; -- in words
   constant c_addr_ddr_inc_axis              : natural := c_ddr_payload_width/g_ddr_dq_width*c_bytes_per_word; -- in bytes
+  constant c_addr_ddr_inc_axis_log2         : natural := f_log2_size(c_addr_ddr_inc_axis);
   constant c_ddr_payload_width_byte         : natural := c_ddr_payload_width/8;
   constant c_ddr_payload_width_byte_log2    : natural := f_log2_size(c_ddr_payload_width_byte);
 
@@ -211,6 +218,7 @@ architecture rtl of acq_ddr3_axis_write is
   signal lmt_shots_nb                       : unsigned(c_shots_size_width-1 downto 0);
   signal lmt_curr_chan_id                   : unsigned(c_chan_id_width-1 downto 0);
   signal lmt_valid                          : std_logic;
+  signal lmt_chan_width_log2                : unsigned(g_trig_cnt_off_width-1 downto 0);
   signal fc_dout                            : std_logic_vector(g_ddr_header_width+g_ddr_payload_width+c_ddr_eop_width+c_ddr_keep_width-1 downto 0);
   signal fc_valid_cmd                       : std_logic;
   signal fc_sof_cmd                         : std_logic;
@@ -302,6 +310,8 @@ architecture rtl of acq_ddr3_axis_write is
   signal ddr_data_id_in                     : std_logic_vector(2 downto 0);
   signal ddr_header_in                      : std_logic_vector(c_acq_header_width-1 downto 0);
   signal ddr_trig_addr                      : unsigned(g_ddr_addr_width-1 downto 0);
+  signal ddr_trig_cnt_off_s                 : std_logic_vector(g_trig_cnt_off_width-1 downto 0);
+  signal ddr_trig_cnt_off                   : unsigned(g_trig_cnt_off_width-1 downto 0);
 
   signal ddr_eop_in                         : std_logic_vector(c_ddr_eop_width-1 downto 0);
   signal ddr_keep_in                        : std_logic_vector(c_ddr_keep_width-1 downto 0);
@@ -361,6 +371,7 @@ begin
         lmt_full_pkt_size_alig_s <= (others => '0');
         lmt_shots_nb <= to_unsigned(1, lmt_shots_nb'length);
         lmt_curr_chan_id <= to_unsigned(0, lmt_curr_chan_id'length);
+        lmt_chan_width_log2 <= to_unsigned(0, lmt_chan_width_log2'length);
       else
         lmt_valid <= lmt_valid_i;
 
@@ -406,6 +417,10 @@ begin
 
           lmt_shots_nb <= lmt_shots_nb_i;
           lmt_curr_chan_id <= lmt_curr_chan_id_i;
+
+          -- Get number of channel width (in byte shit count) for this channel
+          lmt_chan_width_log2 <= to_unsigned(c_fc_chan_width_log2(to_integer(lmt_curr_chan_id_i)),
+                            lmt_chan_width_log2'length);
 
         end if;
       end if;
@@ -586,6 +601,7 @@ begin
         -- FIXME. Logic on reset tree.
         ddr_addr_max_m1 <= unsigned(wr_end_addr_alig)-c_addr_ddr_inc_axis;
         ddr_btt_full <= to_unsigned(0, ddr_btt_full'length);
+        ddr_trig_cnt_off_s <= (others => '0');
       else
 
         if wr_start_i = '1' then
@@ -620,10 +636,36 @@ begin
           if ddr_addr_wrap_counter = '1' then
             ddr_addr_cnt_axis <= ddr_addr_init;
           end if;
+
+          -- Compute the number of bytes to subtract from the trigger address.
+          -- This depends on the channel width in bytes
+          case to_integer(lmt_chan_width_log2) is
+            when 1 =>
+              ddr_trig_cnt_off_s <= std_logic_vector(wr_trig_cnt_off_i(wr_trig_cnt_off_i'left - 1 downto 0)) &
+                                      f_gen_std_logic_vector(1, '0');
+            when 2 =>
+              ddr_trig_cnt_off_s <= std_logic_vector(wr_trig_cnt_off_i(wr_trig_cnt_off_i'left - 2 downto 0)) &
+                                      f_gen_std_logic_vector(2, '0');
+            when 3 =>
+              ddr_trig_cnt_off_s <= std_logic_vector(wr_trig_cnt_off_i(wr_trig_cnt_off_i'left - 3 downto 0)) &
+                                      f_gen_std_logic_vector(3, '0');
+            when 4 =>
+              ddr_trig_cnt_off_s <= std_logic_vector(wr_trig_cnt_off_i(wr_trig_cnt_off_i'left - 4 downto 0)) &
+                                      f_gen_std_logic_vector(4, '0');
+            when 5 =>
+              ddr_trig_cnt_off_s <= std_logic_vector(wr_trig_cnt_off_i(wr_trig_cnt_off_i'left - 5 downto 0)) &
+                                      f_gen_std_logic_vector(5, '0');
+            when others =>
+              ddr_trig_cnt_off_s <= std_logic_vector(wr_trig_cnt_off_i(wr_trig_cnt_off_i'left - 1 downto 0)) &
+                                      f_gen_std_logic_vector(1, '0');
+          end case;
+
         end if;
       end if;
     end if;
   end process;
+
+  ddr_trig_cnt_off <= unsigned(ddr_trig_cnt_off_s);
 
   ddr_btt_mem_area_full <= unsigned(wr_end_addr_alig) - unsigned(wr_init_addr_alig);
   ddr_btt_mem_area_rem <= unsigned(wr_end_addr_alig) - unsigned(ddr_addr_cnt_axis);
@@ -673,9 +715,16 @@ begin
           ddr_trig_addr <= unsigned(wr_init_addr_alig);
           ddr_trig_captured <= '0';
         -- Store DDR address if there was a trigger occurrence
-        elsif (ddr_trigger_in = '1' and ddr_valid_in = '1') or
-            -- We have transfered all samples, but no trigger occurred
-            (cnt_all_trans_done_p = '1' and ddr_trig_captured = '0') then
+        elsif (ddr_trigger_in = '1' and ddr_valid_in = '1') then
+          if ddr_addr_cnt_axis /= ddr_addr_init then
+            ddr_trig_addr <= ddr_addr_cnt_axis - ddr_trig_cnt_off;
+          else
+            ddr_trig_addr <= ddr_addr_max - ddr_trig_cnt_off;
+          end if;
+
+          ddr_trig_captured <= '1';
+        -- We have transfered all samples, but no trigger occurred
+        elsif cnt_all_trans_done_p = '1' and ddr_trig_captured = '0' then
           ddr_trig_addr <= ddr_addr_cnt_axis;
           ddr_trig_captured <= '1';
         end if;
