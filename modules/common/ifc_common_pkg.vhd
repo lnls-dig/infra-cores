@@ -38,6 +38,20 @@ package ifc_common_pkg is
   );
   end component;
 
+  component pulse2square
+  port
+  (
+    clk_i                                    : in std_logic;
+    rst_n_i                                  : in std_logic;
+
+    -- Pulse input
+    pulse_i                                  : in std_logic;
+    -- Clear square
+    clr_i                                    : in std_logic;
+    -- square output
+    square_o                                 : out std_logic
+  );
+  end component;
 
   component trigger_rcv is
     generic (

@@ -1,5 +1,6 @@
 modules = { "local" : ["reset_synch",
                        "pulse2level",
+                       "pulse2square",
                        "trigger_rcv",
                        "trigger_common",
                        "trigger_io",
