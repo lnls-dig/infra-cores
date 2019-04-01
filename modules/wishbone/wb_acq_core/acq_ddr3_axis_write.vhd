@@ -716,10 +716,10 @@ begin
           ddr_trig_captured <= '0';
         -- Store DDR address if there was a trigger occurrence
         elsif (ddr_trigger_in = '1' and ddr_valid_in = '1') then
-          if ddr_addr_cnt_axis /= ddr_addr_init then
-            ddr_trig_addr <= ddr_addr_cnt_axis - ddr_trig_cnt_off;
+          if ddr_addr_cnt_axis = ddr_addr_init then
+            ddr_trig_addr <= ddr_addr_max + c_addr_ddr_inc_axis - ddr_trig_cnt_off;
           else
-            ddr_trig_addr <= ddr_addr_max - ddr_trig_cnt_off;
+            ddr_trig_addr <= ddr_addr_cnt_axis - ddr_trig_cnt_off;
           end if;
 
           ddr_trig_captured <= '1';
