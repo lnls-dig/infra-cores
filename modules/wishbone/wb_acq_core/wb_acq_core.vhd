@@ -1229,6 +1229,7 @@ begin
       g_acq_num_channels                      => g_acq_num_channels,
       g_acq_channels                          => g_acq_channels,
       g_fc_pipe_size                          => c_fc_pipe_size,
+      g_trig_cnt_off_width                    => c_trig_cnt_off_width,
       -- This is the number of header bits interleaved after marshalling
       g_ddr_header_width                      => c_acq_header_width,
       -- Do not modify these! As they are dependent of the memory controller generated!
@@ -1258,6 +1259,7 @@ begin
       -- impose any metastability problem in this module
       wr_init_addr_i                          => acq_ddr3_start_addr,
       wr_end_addr_i                           => acq_ddr3_end_addr,
+      wr_trig_cnt_off_i                       => acq_trig_cnt_off,
 
       lmt_all_trans_done_p_o                  => ddr3_wr_all_trans_done_p,
       lmt_ddr_trig_addr_o                     => ddr_trig_addr,

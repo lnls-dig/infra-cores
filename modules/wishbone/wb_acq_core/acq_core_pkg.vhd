@@ -786,6 +786,7 @@ package acq_core_pkg is
     g_acq_num_channels                        : natural := 1;
     g_acq_channels                            : t_acq_chan_param_array;
     g_fc_pipe_size                            : natural := 4;
+    g_trig_cnt_off_width                      : natural := 8;
     -- Do not modify these! As they are dependent of the memory controller generated!
     g_ddr_header_width                        : natural := 4;
     g_ddr_payload_width                       : natural := 256;     -- be careful changing these!
@@ -811,6 +812,7 @@ package acq_core_pkg is
     wr_start_i                                : in std_logic;
     wr_init_addr_i                            : in std_logic_vector(g_ddr_addr_width-1 downto 0);
     wr_end_addr_i                             : in std_logic_vector(g_ddr_addr_width-1 downto 0);
+    wr_trig_cnt_off_i                         : in unsigned(g_trig_cnt_off_width-1 downto 0);
 
     lmt_all_trans_done_p_o                    : out std_logic;
     lmt_ddr_trig_addr_o                       : out std_logic_vector(g_ddr_addr_width-1 downto 0);
