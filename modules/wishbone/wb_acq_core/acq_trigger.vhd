@@ -523,7 +523,7 @@ begin
         -- By design acq_min_align_max would be at least 1, meaning a channel
         -- composed of 2 atoms. So the arithmetic acq_min_align_max-1 yields
         -- valid values in all cases.
-        if trig_det = '1' or trig_unaligned = '1' then
+        if (trig_det = '1' or trig_unaligned = '1') and trig_align = '0' then
           if acq_trig_align_cnt = acq_min_align_max and acq_valid_sel_out = '1' then -- will increment to the first atom
             trig_align <= '1'; -- Output trigger aligned with the first atom
           end if;

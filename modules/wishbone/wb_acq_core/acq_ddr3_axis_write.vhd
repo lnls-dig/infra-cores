@@ -715,18 +715,20 @@ begin
           ddr_trig_addr <= unsigned(wr_init_addr_alig);
           ddr_trig_captured <= '0';
         -- Store DDR address if there was a trigger occurrence
-        elsif (ddr_trigger_in = '1' and ddr_valid_in = '1') then
-          if ddr_addr_cnt_axis = ddr_addr_init then
-            ddr_trig_addr <= ddr_addr_max + c_addr_ddr_inc_axis - ddr_trig_cnt_off;
-          else
-            ddr_trig_addr <= ddr_addr_cnt_axis - ddr_trig_cnt_off;
-          end if;
+        elsif ddr_trig_captured = '0' then
+          if (ddr_trigger_in = '1' and ddr_valid_in = '1') then
+            if ddr_addr_cnt_axis = ddr_addr_init then
+              ddr_trig_addr <= ddr_addr_max + c_addr_ddr_inc_axis - ddr_trig_cnt_off;
+            else
+              ddr_trig_addr <= ddr_addr_cnt_axis - ddr_trig_cnt_off;
+            end if;
 
-          ddr_trig_captured <= '1';
-        -- We have transfered all samples, but no trigger occurred
-        elsif cnt_all_trans_done_p = '1' and ddr_trig_captured = '0' then
-          ddr_trig_addr <= ddr_addr_cnt_axis;
-          ddr_trig_captured <= '1';
+            ddr_trig_captured <= '1';
+          -- We have transfered all samples, but no trigger occurred
+          elsif cnt_all_trans_done_p = '1' and ddr_trig_captured = '0' then
+            ddr_trig_addr <= ddr_addr_cnt_axis;
+            ddr_trig_captured <= '1';
+          end if;
         end if;
       end if;
     end if;
