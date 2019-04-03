@@ -399,6 +399,7 @@ package acq_core_pkg is
     acq_id_i                                  : in t_acq_id;
     acq_trig_i                                : in std_logic;
     acq_trig_accepting_i                      : in std_logic;
+    acq_single_shot_i                         : in std_logic;
 
     -- Current channel selection ID
     lmt_curr_chan_id_i                        : in unsigned(c_chan_id_width-1 downto 0);

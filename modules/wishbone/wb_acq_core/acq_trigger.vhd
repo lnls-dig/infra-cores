@@ -72,6 +72,7 @@ port
   acq_id_i                                  : in t_acq_id;
   acq_trig_i                                : in std_logic;
   acq_trig_accepting_i                      : in std_logic;
+  acq_single_shot_i                         : in std_logic;
 
   -- Current channel selection ID
   lmt_curr_chan_id_i                        : in unsigned(c_chan_id_width-1 downto 0);
@@ -524,14 +525,21 @@ begin
         -- composed of 2 atoms. So the arithmetic acq_min_align_max-1 yields
         -- valid values in all cases.
         if (trig_det = '1' or trig_unaligned = '1') and trig_align = '0' then
-          if acq_trig_align_cnt = acq_min_align_max and acq_valid_sel_out = '1' then -- will increment to the first atom
-            trig_align <= '1'; -- Output trigger aligned with the first atom
-          end if;
 
-          -- Acquire offset from trigger only once per transaction
-          if trig_cnt_off_captured = '0' then
-            trig_cnt_off <= resize(acq_min_align_max - acq_trig_align_cnt, trig_cnt_off'length);
-            trig_cnt_off_captured <= '1';
+          -- No need for trigger alignment if using multishot RAM
+          if acq_single_shot_i = '0' then
+            trig_align <= '1';
+            trig_cnt_off <= to_unsigned(0, trig_cnt_off'length);
+          else
+            if acq_trig_align_cnt = acq_min_align_max and acq_valid_sel_out = '1' then -- will increment to the first atom
+              trig_align <= '1'; -- Output trigger aligned with the first atom
+            end if;
+
+            -- Acquire offset from trigger only once per transaction
+            if trig_cnt_off_captured = '0' then
+              trig_cnt_off <= resize(acq_min_align_max - acq_trig_align_cnt, trig_cnt_off'length);
+              trig_cnt_off_captured <= '1';
+            end if;
           end if;
 
         elsif acq_valid_sel_out = '1' then
