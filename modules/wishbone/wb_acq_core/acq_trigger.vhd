@@ -509,7 +509,7 @@ begin
         trig_cnt_off <= to_unsigned(0, trig_cnt_off'length);
         trig_cnt_off_captured <= '0';
       else
-          if trig_det = '1' and trig_cnt_off_captured = '0' then
+        if trig_det = '1' and trig_cnt_off_captured = '0' then
           trig_unaligned <= '1';
         -- Trigger captured
         elsif trig_align = '1' then
