@@ -9,9 +9,7 @@ use work.wishbone_pkg.all;
 
 entity wb_dbe_periph is
 generic(
-  -- NOT used!
   g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
-  -- NOT used!
   g_address_granularity                     : t_wishbone_address_granularity := WORD;
   g_cntr_period                             : integer                        := 100000; -- 100MHz clock, ms granularity
   g_num_leds                                : natural                        := 8;
@@ -123,8 +121,8 @@ begin
   -- Slave 0 is the UART
   cmp_uart : xwb_simple_uart
   generic map (
-    g_interface_mode                        => PIPELINED,
-    g_address_granularity                   => BYTE
+    g_interface_mode                        => g_interface_mode,
+    g_address_granularity                   => g_address_granularity
   )
   port map (
     clk_sys_i                               => clk_sys_i,
@@ -138,8 +136,8 @@ begin
   -- Slave 1 is the LED driver
   cmp_leds : xwb_gpio_port
   generic map(
-    g_interface_mode                        => PIPELINED,
-    g_address_granularity                   => BYTE,
+    g_interface_mode                        => g_interface_mode,
+    g_address_granularity                   => g_address_granularity,
     g_num_pins                              => g_num_leds,
     g_with_builtin_tristates                => false
   )
@@ -186,8 +184,8 @@ begin
   -- Slave 2 is the Button driver
   cmp_buttons : xwb_gpio_port
   generic map(
-    g_interface_mode                        => PIPELINED,
-    g_address_granularity                   => BYTE,
+    g_interface_mode                        => g_interface_mode,
+    g_address_granularity                   => g_address_granularity,
     g_num_pins                              => g_num_buttons,
     g_with_builtin_tristates                => false
   )
@@ -210,10 +208,8 @@ begin
   -- Slave 3 is the TICs counter
   cmp_xwb_tics : xwb_tics
   generic map(
-    g_interface_mode                        => PIPELINED,
-    g_address_granularity                   => WORD,
-    --g_interface_mode                        => g_interface_mode,
-    --g_address_granularity                   => g_address_granularity,
+    g_interface_mode                        => g_interface_mode,
+    g_address_granularity                   => g_address_granularity,
     g_period                                => g_cntr_period
   )
   port map(

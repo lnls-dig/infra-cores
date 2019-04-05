@@ -1400,9 +1400,7 @@ package ifc_wishbone_pkg is
 
   component wb_dbe_periph
   generic(
-    -- NOT used!
     g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
-    -- NOT used!
     g_address_granularity                     : t_wishbone_address_granularity := WORD;
     g_cntr_period                             : integer                        := 100000; -- 100MHz clock, ms granularity
     g_num_leds                                : natural                        := 8;
@@ -1444,9 +1442,7 @@ package ifc_wishbone_pkg is
 
   component xwb_dbe_periph
   generic(
-    -- NOT used!
     g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
-    -- NOT used!
     g_address_granularity                     : t_wishbone_address_granularity := WORD;
     g_cntr_period                             : integer                        := 100000; -- 100MHz clock, ms granularity
     g_num_leds                                : natural                        := 8;

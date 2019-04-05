@@ -8,9 +8,7 @@ use work.wishbone_pkg.all;
 
 entity xwb_dbe_periph is
 generic(
-  -- NOT used!
   g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
-  -- NOT used!
   g_address_granularity                     : t_wishbone_address_granularity := WORD;
   g_cntr_period                             : integer                        := 100000; -- 100MHz clock, ms granularity
   g_num_leds                                : natural                        := 8;
