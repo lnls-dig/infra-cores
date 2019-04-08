@@ -1,0 +1,44 @@
+# Design checkpoint files
+*.dcp
+
+# .XCI generated folders
+**/synth
+**/sim
+**/hdl
+
+# .XCI generated files
+*.xdc
+
+# Specific generated cores
+**/axi_datamover_bpm.xdc
+**/axi_datamover_bpm.xml
+**/axi_datamover_bpm_clocks.xdc
+**/axi_datamover_bpm_ooc.xdc
+**/axi_datamover_bpm_sim_netlist.v
+**/axi_datamover_bpm_sim_netlist.vhdl
+**/axi_datamover_bpm_stub.v
+**/axi_datamover_bpm_stub.vhdl
+
+**/axi_interconnect_bpm.xml
+**/axi_interconnect_bpm_clocks.xdc
+**/axi_interconnect_bpm_ooc.xdc
+**/axi_interconnect_bpm_sim_netlist.v
+**/axi_interconnect_bpm_sim_netlist.vhdl
+**/axi_interconnect_bpm_stub.v
+**/axi_interconnect_bpm_stub.vhdl
+
+**/axi_interconnect.xml
+**/axi_interconnect_clocks.xdc
+**/axi_interconnect_ooc.xdc
+**/axi_interconnect_sim_netlist.v
+**/axi_interconnect_sim_netlist.vhdl
+**/axi_interconnect_stub.v
+**/axi_interconnect_stub.vhdl
+
+**/axi_datamover_0.xml
+**/axi_datamover_0_clocks.xdc
+**/axi_datamover_0_ooc.xdc
+**/axi_datamover_0_sim_netlist.v
+**/axi_datamover_0_sim_netlist.vhdl
+**/axi_datamover_0_stub.v
+**/axi_datamover_0_stub.vhdl
