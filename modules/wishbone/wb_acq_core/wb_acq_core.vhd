@@ -210,17 +210,34 @@ architecture rtl of wb_acq_core is
 
   constant c_fc_pipe_size                   : natural := 8;
 
-  constant c_p2l_num_inputs                 : natural := 6;
+  constant c_p2l_num_inputs                 : natural := 7;
   constant c_p2l_all_trans_done_idx         : natural := 0;
   constant c_p2l_fifo_fc_full_idx           : natural := 1;
   constant c_p2l_acq_start_idx              : natural := 2;
   constant c_p2l_ddr3_wr_all_trans_done_idx : natural := 3;
   constant c_p2l_ddr3_all_trans_done_idx    : natural := 4;
   constant c_p2l_acq_start_sync_ext_idx     : natural := 5;
+  constant c_p2l_multishot_fc_full_idx      : natural := 6;
   constant c_p2l_with_pulse_sync            : t_acq_bool_array(c_p2l_num_inputs-1 downto 0) :=
-                                                (true, true, false, true, false, false);
+                                              (
+                                                c_p2l_multishot_fc_full_idx      => false,
+                                                c_p2l_acq_start_sync_ext_idx     => true,
+                                                c_p2l_ddr3_all_trans_done_idx    => true,
+                                                c_p2l_ddr3_wr_all_trans_done_idx => false,
+                                                c_p2l_acq_start_idx              => true,
+                                                c_p2l_fifo_fc_full_idx           => false,
+                                                c_p2l_all_trans_done_idx         => false
+                                              );
   constant c_p2l_with_pulse2level           : t_acq_bool_array(c_p2l_num_inputs-1 downto 0) :=
-                                                (false, true, true, false, true, true);
+                                              (
+                                                c_p2l_multishot_fc_full_idx      => true,
+                                                c_p2l_acq_start_sync_ext_idx     => false,
+                                                c_p2l_ddr3_all_trans_done_idx    => true,
+                                                c_p2l_ddr3_wr_all_trans_done_idx => true,
+                                                c_p2l_acq_start_idx              => false,
+                                                c_p2l_fifo_fc_full_idx           => true,
+                                                c_p2l_all_trans_done_idx         => true
+                                              );
 
   constant c_acq_start_fs_rst_pulse_width   : natural := 16;
 
@@ -336,6 +353,7 @@ architecture rtl of wb_acq_core is
   signal shots_decr                         : std_logic;
   signal multishot_buffer_sel               : std_logic;
   signal multishot_fc_full_p                : std_logic;
+  signal multishot_fc_full_l                : std_logic;
   signal acq_ms_addr_rst                    : std_logic;
 
   -- Packet size for ext interface
@@ -361,6 +379,7 @@ architecture rtl of wb_acq_core is
   signal fifo_fc_all_trans_done_l           : std_logic;
   signal fifo_fc_full                       : std_logic;
   signal fifo_fc_full_l                     : std_logic;
+  signal fifo_sta_full                      : std_logic;
 
   -- External memory interface signals
   signal ext_dout                           : std_logic_vector(c_acq_header_width+g_ddr_payload_width-1 downto 0);
@@ -572,7 +591,7 @@ begin
   regs_in.sta_fsm_acq_done_i                <= acq_end;
   regs_in.sta_reserved1_i                   <= dbg_fifo_rd_empty & dbg_fifo_fc_rd_en & dbg_fifo_re & dbg_fifo_we;
   regs_in.sta_fc_trans_done_i               <= fifo_fc_all_trans_done_l;
-  regs_in.sta_fc_full_i                     <= fifo_fc_full_l;
+  regs_in.sta_fc_full_i                     <= fifo_sta_full;
   regs_in.sta_reserved2_i                   <= "00" & dbg_source_pl_stall & dbg_source_pl_dreq &
                                                dbg_fifo_fc_valid_fwft & dbg_fifo_wr_full;
   regs_in.sta_ddr3_trans_done_i             <= ddr3_all_trans_done_l;
@@ -1060,6 +1079,10 @@ begin
     dbg_shots_cnt_o                         => dbg_shots_cnt
   );
 
+  -- FIFO full logic to user register
+  fifo_sta_full <= fifo_fc_full_l when acq_single_shot = '1' -- Directly to external DDR, no internal BRAM buffer
+                       else multishot_fc_full_l;
+
   ------------------------------------------------------------------------------
   -- Delayed start and modules reset
   ------------------------------------------------------------------------------
@@ -1213,6 +1236,17 @@ begin
   p2l_clr(c_p2l_acq_start_sync_ext_idx)       <= '0'; -- not used
 
   acq_start_sync_fs                           <= p2l_level_synched(c_p2l_acq_start_sync_ext_idx);
+
+  -- multishot_fc_full signal conversion
+  p2l_clk_in(c_p2l_multishot_fc_full_idx)     <= fs_clk_i;
+  p2l_rst_in_n(c_p2l_multishot_fc_full_idx)   <= fs_rst_n;
+  p2l_clk_out(c_p2l_multishot_fc_full_idx)    <= fs_clk_i;
+  p2l_rst_out_n(c_p2l_multishot_fc_full_idx)  <= fs_rst_n;
+
+  p2l_pulse(c_p2l_multishot_fc_full_idx)      <= multishot_fc_full_p;
+  p2l_clr(c_p2l_multishot_fc_full_idx)        <= acq_start_sync_fs;
+
+  multishot_fc_full_l                         <= p2l_level_synched(c_p2l_multishot_fc_full_idx);
 
   -- Output debugs
 
