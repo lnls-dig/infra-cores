@@ -335,6 +335,7 @@ architecture rtl of wb_acq_core is
   signal shots_cnt                          : unsigned(15 downto 0);
   signal shots_decr                         : std_logic;
   signal multishot_buffer_sel               : std_logic;
+  signal multishot_fc_full_p                : std_logic;
   signal acq_ms_addr_rst                    : std_logic;
 
   -- Packet size for ext interface
@@ -351,6 +352,7 @@ architecture rtl of wb_acq_core is
   signal dpram_addrb_cnt                    : unsigned(c_dpram_depth-1 downto 0);
   signal dpram_dout                         : std_logic_vector(c_acq_header_width+c_acq_data_width-1 downto 0);
   signal dpram_valid                        : std_logic;
+  signal dpram_stall                        : std_logic;
 
   -- FIFO Flow Control signals
   signal fifo_fc_req_rst_trans              : std_logic;
@@ -951,14 +953,18 @@ begin
     acq_trig_i                              => acq_trig_fsm,
 
     pre_trig_samples_i                      => lmt_acq_pre_pkt_size,
-    post_trig_samples_i                     => lmt_acq_pre_pkt_size,
+    post_trig_samples_i                     => lmt_acq_pos_pkt_size,
+    full_samples_i                          => lmt_acq_full_pkt_size,
+    samples_valid_i                         => acq_start_safe,
 
     acq_pre_trig_done_i                     => acq_pre_trig_done,
     acq_wait_trig_skip_done_i               => acq_wait_trig_skip_done,
     acq_post_trig_done_i                    => acq_post_trig_done,
 
+    dpram_fifo_full_o                       => multishot_fc_full_p,
     dpram_dout_o                            => dpram_dout,
-    dpram_valid_o                           => dpram_valid
+    dpram_valid_o                           => dpram_valid,
+    dpram_stall_i                           => dpram_stall
   );
 
   acq_ms_addr_rst                           <= shots_decr or acq_start_sync_fs;
@@ -997,6 +1003,7 @@ begin
     -- DPRAM data
     dpram_data_i                            => dpram_dout,
     dpram_dvalid_i                          => dpram_valid,
+    dpram_stall_o                           => dpram_stall,
 
     -- Passthrough data
     pt_data_i                               => acq_data_fsm,
