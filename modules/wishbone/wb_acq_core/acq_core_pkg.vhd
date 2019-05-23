@@ -553,6 +553,7 @@ package acq_core_pkg is
     -- DPRAM data
     dpram_data_i                              : in std_logic_vector(g_header_in_width+g_data_in_width-1 downto 0);
     dpram_dvalid_i                            : in std_logic;
+    dpram_stall_o                             : out std_logic;
 
     -- Passthough data
     pt_data_i                                 : in std_logic_vector(g_data_in_width-1 downto 0);
