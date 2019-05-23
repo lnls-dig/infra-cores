@@ -37,6 +37,7 @@ generic
 (
   g_header_out_width                        : natural := 1;
   g_data_width                              : natural := 64;
+  g_fc_pipe_size                            : natural := 4;
   g_multishot_ram_size                      : natural := 2048
 );
 port
@@ -56,13 +57,16 @@ port
 
   pre_trig_samples_i                        : in unsigned(c_acq_samples_size-1 downto 0);
   post_trig_samples_i                       : in unsigned(c_acq_samples_size-1 downto 0);
+  full_samples_i                            : in unsigned(c_acq_samples_size-1 downto 0);
+  samples_valid_i                           : in std_logic;
 
   acq_pre_trig_done_i                       : in std_logic;
   acq_wait_trig_skip_done_i                 : in std_logic;
   acq_post_trig_done_i                      : in std_logic;
 
   dpram_dout_o                              : out std_logic_vector(g_header_out_width+g_data_width-1 downto 0);
-  dpram_valid_o                             : out std_logic
+  dpram_valid_o                             : out std_logic;
+  dpram_stall_i                             : in std_logic
 );
 end acq_multishot_dpram;
 
@@ -75,6 +79,7 @@ architecture rtl of acq_multishot_dpram is
   constant c_dpram_header_bot_idx           : natural := g_data_width;
   constant c_dpram_payload_top_idx          : natural := g_data_width-1;
   constant c_dpram_payload_bot_idx          : natural := 0;
+  constant c_pre_out_pipe_size              : natural := 8;
 
   signal dpram_trig                         : std_logic;
 
@@ -84,9 +89,7 @@ architecture rtl of acq_multishot_dpram is
   signal dpram_addrb_cnt                    : unsigned(c_dpram_depth-1 downto 0);
   signal dpram_valid_t                      : std_logic;
   signal dpram_valid_t1                     : std_logic;
-  signal dpram_trigger                      : std_logic;
-  signal dpram_data_id                      : std_logic_vector(2 downto 0);
-  signal dpram_data                         : std_logic_vector(g_data_width-1 downto 0);
+  signal dpram_rd_req                       : std_logic;
 
   signal dpram0_dina                        : std_logic_vector(c_dpram_width-1 downto 0);
   signal dpram0_addra                       : std_logic_vector(c_dpram_depth-1 downto 0);
@@ -102,8 +105,22 @@ architecture rtl of acq_multishot_dpram is
 
   signal dpram_dout                         : std_logic_vector(g_header_out_width+g_data_width-1 downto 0);
   signal dpram_valid                        : std_logic;
-  signal dpram_dout_retag                   : std_logic_vector(g_header_out_width+g_data_width-1 downto 0);
-  signal dpram_valid_retag                  : std_logic;
+  --signal dpram_dout_retag                   : std_logic_vector(g_header_out_width+g_data_width-1 downto 0);
+  --signal dpram_valid_retag                  : std_logic;
+  --signal dpram_stall_retag                  : std_logic;
+
+  signal fc_src_data_in                     : std_logic_vector(g_header_out_width+g_data_width-1 downto 0);
+  signal fc_src_valid_in                    : std_logic;
+  signal fc_src_stall                       : std_logic;
+
+  signal pre_out_dout                       : std_logic_vector(g_header_out_width+g_data_width-1 downto 0);
+  signal pre_out_valid                      : std_logic;
+  signal pre_out_rd_en                      : std_logic;
+  signal pre_out_trigger                    : std_logic;
+  signal pre_out_data_id                    : std_logic_vector(2 downto 0);
+  signal pre_out_data                       : std_logic_vector(g_data_width-1 downto 0);
+  signal pre_out_full                       : std_logic;
+  signal pre_out_almost_full                : std_logic;
 
 begin
 
@@ -209,13 +226,18 @@ begin
         dpram_valid_t   <= '0';
         dpram_valid_t1  <= '0';
       else
-        if acq_post_trig_done_i = '1' then
-          dpram_addrb_cnt <= dpram_addra_trig - pre_trig_samples_i(c_dpram_depth-1 downto 0);
-          dpram_valid_t   <= '1';
-        elsif (dpram_addrb_cnt = dpram_addra_post_done) then
-          dpram_valid_t <= '0';
+        if dpram_rd_req = '1' then
+          if acq_post_trig_done_i = '1' then
+            dpram_addrb_cnt <= dpram_addra_trig - pre_trig_samples_i(c_dpram_depth-1 downto 0);
+            dpram_valid_t   <= '1';
+          elsif (dpram_addrb_cnt = dpram_addra_post_done) then
+            dpram_valid_t <= '0';
+          else
+            dpram_addrb_cnt <= dpram_addrb_cnt + 1;
+            dpram_valid_t <= '1';
+          end if;
         else
-          dpram_addrb_cnt <= dpram_addrb_cnt + 1;
+          dpram_valid_t <= '0';
         end if;
 
         -- Account for DPRAM 1 cycle latency
@@ -232,41 +254,94 @@ begin
   dpram_dout   <= dpram0_doutb when buffer_sel_i = '1' else dpram1_doutb;
   dpram_valid  <= dpram_valid_t1;
 
-  -- Extract trigger from dpram data
-  dpram_trigger <= dpram_dout(c_acq_header_trigger_idx+c_dpram_header_bot_idx);
+  dpram_rd_req <= not(pre_out_almost_full or pre_out_full);
 
-  -- Extract data_id from dpram data
-  dpram_data_id <= dpram_dout(c_acq_header_id_top_idx+c_dpram_header_bot_idx downto
+  cmp_pre_out_fwft_fifo : acq_fwft_fifo
+  generic map
+  (
+    g_data_width                            => g_header_out_width + g_data_width,
+    g_size                                  => c_pre_out_pipe_size,
+    g_with_wr_full                          => true,
+    g_with_wr_almost_full                   => true,
+    g_almost_empty_threshold                => 1,
+    g_almost_full_threshold                 => c_pre_out_pipe_size-3,
+    g_with_fifo_inferred                    => true,
+    g_async                                 => false
+  )
+  port map
+  (
+    -- Write clock
+    wr_clk_i                                => fs_clk_i,
+    wr_rst_n_i                              => fs_rst_n_i,
+
+    wr_data_i                               => dpram_dout,
+    wr_en_i                                 => dpram_valid,
+    wr_full_o                               => pre_out_full,
+    wr_almost_full_o                        => pre_out_almost_full,
+
+    -- Read clock
+    rd_clk_i                                => fs_clk_i,
+    rd_rst_n_i                              => fs_rst_n_i,
+
+    rd_data_o                               => pre_out_dout,
+    rd_valid_o                              => pre_out_valid,
+    rd_en_i                                 => pre_out_rd_en
+  );
+
+  pre_out_rd_en <= not(fc_src_stall);
+
+  -- Extract trigger from pre_out data
+  pre_out_trigger <= pre_out_dout(c_acq_header_trigger_idx+c_dpram_header_bot_idx);
+
+  -- Extract data_id from pre_out data
+  pre_out_data_id <= pre_out_dout(c_acq_header_id_top_idx+c_dpram_header_bot_idx downto
                           c_acq_header_id_bot_idx+c_dpram_header_bot_idx);
 
-  dpram_data <= dpram_dout(c_dpram_payload_top_idx downto c_dpram_payload_bot_idx);
+  pre_out_data <= pre_out_dout(c_dpram_payload_top_idx downto c_dpram_payload_bot_idx);
 
+  -- FC Source inputs.
   -- Change DPRAM tag from wait_trig to pre_samples, as we only write to DPRAM
   -- exactly the samples to be written to DDR and we can have samples tagged with
   -- wait_trig (which are not gonna be counter for on next modules)
-  p_dpram_retag : process (fs_clk_i)
-  begin
-    if rising_edge(fs_clk_i) then
-      if fs_rst_n_i = '0' then
-        dpram_dout_retag <= (others => '0');
-        dpram_valid_retag <= '0';
-      else
-        dpram_valid_retag <= dpram_valid;
+  fc_src_data_in <= "010" & pre_out_trigger & pre_out_data when pre_out_data_id = "011" else
+                    pre_out_dout;
+  fc_src_valid_in <= pre_out_valid;
 
-        if dpram_valid = '1' then
-          -- Retag data with Pre Trigger state
-          if dpram_data_id = "011" then -- Wait Trigger State
-            dpram_dout_retag <= "010" & dpram_trigger & dpram_data;
-          else
-            dpram_dout_retag <= dpram_dout;
-          end if;
-        end if;
+  cmp_fc_source : fc_source
+  generic map (
+    g_header_in_width                       => g_header_out_width,
+    g_data_width                            => g_data_width,
+    g_pkt_size_width                        => c_pkt_size_width,
+    g_addr_width                            => 0,
+    g_pipe_size                             => g_fc_pipe_size
+  )
+  port map (
+    clk_i                                   => fs_clk_i,
+    rst_n_i                                 => fs_rst_n_i,
 
-      end if;
-    end if;
-  end process;
+    pl_data_i                               => fc_src_data_in,
+    pl_addr_i                               => (others => '0'),
+    pl_valid_i                              => fc_src_valid_in,
 
-  dpram_dout_o   <= dpram_dout_retag;
-  dpram_valid_o  <= dpram_valid_retag;
+    pl_dreq_o                               => open,
+    pl_stall_o                              => fc_src_stall,
+    pl_pkt_sent_o                           => open,
+
+    pl_rst_trans_i                          => '0',
+
+    lmt_pre_pkt_size_i                      => pre_trig_samples_i,
+    lmt_pos_pkt_size_i                      => post_trig_samples_i,
+    lmt_full_pkt_size_i                     => full_samples_i,
+    lmt_valid_i                             => samples_valid_i,
+
+    fc_dout_o                               => dpram_dout_o,
+    fc_valid_o                              => dpram_valid_o,
+    fc_addr_o                               => open,
+    fc_sof_o                                => open,
+    fc_eof_o                                => open,
+
+    fc_stall_i                              => dpram_stall_i,
+    fc_dreq_i                               => '1'
+  );
 
 end rtl;

@@ -498,6 +498,7 @@ package acq_core_pkg is
   (
     g_header_out_width                        : natural := 1;
     g_data_width                              : natural := 64;
+    g_fc_pipe_size                            : natural := 4;
     g_multishot_ram_size                      : natural := 2048
   );
   port
@@ -517,13 +518,16 @@ package acq_core_pkg is
 
     pre_trig_samples_i                        : in unsigned(c_acq_samples_size-1 downto 0);
     post_trig_samples_i                       : in unsigned(c_acq_samples_size-1 downto 0);
+    full_samples_i                            : in unsigned(c_acq_samples_size-1 downto 0);
+    samples_valid_i                           : in std_logic;
 
     acq_pre_trig_done_i                       : in std_logic;
     acq_wait_trig_skip_done_i                 : in std_logic;
     acq_post_trig_done_i                      : in std_logic;
 
     dpram_dout_o                              : out std_logic_vector(g_header_out_width+g_data_width-1 downto 0);
-    dpram_valid_o                             : out std_logic
+    dpram_valid_o                             : out std_logic;
+    dpram_stall_i                             : in std_logic
   );
   end component;
 
