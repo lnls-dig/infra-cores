@@ -64,6 +64,7 @@ port
   acq_wait_trig_skip_done_i                 : in std_logic;
   acq_post_trig_done_i                      : in std_logic;
 
+  dpram_fifo_full_o                         : out std_logic;
   dpram_dout_o                              : out std_logic_vector(g_header_out_width+g_data_width-1 downto 0);
   dpram_valid_o                             : out std_logic;
   dpram_stall_i                             : in std_logic
@@ -254,6 +255,7 @@ begin
   dpram_dout   <= dpram0_doutb when buffer_sel_i = '1' else dpram1_doutb;
   dpram_valid  <= dpram_valid_t1;
 
+  dpram_fifo_full_o <= pre_out_full;
   dpram_rd_req <= not(pre_out_almost_full or pre_out_full);
 
   cmp_pre_out_fwft_fifo : acq_fwft_fifo

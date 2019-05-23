@@ -525,6 +525,7 @@ package acq_core_pkg is
     acq_wait_trig_skip_done_i                 : in std_logic;
     acq_post_trig_done_i                      : in std_logic;
 
+    dpram_fifo_full_o                         : out std_logic;
     dpram_dout_o                              : out std_logic_vector(g_header_out_width+g_data_width-1 downto 0);
     dpram_valid_o                             : out std_logic;
     dpram_stall_i                             : in std_logic
