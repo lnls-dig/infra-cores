@@ -263,10 +263,14 @@ begin
   (
     g_data_width                            => g_header_out_width + g_data_width,
     g_size                                  => c_pre_out_pipe_size,
-    g_with_wr_full                          => true,
+    g_with_rd_almost_empty                  => true,
+    g_with_wr_almost_empty                  => true,
+    g_with_rd_almost_full                   => true,
     g_with_wr_almost_full                   => true,
     g_almost_empty_threshold                => 1,
     g_almost_full_threshold                 => c_pre_out_pipe_size-3,
+    g_with_wr_count                         => false,
+    g_with_rd_count                         => false,
     g_with_fifo_inferred                    => true,
     g_async                                 => false
   )
