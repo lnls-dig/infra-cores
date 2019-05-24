@@ -194,9 +194,8 @@ architecture rtl of acq_fc_fifo is
   signal fifo_fc_mux_cnt                    : unsigned(f_log2_size(c_num_acq_fifos)-1 downto 0);
   signal fifo_fc_mux_inc                    : std_logic;
   signal fifo_fc_fifo_idx_max               : unsigned(f_log2_size(c_num_acq_fifos)-1 downto 0);
-  signal fifo_fc_wr_full                    : t_fc_dvalid_array(c_num_acq_fifos-1 downto 0);
-  signal fifo_fc_wr_full_or                 : t_fc_dvalid_array(c_num_acq_fifos downto 0);
-  signal fifo_fc_wr_full_any                : t_fc_dvalid;
+  signal fifo_fc_wr_full_arr                : t_fc_dvalid_array(c_num_acq_fifos-1 downto 0);
+  signal fifo_fc_wr_full                    : t_fc_dvalid;
   signal fifo_fc_wr_count                   : t_fc_count_array(c_num_acq_fifos-1 downto 0);
   signal fifo_fc_rd_count                   : t_fc_count_array(c_num_acq_fifos-1 downto 0);
   signal fifo_fc_rd_empty                   : t_fc_dvalid_array(c_num_acq_fifos-1 downto 0);
@@ -481,10 +480,10 @@ begin
   fifo_in_valid_full <= '1' when fifo_in_valid_cnt = lmt_full_pkt_size else '0';
 
   -- Fifo valid input. We use only the first FIFO full, for precaution and simplicity.
-  -- Don't add "fifo_fc_wr_full" to the condition to write on FIFO. The data will
+  -- Don't add "fifo_fc_wr_full_arr" to the condition to write on FIFO. The data will
   -- be lost anyway and we can improve timing closure.
   fifo_fc_wr_en <= pt_wr_en_i and pt_dvalid_i and not(fifo_in_valid_full);
-  fifo_fc_dpram_wr_en <= dpram_dvalid_i and not(fifo_fc_wr_full_any);
+  fifo_fc_dpram_wr_en <= dpram_dvalid_i and not(fifo_fc_wr_full);
 
   -- Only count when in pre_trigger or post_trigger and we haven't acquire
   -- enough samples
@@ -556,7 +555,7 @@ begin
 
       wr_data_i                             => fifo_fc_din(i),
       wr_en_i                               => fifo_fc_we(i),
-      wr_full_o                             => fifo_fc_wr_full(i),
+      wr_full_o                             => fifo_fc_wr_full_arr(i),
       wr_count_o                            => fifo_fc_wr_count(i),
 
       -- Read clock
@@ -578,15 +577,9 @@ begin
                             c_acq_header_id_bot_idx+c_fc_data_header_bot_idx);
   end generate;
 
-  fifo_fc_wr_full_or(0) <= '0';
-  -- ORing all fifo full
-  gen_fifo_wr_full : for i in 0 to c_num_acq_fifos-1 generate
-    fifo_fc_wr_full_or(i+1) <= fifo_fc_wr_full_or(i) or fifo_fc_wr_full(i);
-  end generate;
-
-  fifo_fc_wr_full_any <= fifo_fc_wr_full_or(c_num_acq_fifos);
-  fifo_fc_full_o <= fifo_fc_wr_full_any;
-  dpram_stall_o <= fifo_fc_wr_full_any;
+  fifo_fc_wr_full <= fifo_fc_wr_full_arr(0);
+  fifo_fc_full_o <= fifo_fc_wr_full;
+  dpram_stall_o <= fifo_fc_wr_full;
 
   -- TODO1: implement better fifo reading mechanism!
   -- We actually don't need to wait until fifo_fc_stall_i is clean to read from fifo.
@@ -606,7 +599,7 @@ begin
   dbg_fifo_re_o <= '0';
   dbg_fifo_fc_rd_en_o <= fifo_fc_rd_en;
   dbg_fifo_rd_empty_o <= fifo_fc_rd_empty(0);
-  dbg_fifo_wr_full_o <= fifo_fc_wr_full_any;
+  dbg_fifo_wr_full_o <= fifo_fc_wr_full;
   dbg_fifo_fc_valid_fwft_o <= '0';
   dbg_source_pl_dreq_o <= pl_dreq;
   dbg_source_pl_stall_o <= pl_stall;
