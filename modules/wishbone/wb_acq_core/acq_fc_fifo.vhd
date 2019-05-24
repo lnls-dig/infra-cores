@@ -409,6 +409,15 @@ begin
         else
           fifo_fc_din(to_integer(fifo_fc_mux_cnt)) <= dpram_data_i; -- This already has data_id + trigger + data
           fifo_fc_we(to_integer(fifo_fc_mux_cnt)) <= dpram_dvalid_i;
+
+          -- If we are in a stall, soon after the FIFO accepts the data we must
+          -- clear the we signal. fifo_fc_mux_cnt will update soon after this
+          -- so no chance of dpram_valid asserting the same signal again.
+          if fifo_fc_we(to_integer(fifo_fc_mux_cnt)) = '1' and
+              fifo_fc_dpram_wr_en = '1' then
+            fifo_fc_we(to_integer(fifo_fc_mux_cnt)) <= '0';
+          end if;
+
         end if;
 
         -- Drive the previous MUX pointer and fix it for the 0 case
