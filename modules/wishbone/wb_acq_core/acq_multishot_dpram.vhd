@@ -80,7 +80,7 @@ architecture rtl of acq_multishot_dpram is
   constant c_dpram_header_bot_idx           : natural := g_data_width;
   constant c_dpram_payload_top_idx          : natural := g_data_width-1;
   constant c_dpram_payload_bot_idx          : natural := 0;
-  constant c_fc_source_pipe_size            : natural := 8;
+  constant c_fc_source_pipe_size            : natural := 16;
 
   signal dpram_trig                         : std_logic;
 
