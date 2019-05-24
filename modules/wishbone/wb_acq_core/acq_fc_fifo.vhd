@@ -580,7 +580,7 @@ begin
 
   fifo_fc_wr_full_or(0) <= '0';
   -- ORing all fifo full
-  gen_mmcm_adc_locked : for i in 0 to c_num_acq_fifos-1 generate
+  gen_fifo_wr_full : for i in 0 to c_num_acq_fifos-1 generate
     fifo_fc_wr_full_or(i+1) <= fifo_fc_wr_full_or(i) or fifo_fc_wr_full(i);
   end generate;
 
