@@ -551,8 +551,9 @@ begin
       -- For simplicity take the widest channel
       g_data_width                          => c_widest_channel_width,
       g_size                                => g_fifo_size,
-      g_almost_empty_threshold              => 0,
-      g_almost_full_threshold               => 0,
+      g_almost_empty_threshold              => 2,
+      g_almost_full_threshold               => g_fifo_size-2,
+      g_with_wr_almost_full                 => true,
       g_with_wr_count                       => true,
       g_with_rd_count                       => false
     )
@@ -564,7 +565,8 @@ begin
 
       wr_data_i                             => fifo_fc_din(i),
       wr_en_i                               => fifo_fc_we(i),
-      wr_full_o                             => fifo_fc_wr_full_arr(i),
+      wr_full_o                             => open,
+      wr_almost_full_o                      => fifo_fc_wr_full_arr(i),
       wr_count_o                            => fifo_fc_wr_count(i),
 
       -- Read clock
