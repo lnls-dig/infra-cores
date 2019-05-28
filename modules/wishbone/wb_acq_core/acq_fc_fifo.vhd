@@ -408,7 +408,7 @@ begin
           fifo_fc_we(to_integer(fifo_fc_mux_cnt)) <= fifo_fc_wr_en;
         else
           fifo_fc_din(to_integer(fifo_fc_mux_cnt)) <= dpram_data_i; -- This already has data_id + trigger + data
-          fifo_fc_we(to_integer(fifo_fc_mux_cnt)) <= dpram_dvalid_i;
+          fifo_fc_we(to_integer(fifo_fc_mux_cnt)) <= fifo_fc_dpram_wr_en;
 
           -- If we are in a stall, soon after the FIFO accepts the data we must
           -- clear the we signal. fifo_fc_mux_cnt will update soon after this
