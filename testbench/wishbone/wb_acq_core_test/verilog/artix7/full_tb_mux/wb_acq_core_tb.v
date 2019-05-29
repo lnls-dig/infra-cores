@@ -504,7 +504,7 @@ module wb_acq_core_tb;
   localparam ACQ_DATA_WIDTH         = 128;
   localparam ACQ_DATA_WIDTH_MAX     = 1024;
   localparam DATA_CHECK_FIFO_SIZE   = 8192;
-  localparam ACQ_FIFO_SIZE          = 1024;
+  localparam ACQ_FIFO_SIZE          = 256;
 
   localparam DDR3_PAYLOAD_WIDTH = (BURST_MODE_INTEGER)*PAYLOAD_WIDTH;
   localparam DDR3_ADDR_INC = DDR3_PAYLOAD_WIDTH/DQ_WIDTH;
