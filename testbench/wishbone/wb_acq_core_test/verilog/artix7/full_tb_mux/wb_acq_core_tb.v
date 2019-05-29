@@ -2423,7 +2423,7 @@ module wb_acq_core_tb;
             data_test[ch] <= data_test[ch] + ch + 1;
           end
 
-          data_test_dvalid_t[ch] <= f_gen_data_rdy_gen(data_valid_threshold, 1);
+          data_test_dvalid_t[ch] <= f_gen_data_rdy_gen(data_valid_threshold, 0);
           data_test_dvalid[ch] <= data_test_dvalid_t[ch];
           data_test_trig[ch] <= data_trig;
         end else begin
