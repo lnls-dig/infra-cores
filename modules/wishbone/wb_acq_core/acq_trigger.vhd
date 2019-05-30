@@ -157,7 +157,6 @@ architecture rtl of acq_trigger is
   signal acq_curr_coalesce_id               : integer;
   signal acq_data_in                        : std_logic_vector(g_data_in_width-1 downto 0);
   signal acq_data_sel_out                   : std_logic_vector(g_data_in_width-1 downto 0);
-  signal acq_data_out                       : std_logic_vector(g_data_in_width-1 downto 0);
   signal acq_atoms                          : t_acq_atom_array2d(g_acq_num_channels-1 downto 0,
                                                 c_widest_num_atoms-1 downto 0) :=
                                                 (others => (others => (others => '0')));
@@ -169,15 +168,12 @@ architecture rtl of acq_trigger is
   signal acq_id_in                          : t_acq_id;
   signal acq_valid_sel_out                  : std_logic;
   signal acq_id_sel_out                     : t_acq_id;
-  signal acq_valid_out                      : std_logic;
-  signal acq_id_out                         : t_acq_id;
 
   signal acq_data_pipe                      : t_data_pipe(c_pipe_depth-1 downto 0);
   signal acq_valid_pipe                     : t_valid_pipe(c_pipe_depth-1 downto 0);
   signal acq_id_pipe                        : t_id_pipe(c_pipe_depth-1 downto 0);
   signal acq_trig                           : std_logic;
   signal acq_trig_sel_out                   : std_logic;
-  signal acq_trig_out                       : std_logic;
   signal acq_trig_align_cnt                 : unsigned(c_trigger_align_width-1 downto 0);
   signal acq_trig_align_cnt_en              : std_logic;
   signal acq_min_align_max                  : unsigned(c_trigger_align_width-1 downto 0);
@@ -490,9 +486,9 @@ begin
 
   -- Only count while we are acquiring data, not before nor after. This is
   -- necessary to acquire the desired alignment.
-  -- FIXME: here we are relying on the precise delay between "acq_valid_out"
+  -- FIXME: here we are relying on the precise delay between "acq_valid_sel_out"
   -- and "acq_wr_en_i" signals, which are not clearly related
-  acq_trig_align_cnt_en <= acq_valid_out and acq_wr_en_i;
+  acq_trig_align_cnt_en <= acq_valid_sel_out and acq_wr_en_i;
 
   -- Valid trigger for acceptance
   trig_det <= trig_d and acq_trig_accepting_i;
@@ -531,7 +527,7 @@ begin
             trig_align <= '1';
             trig_cnt_off <= to_unsigned(0, trig_cnt_off'length);
           else
-            if acq_trig_align_cnt = acq_min_align_max and acq_valid_sel_out = '1' then -- will increment to the first atom
+            if acq_trig_align_cnt = acq_min_align_max-1 and acq_valid_sel_out = '1' then -- will increment to the first atom
               trig_align <= '1'; -- Output trigger aligned with the first atom
             end if;
 
@@ -581,26 +577,12 @@ begin
   -- Output Logic
   -----------------------------------------------------------------------------
 
-  p_reg_trig_data : process (fs_clk_i)
-  begin
-    if rising_edge(fs_clk_i) then
-      if fs_rst_n_i = '0' then
-        acq_data_out <= (others => '0');
-        acq_valid_out <= '0';
-        acq_id_out <= (others => '0');
-        acq_trig_out <= '0';
-      else
-        acq_data_out <= acq_data_sel_out;
-        acq_valid_out <= acq_valid_sel_out;
-        acq_id_out <= acq_id_sel_out;
-        acq_trig_out <= acq_trig_sel_out;
-      end if;
-    end if;
-  end process;
-
-  acq_data_o <= acq_data_out;
-  acq_valid_o <= acq_valid_out;
-  acq_id_o <= acq_id_out;
-  acq_trig_o <= acq_trig_out;
+  -- WARNING. Don't add delay between "trigger_align" and the output. This will incur
+  -- a trigger misalignment in which the acq_fc_fifo module will fail to acquire
+  -- the necessary samples to transmit to the external memory
+  acq_data_o <= acq_data_sel_out;
+  acq_valid_o <= acq_valid_sel_out;
+  acq_id_o <= acq_id_sel_out;
+  acq_trig_o <= acq_trig_sel_out;
 
 end rtl;
