@@ -1469,17 +1469,17 @@ begin
         lmt_rst_i                             => '0', -- remove this signal!
 
         -- Current channel selection ID
-        lmt_curr_chan_id_i                      => lmt_curr_chan_id,
+        lmt_curr_chan_id_i                    => lmt_curr_chan_id,
         -- Size of the pre trigger transaction in g_fifo_size bytes
-        lmt_pre_pkt_size_i                      => lmt_acq_pre_pkt_size,
+        lmt_pre_pkt_size_i                    => lmt_acq_pre_pkt_size,
         -- Size of the pos trigger transaction in g_fifo_size bytes
-        lmt_pos_pkt_size_i                      => lmt_acq_pos_pkt_size,
+        lmt_pos_pkt_size_i                    => lmt_acq_pos_pkt_size,
         -- Size of the full transaction in g_fifo_size bytes
-        lmt_full_pkt_size_i                     => lmt_acq_full_pkt_size,
+        lmt_full_pkt_size_i                   => lmt_acq_full_pkt_size,
         -- Number of shots in this acquisition
-        lmt_shots_nb_i                          => lmt_shots_nb,
-        --lmt_valid_i                             => lmt_valid,
-        lmt_valid_i                             => acq_start_sync_ext,
+        lmt_shots_nb_i                        => lmt_shots_nb,
+        --lmt_valid_i                           => lmt_valid,
+        lmt_valid_i                           => acq_start_sync_ext,
 
         -- Xilinx DDR3 UI Interface
         ui_app_addr_o                         => ui_app_rb_addr,
@@ -1563,28 +1563,28 @@ begin
         lmt_rst_i                             => '0', -- remove this signal!
 
         -- Current channel selection ID
-        lmt_curr_chan_id_i                      => lmt_curr_chan_id,
+        lmt_curr_chan_id_i                    => lmt_curr_chan_id,
         -- Size of the pre trigger transaction in g_fifo_size bytes
-        lmt_pre_pkt_size_i                      => lmt_acq_pre_pkt_size,
+        lmt_pre_pkt_size_i                    => lmt_acq_pre_pkt_size,
         -- Size of the pos trigger transaction in g_fifo_size bytes
-        lmt_pos_pkt_size_i                      => lmt_acq_pos_pkt_size,
+        lmt_pos_pkt_size_i                    => lmt_acq_pos_pkt_size,
         -- Size of the full transaction in g_fifo_size bytes
-        lmt_full_pkt_size_i                     => lmt_acq_full_pkt_size,
+        lmt_full_pkt_size_i                   => lmt_acq_full_pkt_size,
         -- Number of shots in this acquisition
-        lmt_shots_nb_i                          => lmt_shots_nb,
+        lmt_shots_nb_i                        => lmt_shots_nb,
         --lmt_valid_i                             => lmt_valid,
-        lmt_valid_i                             => acq_start_sync_ext,
+        lmt_valid_i                           => acq_start_sync_ext,
 
         -- DDR3 AXIS Interface
-        axis_mm2s_cmd_tdata_o                   => axis_mm2s_cmd_tdata_o,
-        axis_mm2s_cmd_tvalid_o                  => axis_mm2s_cmd_tvalid_o,
-        axis_mm2s_cmd_tready_i                  => axis_mm2s_cmd_tready_i,
+        axis_mm2s_cmd_tdata_o                 => axis_mm2s_cmd_tdata_o,
+        axis_mm2s_cmd_tvalid_o                => axis_mm2s_cmd_tvalid_o,
+        axis_mm2s_cmd_tready_i                => axis_mm2s_cmd_tready_i,
 
-        axis_mm2s_pld_tdata_i                   => axis_mm2s_pld_tdata_i,
-        axis_mm2s_pld_tkeep_i                   => axis_mm2s_pld_tkeep_i,
-        axis_mm2s_pld_tlast_i                   => axis_mm2s_pld_tlast_i,
-        axis_mm2s_pld_tvalid_i                  => axis_mm2s_pld_tvalid_i,
-        axis_mm2s_pld_tready_o                  => axis_mm2s_pld_tready_o
+        axis_mm2s_pld_tdata_i                 => axis_mm2s_pld_tdata_i,
+        axis_mm2s_pld_tkeep_i                 => axis_mm2s_pld_tkeep_i,
+        axis_mm2s_pld_tlast_i                 => axis_mm2s_pld_tlast_i,
+        axis_mm2s_pld_tvalid_i                => axis_mm2s_pld_tvalid_i,
+        axis_mm2s_pld_tready_o                => axis_mm2s_pld_tready_o
       );
 
       ddr3_rb_start                           <= ddr3_wr_all_trans_done_l and dbg_ddr_rb_start_p_i;
