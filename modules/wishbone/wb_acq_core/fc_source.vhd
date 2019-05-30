@@ -280,7 +280,6 @@ begin
     if rising_edge(clk_i) then
       if rst_n_i = '0' then
         fc_first_data <= '1';
-        fc_last_data <= '0';
       else
         -- We don't care if the first data is asserted for a long time.
         -- It just matters when fc_valid_s = '1' anyway
@@ -290,18 +289,12 @@ begin
           fc_first_data <= '0';
         end if;
 
-        if lmt_valid = '1' then
-          fc_last_data <= '0';
-        elsif lmt_full_pkt_size = to_unsigned(1, lmt_full_pkt_size'length) or -- base case of lmt_full_pkt_size = 1
-            (fc_in_pend_cnt = lmt_full_pkt_size-1 and fc_in_pend_cnt_en = '1') then -- will increment
-          fc_last_data <= '1';
-        elsif fc_valid_s = '1' then
-          fc_last_data <= '0';
-        end if;
-
       end if;
     end if;
   end process;
+
+  fc_last_data <= '1' when lmt_full_pkt_size = to_unsigned(1, lmt_full_pkt_size'length) or -- base case of lmt_full_pkt_size = 1
+                  (fc_in_pend_cnt = lmt_full_pkt_size-1 and fc_in_pend_cnt_en = '1') else '0';
 
   -- signals that a packet was actually transfered
   pkt_sent <= '1' when fc_valid_out_int = '1' and fc_stall_i = '0' else '0';
