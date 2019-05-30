@@ -120,6 +120,10 @@ architecture rtl of acq_ddr3_axis_read is
                                                                c_acq_chan_slice);
   constant c_ddr_fc_payload_ratio_log2      : t_payld_ratio_array(g_acq_num_channels-1 downto 0) :=
                                                 f_log2_size_array(c_ddr_fc_payload_ratio);
+  constant c_fc_chan_width                  : t_property_value_array(g_acq_num_channels-1 downto 0) :=
+                                                f_extract_property_array(c_acq_channels, t_acq_chan_property'(WIDTH_BYTES)); -- in bytes
+  constant c_fc_chan_width_log2             : t_property_value_array(g_acq_num_channels-1 downto 0) :=
+                                                f_log2_size_array(c_fc_chan_width);
 
   -- Data increment constant
   constant c_bytes_per_word                 : natural := g_ddr_dq_width/8;
@@ -153,9 +157,12 @@ architecture rtl of acq_ddr3_axis_read is
   signal lmt_full_pkt_size_aggd             : unsigned(c_pkt_size_width-1 downto 0);
   signal lmt_shots_nb                       : unsigned(c_shots_size_width-1 downto 0);
   signal lmt_valid                          : std_logic;
+  signal lmt_chan_width_log2                : unsigned(g_trig_cnt_off_width-1 downto 0);
   signal lmt_curr_chan_id                   : unsigned(c_chan_id_width-1 downto 0);
   signal lmt_chan_curr_width                : unsigned(c_acq_chan_cmplt_width_log2-1 downto 0);
   signal rb_ddr_trig_addr                   : unsigned(g_ddr_addr_width-1 downto 0);
+  signal ddr_trig_cnt_off_s                 : std_logic_vector(g_trig_cnt_off_width-1 downto 0);
+  signal ddr_trig_cnt_off                   : unsigned(g_trig_cnt_off_width-1 downto 0);
   -- For intermediate multiplication result
   signal lmt_full_pkt_addr_ss               : unsigned(42 downto 0);
   signal lmt_full_pkt_addr_ms               : unsigned(42 downto 0);
@@ -200,6 +207,7 @@ begin
         lmt_full_pkt_size_alig_s <= (others => '0');
         lmt_shots_nb <= to_unsigned(1, lmt_shots_nb'length);
         lmt_curr_chan_id <= to_unsigned(0, lmt_curr_chan_id'length);
+        lmt_chan_width_log2 <= to_unsigned(0, lmt_chan_width_log2'length);
       else
         lmt_valid <= lmt_valid_i;
 
@@ -245,6 +253,10 @@ begin
 
           lmt_shots_nb <= lmt_shots_nb_i;
           lmt_curr_chan_id <= lmt_curr_chan_id_i;
+
+          -- Get number of channel width (in byte shit count) for this channel
+          lmt_chan_width_log2 <= to_unsigned(c_fc_chan_width_log2(to_integer(lmt_curr_chan_id_i)),
+                            lmt_chan_width_log2'length);
         end if;
       end if;
     end if;
@@ -265,7 +277,41 @@ begin
   -- Determine the DDR read address
   -----------------------------------------------------------------------------
 
-  rb_ddr_trig_addr <= unsigned(rb_ddr_trig_addr_i) + rb_ddr_trig_cnt_off_i;
+  p_ddr_offs : process(ext_clk_i)
+  begin
+    if rising_edge(ext_clk_i) then
+      if ext_rst_n_i = '0' then
+        ddr_trig_cnt_off_s <= (others => '0');
+      else
+        -- Compute the number of bytes to subtract from the trigger address.
+        -- This depends on the channel width in bytes
+        case to_integer(lmt_chan_width_log2) is
+          when 1 =>
+            ddr_trig_cnt_off_s <= std_logic_vector(rb_ddr_trig_cnt_off_i(rb_ddr_trig_cnt_off_i'left - 1 downto 0)) &
+                                    f_gen_std_logic_vector(1, '0');
+          when 2 =>
+            ddr_trig_cnt_off_s <= std_logic_vector(rb_ddr_trig_cnt_off_i(rb_ddr_trig_cnt_off_i'left - 2 downto 0)) &
+                                    f_gen_std_logic_vector(2, '0');
+          when 3 =>
+            ddr_trig_cnt_off_s <= std_logic_vector(rb_ddr_trig_cnt_off_i(rb_ddr_trig_cnt_off_i'left - 3 downto 0)) &
+                                    f_gen_std_logic_vector(3, '0');
+          when 4 =>
+            ddr_trig_cnt_off_s <= std_logic_vector(rb_ddr_trig_cnt_off_i(rb_ddr_trig_cnt_off_i'left - 4 downto 0)) &
+                                    f_gen_std_logic_vector(4, '0');
+          when 5 =>
+            ddr_trig_cnt_off_s <= std_logic_vector(rb_ddr_trig_cnt_off_i(rb_ddr_trig_cnt_off_i'left - 5 downto 0)) &
+                                    f_gen_std_logic_vector(5, '0');
+          when others =>
+            ddr_trig_cnt_off_s <= std_logic_vector(rb_ddr_trig_cnt_off_i(rb_ddr_trig_cnt_off_i'left - 1 downto 0)) &
+                                    f_gen_std_logic_vector(1, '0');
+        end case;
+      end if;
+    end if;
+  end process;
+
+  ddr_trig_cnt_off <= unsigned(ddr_trig_cnt_off_s);
+
+  rb_ddr_trig_addr <= unsigned(rb_ddr_trig_addr_i) + ddr_trig_cnt_off;
 
   -- Generate address to FIFO interface.
   -- FIXME: Word for the application point of view might not be the same
