@@ -111,6 +111,7 @@ architecture rtl of fc_source is
   signal fc_valid_s                         : std_logic;
   signal fc_in_data_pending                 : std_logic;
   signal fc_in_cnt_en                       : std_logic;
+  signal fc_in_pend_cnt_en                  : std_logic;
   signal fc_in_trigger                      : std_logic;
   signal fc_in_data_id                      : std_logic_vector(2 downto 0);
 
@@ -196,7 +197,7 @@ begin
 
         if pl_rst_trans_i = '1' or fc_last_data = '1'then
           fc_in_pend_cnt <= to_unsigned(0, fc_in_pend_cnt'length);
-        elsif fc_in_data_pending = '1' and fc_in_cnt_en = '1' then
+        elsif fc_in_pend_cnt_en = '1' then
           fc_in_pend_cnt <= fc_in_pend_cnt + 1;
         end if;
 
@@ -212,6 +213,7 @@ begin
                                 fc_in_data_id = "100") -- Post-trigger
                             else '0';
   fc_in_data_pending <= fc_valid_s;
+  fc_in_pend_cnt_en <= fc_in_data_pending and fc_in_cnt_en;
 
   cmp_pre_out_fwft_fifo : acq_fwft_fifo
   generic map
@@ -291,7 +293,7 @@ begin
         if lmt_valid = '1' then
           fc_last_data <= '0';
         elsif lmt_full_pkt_size = to_unsigned(1, lmt_full_pkt_size'length) or -- base case of lmt_full_pkt_size = 1
-            (fc_in_pend_cnt = lmt_full_pkt_size-2 and fc_valid_s = '1') then -- will increment
+            (fc_in_pend_cnt = lmt_full_pkt_size-1 and fc_in_pend_cnt_en = '1') then -- will increment
           fc_last_data <= '1';
         elsif fc_valid_s = '1' then
           fc_last_data <= '0';
