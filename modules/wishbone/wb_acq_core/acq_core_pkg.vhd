@@ -940,6 +940,7 @@ package acq_core_pkg is
     g_acq_addr_width                          : natural := 32;
     g_acq_num_channels                        : natural := 1;
     g_acq_channels                            : t_acq_chan_param_array;
+    g_trig_cnt_off_width                      : natural := 8;
     -- Do not modify these! As they are dependent of the memory controller generated!
     g_ddr_payload_width                       : natural := 256;     -- be careful changing these!
     g_ddr_dq_width                            : natural := 64;      -- be careful changing these!
@@ -964,6 +965,7 @@ package acq_core_pkg is
     rb_start_i                                : in std_logic;
     rb_init_addr_i                            : in std_logic_vector(g_ddr_addr_width-1 downto 0);
     rb_ddr_trig_addr_i                        : in std_logic_vector(g_ddr_addr_width-1 downto 0);
+    rb_ddr_trig_cnt_off_i                     : in unsigned(g_trig_cnt_off_width-1 downto 0);
 
     lmt_all_trans_done_p_o                    : out std_logic;
     lmt_rst_i                                 : in std_logic;
@@ -1002,6 +1004,7 @@ package acq_core_pkg is
     g_acq_addr_width                          : natural := 32;
     g_acq_num_channels                        : natural := 1;
     g_acq_channels                            : t_acq_chan_param_array;
+    g_trig_cnt_off_width                      : natural := 8;
     -- Do not modify these! As they are dependent of the memory controller generated!
     g_ddr_payload_width                       : natural := 256;     -- be careful changing these!
     g_ddr_dq_width                            : natural := 64;      -- be careful changing these!
@@ -1027,6 +1030,7 @@ package acq_core_pkg is
     rb_start_i                                : in std_logic;
     rb_init_addr_i                            : in std_logic_vector(g_ddr_addr_width-1 downto 0);
     rb_ddr_trig_addr_i                        : in std_logic_vector(g_ddr_addr_width-1 downto 0);
+    rb_ddr_trig_cnt_off_i                     : in unsigned(g_trig_cnt_off_width-1 downto 0);
 
     lmt_all_trans_done_p_o                    : out std_logic;
     lmt_rst_i                                 : in std_logic;

@@ -1464,6 +1464,7 @@ begin
         -- impose any metastability problem in this module
         rb_init_addr_i                        => acq_ddr3_start_addr,
         rb_ddr_trig_addr_i                    => ddr_trig_addr,
+        rb_ddr_trig_cnt_off_i                 => acq_trig_cnt_off,
 
         lmt_all_trans_done_p_o                => ddr3_rb_all_trans_done_p,
         lmt_rst_i                             => '0', -- remove this signal!
@@ -1558,6 +1559,7 @@ begin
         -- impose any metastability problem in this module
         rb_init_addr_i                        => acq_ddr3_start_addr,
         rb_ddr_trig_addr_i                    => ddr_trig_addr,
+        rb_ddr_trig_cnt_off_i                 => acq_trig_cnt_off,
 
         lmt_all_trans_done_p_o                => ddr3_rb_all_trans_done_p,
         lmt_rst_i                             => '0', -- remove this signal!
