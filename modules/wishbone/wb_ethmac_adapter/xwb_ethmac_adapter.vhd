@@ -136,6 +136,32 @@ architecture behavioral of xwb_ethmac_adapter is
 
   signal rx_ram_dat_reg                       : std_logic_vector(31 downto 0);
 
+  component wb_ethmac_narrow
+  generic(
+    g_slave_width  : natural;
+    g_master_width : natural);
+  port(
+    clk_i    : in  std_logic;
+    rst_n_i  : in  std_logic;
+    slave_i  : in  t_wishbone_slave_in;
+    slave_o  : out t_wishbone_slave_out;
+    master_i : in  t_wishbone_master_in;
+    master_o : out t_wishbone_master_out);
+  end component;
+
+  component wb_ethmac_widen
+  generic(
+    g_slave_width  : natural;
+    g_master_width : natural);
+  port(
+    clk_i    : in  std_logic;
+    rst_n_i  : in  std_logic;
+    slave_i  : in  t_wishbone_slave_in;
+    slave_o  : out t_wishbone_slave_out;
+    master_i : in  t_wishbone_master_in;
+    master_o : out t_wishbone_master_out);
+  end component;
+
 begin
 
   wb_adr <= wb_slave_i.adr;
