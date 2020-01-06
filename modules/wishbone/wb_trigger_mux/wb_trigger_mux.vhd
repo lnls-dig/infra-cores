@@ -231,7 +231,6 @@ begin  -- architecture rtl
     sl_ack_o                                => wb_ack_o,
     sl_rty_o                                => open,
     sl_err_o                                => open,
-    sl_int_o                                => open,
     sl_stall_o                              => wb_stall_o
   );
 
