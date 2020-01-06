@@ -412,7 +412,6 @@ begin
 
     slave_i                                 => cbar_master_out(2),
     slave_o                                 => cbar_master_in(2),
-    desc_o                                  => open,
 
     pad_cs_o                                => ad9510_spi_ss_int,
     pad_sclk_o                              => ad9510_spi_clk, --spi_ad9510_sclk_o,
