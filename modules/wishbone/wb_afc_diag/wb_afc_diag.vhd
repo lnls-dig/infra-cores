@@ -194,7 +194,6 @@ begin
   );
 
   -- Unused wishbone signals
-  wb_slv_adp_in.int                         <= '0';
   wb_slv_adp_in.err                         <= '0';
   wb_slv_adp_in.rty                         <= '0';
   wb_slv_adp_in.stall                       <= '0';

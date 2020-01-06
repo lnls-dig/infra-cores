@@ -232,7 +232,6 @@ begin
   -- Unused slave signals
   --wb_ma_in.rty                              <= '0';
   --wb_ma_in.stall                            <= '0';
-  --wb_ma_in.int                              <= '0';
 
   cmp_wrapper_ethmac : ethmac
   port map (

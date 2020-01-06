@@ -190,7 +190,6 @@ begin
     wb_out.dat                          <= readdata when (wb_in.stb = '1' and wb_in.we = '0' and wb_in.cyc = '1') else (others => '0');
 
     wb_out.err                           <= '0';
-    wb_out.int                           <= '0';
     wb_out.rty                           <= '0';
     wb_out.stall                         <= '0';
 
