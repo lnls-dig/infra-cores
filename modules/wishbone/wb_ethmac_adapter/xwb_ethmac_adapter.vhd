@@ -38,7 +38,6 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.wishbone_pkg.all;
 use work.wr_fabric_pkg.all;
-use work.eb_internals_pkg.all;
 
 entity xwb_ethmac_adapter is
 port(
