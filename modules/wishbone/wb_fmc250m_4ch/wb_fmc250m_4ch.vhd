@@ -1376,7 +1376,6 @@ begin
 
     slave_i                                 => cbar_master_out(5),
     slave_o                                 => cbar_master_in(5),
-    desc_o                                  => open,
 
     pad_cs_o                                => adc_spi_ss_int,
     pad_sclk_o                              => adc_spi_clk,
