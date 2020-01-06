@@ -31,7 +31,9 @@ port
         
     wb_slv_i                                    : in t_wishbone_slave_in;
     wb_slv_o                                    : out t_wishbone_slave_out;
-    
+
+    int_o                                        : out std_logic;
+
     -----------------------------
     -- Simulation Only ports
     -----------------------------
@@ -228,7 +230,7 @@ begin
         wbs_err_i                               => wbs_source_i.err,  
         wbs_rty_i                               => wbs_source_i.rty
     );
-    
-    wb_slv_o.int                                <= '0';
+
+    int_o                                       <= '0';
 
 end rtl;
