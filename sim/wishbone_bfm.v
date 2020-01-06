@@ -118,7 +118,6 @@ module wishbone_bfm(
     .sl_rty_o         (),
     .sl_ack_o         (wb_ack_adp2int),
     .sl_stall_o       (),
-    .sl_int_o         (),
 
     .ma_adr_o         (wb_adr_o),
     .ma_dat_o         (wb_dat_o),

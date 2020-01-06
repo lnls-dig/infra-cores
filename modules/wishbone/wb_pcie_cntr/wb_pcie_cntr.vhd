@@ -369,7 +369,6 @@ begin
     sl_dat_o                                  => wb_ma_sladp_pcie_dat_in,
     sl_ack_o                                  => wb_ma_sladp_pcie_ack_in,
     sl_stall_o                                => open,
-    sl_int_o                                  => open,
     sl_rty_o                                  => open,
     sl_err_o                                  => open,
 

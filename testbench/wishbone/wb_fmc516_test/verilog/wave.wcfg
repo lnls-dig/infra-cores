@@ -512,10 +512,6 @@
       <obj_property name="ElementShortName">sl_stall_o</obj_property>
       <obj_property name="ObjectShortName">sl_stall_o</obj_property>
    </wvobject>
-   <wvobject fp_name="/wb_fmc516_tb/cmp_wb_fmc516/cmp_fmc_spi/U_Wrapped_SPI/U_Adapter/sl_int_o" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">sl_int_o</obj_property>
-      <obj_property name="ObjectShortName">sl_int_o</obj_property>
-   </wvobject>
    <wvobject fp_name="/wb_fmc516_tb/cmp_wb_fmc516/cmp_fmc_spi/U_Wrapped_SPI/U_Adapter/master_i" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">master_i</obj_property>
       <obj_property name="ObjectShortName">master_i</obj_property>
@@ -666,10 +662,6 @@
    <wvobject fp_name="/wb_fmc516_tb/cmp_wb_fmc516/cmp_slave_adapter/sl_ack_o" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">sl_ack_o</obj_property>
       <obj_property name="ObjectShortName">sl_ack_o</obj_property>
-   </wvobject>
-   <wvobject fp_name="/wb_fmc516_tb/cmp_wb_fmc516/cmp_slave_adapter/sl_int_o" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">sl_int_o</obj_property>
-      <obj_property name="ObjectShortName">sl_int_o</obj_property>
    </wvobject>
    <wvobject fp_name="/wb_fmc516_tb/cmp_wb_fmc516/cmp_slave_adapter/sl_stall_o" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">sl_stall_o</obj_property>

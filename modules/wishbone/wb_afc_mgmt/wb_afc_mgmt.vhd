@@ -258,7 +258,6 @@ begin
     sl_ack_o                                => cbar_master_in(c_slv_afc_mgmt_regs_id).ack,
     sl_rty_o                                => cbar_master_in(c_slv_afc_mgmt_regs_id).rty,
     sl_err_o                                => cbar_master_in(c_slv_afc_mgmt_regs_id).err,
-    sl_int_o                                => cbar_master_in(c_slv_afc_mgmt_regs_id).int,
     sl_stall_o                              => cbar_master_in(c_slv_afc_mgmt_regs_id).stall
   );
 

@@ -187,7 +187,6 @@ begin
     sl_dat_o                                => wb_dat_o,
     sl_ack_o                                => wb_ack_o,
     sl_stall_o                              => wb_stall_o,
-    --sl_int_o                                => wb_int_o,
     sl_rty_o                                => wb_rty_o,
     sl_err_o                                => wb_err_o
   );
@@ -197,7 +196,6 @@ begin
   -- Unused slave signals
   wb_sl_out.rty                             <= '0';
   wb_sl_out.stall                           <= '0';
-  wb_sl_out.int                             <= '0';
 
   ---- ETHMAC master interface is byte addressed, classic wishbone
   -- NOT used for now

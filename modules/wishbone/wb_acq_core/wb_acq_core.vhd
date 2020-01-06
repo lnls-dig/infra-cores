@@ -517,7 +517,6 @@ begin
     sl_ack_o                                => wb_ack_o,
     sl_rty_o                                => wb_rty_o,
     sl_err_o                                => wb_err_o,
-    sl_int_o                                => open,
     sl_stall_o                              => wb_stall_o
   );
 

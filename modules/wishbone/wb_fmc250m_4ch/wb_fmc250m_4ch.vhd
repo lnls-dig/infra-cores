@@ -679,7 +679,6 @@ begin
     sl_ack_o                                => cbar_master_in(0).ack,
     sl_rty_o                                => cbar_master_in(0).rty,
     sl_err_o                                => cbar_master_in(0).err,
-    sl_int_o                                => cbar_master_in(0).int,
     sl_stall_o                              => cbar_master_in(0).stall
   );
 
@@ -914,7 +913,6 @@ begin
     sl_ack_o                                => cbar_master_in(1).ack,
     sl_rty_o                                => cbar_master_in(1).rty,
     sl_err_o                                => cbar_master_in(1).err,
-    sl_int_o                                => cbar_master_in(1).int,
     sl_stall_o                              => cbar_master_in(1).stall
   );
 
