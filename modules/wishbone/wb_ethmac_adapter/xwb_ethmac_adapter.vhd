@@ -155,7 +155,6 @@ begin
                           err   => '0',
                           rty   => '0',
                           stall => '0',
-                          int => '0',
                           dat   => (others => '0'));
       else
         wb_slave_o.ack <= wb_slave_i.cyc and wb_slave_i.stb;
@@ -319,7 +318,6 @@ begin
   rx_eb16_i.rty   <= rx_eb_i.rty;
   rx_eb16_i.stall <= rx_eb_i.stall;
   rx_eb16_i.dat   <= (others =>'0');
-  rx_eb16_i.int   <= '0';
 
   dma_rx : process (clk_i)
   begin
