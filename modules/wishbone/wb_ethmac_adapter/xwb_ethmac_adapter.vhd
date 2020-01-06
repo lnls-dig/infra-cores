@@ -202,7 +202,7 @@ begin
   bytes_tx <= std_logic_vector(tx_counter);
 
   -- convert streaming output from 16 to 32 bit data width
-  cmp_tx_adapter_16_to_32: eb_stream_widen
+  cmp_tx_adapter_16_to_32: wb_ethmac_widen
   generic map (
     g_slave_width                           => 16,
     g_master_width                          => 32
@@ -292,7 +292,7 @@ begin
   bytes_rx <= std_logic_vector(resize(rx_counter, 32));
 
   -- convert streaming input from 16 to 32 bit data width
-  cmp_rx_adapter_32_to_16: eb_stream_narrow
+  cmp_rx_adapter_32_to_16: wb_ethmac_narrow
   generic map (
     g_slave_width                           => 32,
     g_master_width                          => 16
