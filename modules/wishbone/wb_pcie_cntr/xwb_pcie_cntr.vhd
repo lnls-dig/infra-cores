@@ -80,7 +80,9 @@ port (
   wb_ma_o                                   : out t_wishbone_master_out;
 
   -- Additional exported signals for instantiation
-  wb_ma_pcie_rst_o                          : out std_logic
+  wb_ma_pcie_rst_o                          : out std_logic;
+  pcie_clk_o                                : out std_logic;
+  ddr_rdy_o                                 : out std_logic
 );
 end entity xwb_pcie_cntr;
 
@@ -181,7 +183,9 @@ begin
     wb_ma_ack_i                              => wb_ma_i.ack,
     wb_ma_stall_i                            => wb_ma_i.stall,
     -- Additional exported signals for instantiation
-    wb_ma_pcie_rst_o                         => wb_ma_pcie_rst_o
+    wb_ma_pcie_rst_o                         => wb_ma_pcie_rst_o,
+    pcie_clk_o                               => pcie_clk_o,
+    ddr_rdy_o                                => ddr_rdy_o
   );
 
 end rtl;

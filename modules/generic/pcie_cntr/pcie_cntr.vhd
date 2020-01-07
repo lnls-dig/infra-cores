@@ -120,7 +120,8 @@ entity pcie_cntr is
     --/ Wishbone interface
     -- Additional exported signals for instantiation
     pcie_user_clk : out std_logic;
-    ext_rst_o : out std_logic
+    ext_rst_o : out std_logic;
+    ddr_rdy_o : out std_logic
     );
 end entity pcie_cntr;
 
@@ -129,7 +130,7 @@ architecture Behavioral of pcie_cntr is
   signal DDR_Ready : std_logic;
   signal ddr_reset : std_logic;
   signal ddr_axi_reset : std_logic;
-				
+
   signal wbone_clk     : std_logic;
   signal wb_wr_we      : std_logic;
   signal wb_wr_wsof    : std_logic;
@@ -243,7 +244,7 @@ architecture Behavioral of pcie_cntr is
   signal cfg_interrupt_assert       : std_logic;
   signal cfg_interrupt_msixenable   : std_logic;
   signal cfg_interrupt_msixfm       : std_logic;
-  
+
   signal cfg_turnoff_ok             : std_logic;
   signal cfg_to_turnoff             : std_logic;
   signal cfg_pm_wake                : std_logic;
@@ -831,7 +832,7 @@ DDRs_ctrl_module: entity work.DDR_Transact
     pcie_lnk_up => user_lnk_up,
     sys_reset => ddr_sys_rst
   );
-  
+
 Wishbone_intf: entity work.wb_transact
   port map(
     -- PCIE user clk
@@ -879,7 +880,8 @@ Wishbone_intf: entity work.wb_transact
   STB_O      <= wbone_stb;
   CYC_O      <= wbone_cyc;
   ext_rst_o  <= wb_fifo_rst;
-  
+  ddr_rdy_o  <= DDR_Ready;
+
   pcie_user_clk <= user_clk;
 
 

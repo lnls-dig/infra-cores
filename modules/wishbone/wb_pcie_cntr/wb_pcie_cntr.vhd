@@ -119,7 +119,9 @@ port (
   wb_ma_ack_i                               : in  std_logic                                             := '0';
   wb_ma_stall_i                             : in  std_logic                                             := '0';
   -- Additional exported signals for instantiation
-  wb_ma_pcie_rst_o                          : out std_logic
+  wb_ma_pcie_rst_o                          : out std_logic;
+  pcie_clk_o                                : out std_logic;
+  ddr_rdy_o                                 : out std_logic
 );
 end entity wb_pcie_cntr;
 
@@ -231,7 +233,9 @@ architecture rtl of wb_pcie_cntr is
     CYC_O : out std_logic;
     --/ Wishbone interface
     -- Additional exported signals for instantiation
-    ext_rst_o : out std_logic
+    pcie_user_clk : out std_logic;
+    ext_rst_o : out std_logic;
+    ddr_rdy_o : out std_logic
     );
   end component;
 
@@ -327,6 +331,8 @@ begin
     cyc_o                                   => wb_ma_pcie_cyc_out,
     -- Additional exported signals for instantiation
     ext_rst_o                               => wb_ma_pcie_rst_o
+    pcie_user_clk                           => pcie_clk_o,
+    ddr_rdy_o                               => ddr_rdy_o
   );
 
   -- Connect PCIe to the Wishbone Crossbar

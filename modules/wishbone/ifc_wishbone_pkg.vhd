@@ -2597,7 +2597,9 @@ package ifc_wishbone_pkg is
     wb_ma_ack_i                               : in  std_logic                                             := '0';
     wb_ma_stall_i                             : in  std_logic                                             := '0';
     -- Additional exported signals for instantiation
-    wb_ma_pcie_rst_o                          : out std_logic
+    wb_ma_pcie_rst_o                          : out std_logic;
+    pcie_clk_o                                : out std_logic;
+    ddr_rdy_o                                 : out std_logic
   );
   end component;
 
@@ -2655,7 +2657,9 @@ package ifc_wishbone_pkg is
     wb_ma_o                                   : out t_wishbone_master_out;
 
     -- Additional exported signals for instantiation
-    wb_ma_pcie_rst_o                          : out std_logic
+    wb_ma_pcie_rst_o                          : out std_logic;
+    pcie_clk_o                                : out std_logic;
+    ddr_rdy_o                                 : out std_logic
   );
   end component;
 
@@ -2752,7 +2756,9 @@ package ifc_wishbone_pkg is
     wb_ma_ack_i                               : in  std_logic                                             := '0';
     wb_ma_stall_i                             : in  std_logic                                             := '0';
     -- Additional exported signals for instantiation
-    wb_ma_pcie_rst_o                          : out std_logic
+    wb_ma_pcie_rst_o                          : out std_logic;
+    pcie_clk_o                                : out std_logic;
+    ddr_rdy_o                                 : out std_logic
   );
   end component;
 
@@ -2810,7 +2816,9 @@ package ifc_wishbone_pkg is
     wb_ma_o                                   : out t_wishbone_master_out;
 
     -- Additional exported signals for instantiation
-    wb_ma_pcie_rst_o                          : out std_logic
+    wb_ma_pcie_rst_o                          : out std_logic;
+    pcie_clk_o                                : out std_logic;
+    ddr_rdy_o                                 : out std_logic
   );
   end component;
 
