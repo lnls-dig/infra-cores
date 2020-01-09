@@ -330,7 +330,7 @@ begin
     sel_o                                   => wb_ma_pcie_sel_out,
     cyc_o                                   => wb_ma_pcie_cyc_out,
     -- Additional exported signals for instantiation
-    ext_rst_o                               => wb_ma_pcie_rst_o
+    ext_rst_o                               => wb_ma_pcie_rst_o,
     pcie_user_clk                           => pcie_clk_o,
     ddr_rdy_o                               => ddr_rdy_o
   );
