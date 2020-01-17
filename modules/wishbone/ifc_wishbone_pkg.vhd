@@ -3224,7 +3224,7 @@ package ifc_wishbone_pkg is
       -- Wishbone signals
       -----------------------------
 
-      wb_slv_trigger_iface_i                  : in  t_wishbone_slave_in;
+      wb_slv_trigger_iface_i                  : in  t_wishbone_slave_in := c_dummy_wb_slave_in;
       wb_slv_trigger_iface_o                  : out t_wishbone_slave_out;
 
       wb_slv_trigger_mux_i                    : in  t_wishbone_slave_in_array(g_num_mux_interfaces-1 downto 0);
