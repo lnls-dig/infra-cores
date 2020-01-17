@@ -3167,8 +3167,8 @@ package ifc_wishbone_pkg is
     ---- Trigger Interface ports if g_with_external_iface is true
     -------------------------------
 
-    trig_in_i                                 : in  std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
-    trig_out_o                                : out std_logic_vector(g_trig_num-1 downto 0);
+    trig_in_i                                 : in  t_trig_channel_array(g_trig_num-1 downto 0) := (others => c_trig_channel_dummy);
+    trig_out_o                                : out t_trig_channel_array(g_trig_num-1 downto 0);
 
     -------------------------------
     ---- Internal ports
@@ -3241,8 +3241,8 @@ package ifc_wishbone_pkg is
       ---- Trigger Interface ports if g_with_external_iface is true
       -------------------------------
 
-      trig_in_i                               : in  std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
-      trig_out_o                              : out std_logic_vector(g_trig_num-1 downto 0);
+      trig_in_i                               : in  t_trig_channel_array(g_trig_num-1 downto 0) := (others => c_trig_channel_dummy);
+      trig_out_o                              : out t_trig_channel_array(g_trig_num-1 downto 0);
 
       -----------------------------
       -- Internal ports
