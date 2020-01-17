@@ -1655,7 +1655,7 @@ package ifc_wishbone_pkg is
     -----------------------------
     -- Debug Interface
     -----------------------------
-    dbg_ddr_rb_start_p_i                      : in std_logic;
+    dbg_ddr_rb_start_p_i                      : in std_logic := '0';
     dbg_ddr_rb_rdy_o                          : out std_logic;
     dbg_ddr_rb_data_o                         : out std_logic_vector(g_ddr_payload_width-1 downto 0);
     dbg_ddr_rb_addr_o                         : out std_logic_vector(g_acq_addr_width-1 downto 0);
@@ -1758,7 +1758,7 @@ package ifc_wishbone_pkg is
     -----------------------------
     -- Debug Interface
     -----------------------------
-    dbg_ddr_rb_start_p_i                      : in std_logic;
+    dbg_ddr_rb_start_p_i                      : in std_logic := '0';
     dbg_ddr_rb_rdy_o                          : out std_logic;
     dbg_ddr_rb_data_o                         : out std_logic_vector(g_ddr_payload_width-1 downto 0);
     dbg_ddr_rb_addr_o                         : out std_logic_vector(g_acq_addr_width-1 downto 0);
@@ -1891,7 +1891,7 @@ package ifc_wishbone_pkg is
     -----------------------------
     -- Debug Interface
     -----------------------------
-    dbg_ddr_rb_start_p_i                      : in std_logic;
+    dbg_ddr_rb_start_p_i                      : in std_logic := '0';
     dbg_ddr_rb_rdy_o                          : out std_logic;
     dbg_ddr_rb_data_o                         : out std_logic_vector(g_ddr_payload_width-1 downto 0);
     dbg_ddr_rb_addr_o                         : out std_logic_vector(g_acq_addr_width-1 downto 0);
@@ -1994,7 +1994,7 @@ package ifc_wishbone_pkg is
     -----------------------------
     -- Debug Interface
     -----------------------------
-    dbg_ddr_rb_start_p_i                      : in std_logic;
+    dbg_ddr_rb_start_p_i                      : in std_logic := '0';
     dbg_ddr_rb_rdy_o                          : out std_logic;
     dbg_ddr_rb_data_o                         : out std_logic_vector(g_ddr_payload_width-1 downto 0);
     dbg_ddr_rb_addr_o                         : out std_logic_vector(g_acq_addr_width-1 downto 0);
@@ -2078,7 +2078,7 @@ package ifc_wishbone_pkg is
     -----------------------------
     -- Debug Interface
     -----------------------------
-    dbg_ddr_rb_start_p_array_i                : in std_logic_vector(g_acq_num_cores-1 downto 0);
+    dbg_ddr_rb_start_p_array_i                : in std_logic_vector(g_acq_num_cores-1 downto 0) := (others => '0');
     dbg_ddr_rb_rdy_array_o                    : out std_logic_vector(g_acq_num_cores-1 downto 0);
     dbg_ddr_rb_data_array_o                   : out std_logic_vector(g_acq_num_cores*g_ddr_payload_width-1 downto 0);
     dbg_ddr_rb_addr_array_o                   : out std_logic_vector(g_acq_num_cores*g_acq_addr_width-1 downto 0);
@@ -2191,7 +2191,7 @@ package ifc_wishbone_pkg is
     -----------------------------
     -- Debug Interface
     -----------------------------
-    dbg_ddr_rb_start_p_array_i                : in std_logic_vector(g_acq_num_cores-1 downto 0);
+    dbg_ddr_rb_start_p_array_i                : in std_logic_vector(g_acq_num_cores-1 downto 0) := (others => '0');
     dbg_ddr_rb_rdy_array_o                    : out std_logic_vector(g_acq_num_cores-1 downto 0);
     dbg_ddr_rb_data_array_o                   : out std_logic_vector(g_acq_num_cores*g_ddr_payload_width-1 downto 0);
     dbg_ddr_rb_addr_array_o                   : out std_logic_vector(g_acq_num_cores*g_acq_addr_width-1 downto 0);
@@ -2287,7 +2287,7 @@ package ifc_wishbone_pkg is
     -----------------------------
     -- Debug Interface
     -----------------------------
-    dbg_ddr_rb_start_p_array_i                : in std_logic_vector(g_acq_num_cores-1 downto 0);
+    dbg_ddr_rb_start_p_array_i                : in std_logic_vector(g_acq_num_cores-1 downto 0) := (others => '0');
     dbg_ddr_rb_rdy_array_o                    : out std_logic_vector(g_acq_num_cores-1 downto 0);
     dbg_ddr_rb_data_array_o                   : out std_logic_vector(g_acq_num_cores*g_ddr_payload_width-1 downto 0);
     dbg_ddr_rb_addr_array_o                   : out std_logic_vector(g_acq_num_cores*g_acq_addr_width-1 downto 0);
@@ -2400,7 +2400,7 @@ package ifc_wishbone_pkg is
     -----------------------------
     -- Debug Interface
     -----------------------------
-    dbg_ddr_rb_start_p_array_i                : in std_logic_vector(g_acq_num_cores-1 downto 0);
+    dbg_ddr_rb_start_p_array_i                : in std_logic_vector(g_acq_num_cores-1 downto 0) := (others => '0');
     dbg_ddr_rb_rdy_array_o                    : out std_logic_vector(g_acq_num_cores-1 downto 0);
     dbg_ddr_rb_data_array_o                   : out std_logic_vector(g_acq_num_cores*g_ddr_payload_width-1 downto 0);
     dbg_ddr_rb_addr_array_o                   : out std_logic_vector(g_acq_num_cores*g_acq_addr_width-1 downto 0);
