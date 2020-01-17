@@ -203,8 +203,8 @@ begin  -- architecture rtl
 
   gen_without_trigger_iface : if g_with_external_iface generate
 
-    trig_out_resolved <= trig_mux_in_i;
-    trig_mux_out_o <= trig_in_resolved;
+    trig_out_resolved <= trig_in_i;
+    trig_out_o <= trig_in_resolved;
 
   end generate;
 
