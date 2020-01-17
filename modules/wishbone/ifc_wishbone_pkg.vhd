@@ -3104,6 +3104,10 @@ package ifc_wishbone_pkg is
   generic (
     g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
     g_address_granularity                     : t_wishbone_address_granularity := WORD;
+    -- Set to true if the trigger interface is done externally. Triggers
+    -- will be passed directly to MUX modules, without any synchronization
+    -- and debouncing.
+    g_with_external_iface                     : boolean                        := false;
     g_sync_edge                               : string                         := "positive";
     g_trig_num                                : natural range 1 to 24          := 8; -- channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
     g_intern_num                              : natural range 1 to 24          := 8; -- channels facing inside the FPGA. Limit defined by wb_trigger_regs.vhd
@@ -3161,6 +3165,13 @@ package ifc_wishbone_pkg is
     trig_dir_o                                : out   std_logic_vector(g_trig_num-1 downto 0);
 
     -------------------------------
+    ---- Trigger Interface ports if g_with_external_iface is true
+    -------------------------------
+
+    trig_in_i                                 : in  std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+    trig_out_o                                : out std_logic_vector(g_trig_num-1 downto 0);
+
+    -------------------------------
     ---- Internal ports
     -------------------------------
 
@@ -3185,6 +3196,10 @@ package ifc_wishbone_pkg is
     (
       g_interface_mode                        : t_wishbone_interface_mode      := CLASSIC;
       g_address_granularity                   : t_wishbone_address_granularity := WORD;
+      -- Set to true if the trigger interface is done externally. Triggers
+      -- will be passed directly to MUX modules, without any synchronization
+      -- and debouncing.
+      g_with_external_iface                   : boolean                        := false;
       g_sync_edge                             : string                         := "positive";
       g_trig_num                              : natural range 1 to 24          := 8; -- channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
       g_intern_num                            : natural range 1 to 24          := 8; -- channels facing inside the FPGA. Limit defined by wb_trigger_regs.vhd
@@ -3223,6 +3238,13 @@ package ifc_wishbone_pkg is
 
       trig_b                                  : inout std_logic_vector(g_trig_num-1 downto 0);
       trig_dir_o                              : out   std_logic_vector(g_trig_num-1 downto 0);
+
+      -------------------------------
+      ---- Trigger Interface ports if g_with_external_iface is true
+      -------------------------------
+
+      trig_in_i                               : in  std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+      trig_out_o                              : out std_logic_vector(g_trig_num-1 downto 0);
 
       -----------------------------
       -- Internal ports

@@ -57,6 +57,10 @@ entity wb_trigger is
   generic (
     g_interface_mode       : t_wishbone_interface_mode      := CLASSIC;
     g_address_granularity  : t_wishbone_address_granularity := WORD;
+    -- Set to true if the trigger interface is done externally. Triggers
+    -- will be passed directly to MUX modules, without any synchronization
+    -- and debouncing.
+    g_with_external_iface  : boolean                        := false;
     g_sync_edge            : string                         := "positive";
     g_trig_num             : natural range 1 to 24          := 8; -- channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
     g_intern_num           : natural range 1 to 24          := 8; -- channels facing inside the FPGA. Limit defined by wb_trigger_regs.vhd
@@ -114,6 +118,13 @@ entity wb_trigger is
     trig_dir_o  : out   std_logic_vector(g_trig_num-1 downto 0);
 
     -------------------------------
+    ---- Trigger Interface ports if g_with_external_iface is true
+    -------------------------------
+
+    trig_in_i   : in  std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+    trig_out_o  : out std_logic_vector(g_trig_num-1 downto 0);
+
+    -------------------------------
     ---- Internal ports
     -------------------------------
 
@@ -151,41 +162,57 @@ architecture rtl of wb_trigger is
 
 begin  -- architecture rtl
 
-  cmp_wb_trigger_iface : wb_trigger_iface
-    generic map (
-      g_interface_mode       => g_interface_mode,
-      g_address_granularity  => g_address_granularity,
-      g_sync_edge            => g_sync_edge,
-      g_trig_num             => g_trig_num
-    )
-    port map (
-      clk_i      => clk_i,
-      rst_n_i    => rst_n_i,
+  gen_with_trigger_iface : if not g_with_external_iface generate
 
-      ref_clk_i   => ref_clk_i,
-      ref_rst_n_i => ref_rst_n_i,
+    cmp_wb_trigger_iface : wb_trigger_iface
+      generic map (
+        g_interface_mode       => g_interface_mode,
+        g_address_granularity  => g_address_granularity,
+        g_sync_edge            => g_sync_edge,
+        g_trig_num             => g_trig_num
+      )
+      port map (
+        clk_i      => clk_i,
+        rst_n_i    => rst_n_i,
 
-      wb_adr_i   => wb_trigger_iface_adr_i,
-      wb_dat_i   => wb_trigger_iface_dat_i,
-      wb_dat_o   => wb_trigger_iface_dat_o,
-      wb_sel_i   => wb_trigger_iface_sel_i,
-      wb_we_i    => wb_trigger_iface_we_i,
-      wb_cyc_i   => wb_trigger_iface_cyc_i,
-      wb_stb_i   => wb_trigger_iface_stb_i,
-      wb_ack_o   => wb_trigger_iface_ack_o,
-      wb_err_o   => wb_trigger_iface_err_o,
-      wb_rty_o   => wb_trigger_iface_rty_o,
-      wb_stall_o => wb_trigger_iface_stall_o,
+        ref_clk_i   => ref_clk_i,
+        ref_rst_n_i => ref_rst_n_i,
 
-      trig_b      => trig_b,
-      trig_dir_o  => trig_dir_o,
-      trig_out_o  => trig_out_resolved,
-      trig_in_i   => trig_in_resolved,
+        wb_adr_i   => wb_trigger_iface_adr_i,
+        wb_dat_i   => wb_trigger_iface_dat_i,
+        wb_dat_o   => wb_trigger_iface_dat_o,
+        wb_sel_i   => wb_trigger_iface_sel_i,
+        wb_we_i    => wb_trigger_iface_we_i,
+        wb_cyc_i   => wb_trigger_iface_cyc_i,
+        wb_stb_i   => wb_trigger_iface_stb_i,
+        wb_ack_o   => wb_trigger_iface_ack_o,
+        wb_err_o   => wb_trigger_iface_err_o,
+        wb_rty_o   => wb_trigger_iface_rty_o,
+        wb_stall_o => wb_trigger_iface_stall_o,
 
-      trig_dbg_o             => trig_dbg_o,
-      dbg_data_sync_o        => dbg_data_sync_o,
-      dbg_data_degliteched_o => dbg_data_degliteched_o
-    );
+        trig_b      => trig_b,
+        trig_dir_o  => trig_dir_o,
+        trig_out_o  => trig_out_resolved,
+        trig_in_i   => trig_in_resolved,
+
+        trig_dbg_o             => trig_dbg_o,
+        dbg_data_sync_o        => dbg_data_sync_o,
+        dbg_data_degliteched_o => dbg_data_degliteched_o
+      );
+
+  end generate;
+
+  gen_without_trigger_iface : if g_with_external_iface generate
+
+    gen_trig_out_resolved : for i in c_trig_num-1 downto 0 generate
+        trig_out_resolved(i).pulse <= trig_mux_in_i(i);
+    end generate;
+
+    gen_trig_in_resolved : for i in c_trig_num-1 downto 0 generate
+        trig_mux_out_o(i) <= trig_in_resolved(i).pulse;
+    end generate;
+
+  end generate;
 
   trig_out_resolved_o <= trig_out_resolved;
 
