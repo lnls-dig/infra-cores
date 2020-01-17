@@ -303,10 +303,10 @@ architecture rtl of wb_acq_core is
   signal acq_in_pre_trig                    : std_logic;
   signal acq_in_wait_trig                   : std_logic;
   signal acq_in_post_trig                   : std_logic;
-  signal acq_data_marsh                     : std_logic_vector(c_acq_chan_max_w-1 downto 0);
-  signal dtrig_data_marsh                   : std_logic_vector(c_acq_chan_max_w-1 downto 0);
-  signal acq_data                           : std_logic_vector(c_acq_chan_max_w-1 downto 0);
-  signal acq_data_fsm                       : std_logic_vector(c_acq_chan_max_w-1 downto 0);
+  signal acq_data_marsh                     : std_logic_vector(c_acq_data_width-1 downto 0);
+  signal dtrig_data_marsh                   : std_logic_vector(c_acq_data_width-1 downto 0);
+  signal acq_data                           : std_logic_vector(c_acq_data_width-1 downto 0);
+  signal acq_data_fsm                       : std_logic_vector(c_acq_data_width-1 downto 0);
   signal acq_trig_in                        : std_logic;
   signal acq_trig                           : std_logic;
   signal acq_trig_fsm                       : std_logic;
