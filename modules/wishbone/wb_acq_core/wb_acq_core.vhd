@@ -750,7 +750,8 @@ begin
   cmp_acq_dtrig_sel_chan : acq_sel_chan
   generic map
   (
-    g_acq_num_channels                      => g_acq_num_channels
+    g_acq_num_channels                      => g_acq_num_channels,
+    g_acq_data_width                        => c_acq_data_width
   )
   port map
   (
@@ -784,7 +785,8 @@ begin
   cmp_acq_sel_chan : acq_sel_chan
   generic map
   (
-    g_acq_num_channels                      => g_acq_num_channels
+    g_acq_num_channels                      => g_acq_num_channels,
+    g_acq_data_width                        => c_acq_data_width
   )
   port map
   (
