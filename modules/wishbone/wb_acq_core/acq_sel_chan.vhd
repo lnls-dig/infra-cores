@@ -27,7 +27,8 @@ use work.acq_core_pkg.all;
 entity acq_sel_chan is
 generic
 (
-  g_acq_num_channels                        : natural := 1
+  g_acq_num_channels                        : natural := 1;
+  g_acq_data_width                          : natural := c_acq_chan_max_w
 );
 port
 (
@@ -51,7 +52,7 @@ port
 -----------------------------
 -- Output Interface.
 -----------------------------
-  acq_data_o                                : out std_logic_vector(c_acq_chan_max_w-1 downto 0);
+  acq_data_o                                : out std_logic_vector(g_acq_data_width-1 downto 0);
   acq_dvalid_o                              : out std_logic;
   acq_id_o                                  : out t_acq_id;
   acq_trig_o                                : out std_logic
@@ -63,12 +64,12 @@ architecture rtl of acq_sel_chan is
   signal lmt_valid                          : std_logic;
   signal lmt_curr_chan_id                   : unsigned(c_chan_id_width-1 downto 0);
 
-  signal acq_data_marsh_demux               : std_logic_vector(c_acq_chan_max_w-1 downto 0);
+  signal acq_data_marsh_demux               : std_logic_vector(g_acq_data_width-1 downto 0);
   signal acq_trig_demux                     : std_logic;
   signal acq_dvalid_demux                   : std_logic;
   signal acq_id_demux                       : t_acq_id;
 
-  signal acq_data_marsh_demux_reg           : std_logic_vector(c_acq_chan_max_w-1 downto 0);
+  signal acq_data_marsh_demux_reg           : std_logic_vector(g_acq_data_width-1 downto 0);
   signal acq_trig_demux_reg                 : std_logic;
   signal acq_dvalid_demux_reg               : std_logic;
   signal acq_id_demux_reg                   : t_acq_id;

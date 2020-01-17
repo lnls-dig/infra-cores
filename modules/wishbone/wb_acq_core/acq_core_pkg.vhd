@@ -326,7 +326,8 @@ package acq_core_pkg is
   component acq_sel_chan
   generic
   (
-    g_acq_num_channels                        : natural := 1
+    g_acq_num_channels                        : natural := 1;
+    g_acq_data_width                          : natural := c_acq_chan_max_w
   );
   port
   (
@@ -350,7 +351,7 @@ package acq_core_pkg is
     -----------------------------
     -- Output Interface.
     -----------------------------
-    acq_data_o                                : out std_logic_vector(c_acq_chan_max_w-1 downto 0);
+    acq_data_o                                : out std_logic_vector(g_acq_data_width-1 downto 0);
     acq_dvalid_o                              : out std_logic;
     acq_id_o                                  : out t_acq_id;
     acq_trig_o                                : out std_logic
