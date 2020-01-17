@@ -3105,8 +3105,7 @@ package ifc_wishbone_pkg is
     g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
     g_address_granularity                     : t_wishbone_address_granularity := WORD;
     -- Set to true if the trigger interface is done externally. Triggers
-    -- will be passed directly to MUX modules, without any synchronization
-    -- and debouncing.
+    -- will be passed directly to the clock domain synchronizers.
     g_with_external_iface                     : boolean                        := false;
     g_sync_edge                               : string                         := "positive";
     g_trig_num                                : natural range 1 to 24          := 8; -- channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
@@ -3197,8 +3196,7 @@ package ifc_wishbone_pkg is
       g_interface_mode                        : t_wishbone_interface_mode      := CLASSIC;
       g_address_granularity                   : t_wishbone_address_granularity := WORD;
       -- Set to true if the trigger interface is done externally. Triggers
-      -- will be passed directly to MUX modules, without any synchronization
-      -- and debouncing.
+      -- will be passed directly to the clock domain synchronizers.
       g_with_external_iface                   : boolean                        := false;
       g_sync_edge                             : string                         := "positive";
       g_trig_num                              : natural range 1 to 24          := 8; -- channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
