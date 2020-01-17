@@ -842,14 +842,14 @@ begin
     cfg_int_trig_thres_i                    => acq_trig_int_thres,
     cfg_int_trig_thres_filt_i               => acq_trig_int_thres_filt,
 
-    dtrig_data_i                            => dtrig_data_marsh(c_acq_data_width-1 downto 0),
+    dtrig_data_i                            => dtrig_data_marsh,
     dtrig_valid_i                           => dtrig_valid_in,
     dtrig_id_i                              => dtrig_id_in,
 
     lmt_dtrig_chan_id_i                     => lmt_dtrig_chan_id,
     lmt_dtrig_valid_i                       => acq_start_safe,
 
-    acq_data_i                              => acq_data_marsh(c_acq_data_width-1 downto 0),
+    acq_data_i                              => acq_data_marsh,
     acq_valid_i                             => acq_dvalid_in,
     acq_id_i                                => acq_id_in,
     acq_trig_i                              => acq_trig_in,
