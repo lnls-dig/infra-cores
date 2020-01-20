@@ -43,7 +43,8 @@ entity acq_fsm is
 generic
 (
   g_acq_channels                            : t_acq_chan_param_array := c_default_acq_chan_param_array;
-  g_multishot_ram_size                      : natural := 2048
+  g_multishot_ram_size                      : natural := 2048;
+  g_acq_data_width                          : natural := c_acq_chan_max_w
 );
 port
 (
@@ -60,7 +61,7 @@ port
   acq_start_i                               : in  std_logic := '0';
   acq_now_i                                 : in  std_logic := '0';
   acq_stop_i                                : in  std_logic := '0';
-  acq_data_i                                : in  std_logic_vector(c_acq_chan_max_w-1 downto 0) := (others => '0');
+  acq_data_i                                : in  std_logic_vector(g_acq_data_width-1 downto 0) := (others => '0');
   acq_trig_i                                : in  std_logic := '0';
   acq_dvalid_i                              : in  std_logic := '0';
   acq_id_i                                  : in t_acq_id;
@@ -107,7 +108,7 @@ port
   -- FSM Outputs
   -----------------------------
   shots_decr_o                              : out std_logic;
-  acq_data_o                                : out std_logic_vector(c_acq_chan_max_w-1 downto 0);
+  acq_data_o                                : out std_logic_vector(g_acq_data_width-1 downto 0);
   acq_valid_o                               : out std_logic;
   acq_id_o                                  : out t_acq_id;
   acq_trig_o                                : out std_logic;
@@ -144,7 +145,7 @@ architecture rtl of acq_fsm is
   signal acq_stop_rst_n_fs_sync             : std_logic;
   signal acq_stop_rst_n_ext_sync            : std_logic;
 
-  signal acq_data                           : std_logic_vector(c_acq_chan_max_w-1 downto 0);
+  signal acq_data                           : std_logic_vector(g_acq_data_width-1 downto 0);
   signal acq_valid                          : std_logic;
   signal acq_id                             : t_acq_id;
   signal acq_trig                           : std_logic;
