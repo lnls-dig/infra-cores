@@ -874,7 +874,8 @@ begin
   generic map
   (
     g_acq_channels                          => g_acq_channels,
-    g_multishot_ram_size                    => g_multishot_ram_size
+    g_multishot_ram_size                    => g_multishot_ram_size,
+    g_acq_data_width                        => c_acq_data_width
   )
   port map
   (
