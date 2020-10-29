@@ -705,7 +705,7 @@ module ddr_core_mig #
 
   localparam APP_DATA_WIDTH        = 2 * nCK_PER_CLK * PAYLOAD_WIDTH;
   localparam APP_MASK_WIDTH        = APP_DATA_WIDTH / 8;
-  localparam TEMP_MON_EN           = (SIMULATION == "TRUE") ? "ON" : "OFF";
+  localparam TEMP_MON_EN           = (SIMULATION == "FALSE") ? "ON" : "OFF";
                                                  // Enable or disable the temp monitor module
   localparam tTEMPSAMPLE           = 10000000;   // sample every 10 us
   localparam XADC_CLK_PERIOD       = 5000;       // Use 200 MHz IODELAYCTRL clock
