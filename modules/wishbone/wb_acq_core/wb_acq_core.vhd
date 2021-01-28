@@ -1109,18 +1109,20 @@ begin
   );
 
   -- Sync and pipeline reset signals
-  cmp_reset_fs_synch : reset_synch
+  cmp_reset_fs_synch : gc_sync_ffs
   port map(
     clk_i                                   => fs_clk_i,
-    arst_n_i                                => acq_start_rst,
-    rst_n_o                                 => acq_start_rst_fs_sync
+    rst_n_i                                 => '1',
+    data_i                                  => acq_start_rst,
+    synced_o                                => acq_start_rst_fs_sync
   );
 
-  cmp_reset_ext_synch : reset_synch
+  cmp_reset_ext_synch : gc_sync_ffs
   port map(
     clk_i                                   => ext_clk_i,
-    arst_n_i                                => acq_start_rst,
-    rst_n_o                                 => acq_start_rst_ext_sync
+    rst_n_i                                 => '1',
+    data_i                                  => acq_start_rst,
+    synced_o                                => acq_start_rst_ext_sync
   );
 
   acq_start_rstn_fs_sync <= not(acq_start_rst_fs_sync);
