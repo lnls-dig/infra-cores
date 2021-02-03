@@ -675,8 +675,8 @@ begin
   ddr_btt <= ddr_btt_full(ddr_btt'left downto 0);
 
   -- calculate if the next address will go over the limit
-  ddr_addr_cnt_next_will_reach_max <= '1' when ddr_addr_cnt_axis + c_addr_ddr_inc_axis > ddr_addr_max else '0';
-  ddr_addr_cnt_m1_next_will_reach_max <= '1' when ddr_addr_cnt_axis + c_addr_ddr_inc_axis > ddr_addr_max_m1 else '0';
+  ddr_addr_cnt_next_will_reach_max <= '1' when ddr_addr_cnt_axis + c_addr_ddr_inc_axis >= ddr_addr_max else '0';
+  ddr_addr_cnt_m1_next_will_reach_max <= '1' when ddr_addr_cnt_axis + c_addr_ddr_inc_axis >= ddr_addr_max_m1 else '0';
   -- We must compare the limit using >=, as the input wr_end_addr_alig may not
   -- be multiple of "c_addr_ddr_inc_axis". Thus not allowing us to use "=" only
   ddr_addr_cnt_max_reached <= '1' when ddr_addr_cnt_axis >= ddr_addr_max else '0';
