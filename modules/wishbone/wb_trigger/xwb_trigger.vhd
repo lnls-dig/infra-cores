@@ -115,6 +115,7 @@ begin
     generic map (
       g_interface_mode       => g_interface_mode,
       g_address_granularity  => g_address_granularity,
+      g_with_external_iface  => g_with_external_iface,
       g_sync_edge            => g_sync_edge,
       g_trig_num             => g_trig_num,
       g_intern_num           => g_intern_num,
