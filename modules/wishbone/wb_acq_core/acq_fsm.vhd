@@ -155,7 +155,6 @@ architecture rtl of acq_fsm is
 
   signal acq_fsm_current_state              : t_acq_fsm_state := IDLE;
   signal acq_fsm_state                      : std_logic_vector(2 downto 0);
-  signal acq_fsm_state_d                    : std_logic_vector(2 downto 0);
   signal acq_start                          : std_logic;
   signal acq_stop                           : std_logic;
   signal acq_stop_n                         : std_logic;
@@ -168,14 +167,8 @@ architecture rtl of acq_fsm is
   signal acq_in_post_trig                   : std_logic;
   signal acq_in_post_trig_wait              : std_logic;
   signal acq_in_post_trig_out               : std_logic;
-  signal acq_in_pre_trig_d                  : std_logic;
-  signal acq_in_pre_trig_out_d              : std_logic;
-  signal acq_in_wait_trig_d                 : std_logic;
-  signal acq_in_post_trig_d                 : std_logic;
-  signal acq_in_post_trig_out_d             : std_logic;
   signal acq_fsm_req_rst                    : std_logic;
   signal samples_wr_en                      : std_logic;
-  signal samples_wr_en_d                    : std_logic;
 
   -- Pre/Post trigger and shots counters
   signal curr_num_coalesce_log2             : integer := 0;
@@ -191,7 +184,6 @@ architecture rtl of acq_fsm is
   signal pre_trig_done                      : std_logic;
   signal pre_trig_done_ext                  : std_logic;
   signal wait_trig_skip_r                   : std_logic;
-  signal wait_trig_skip_done                : std_logic;
   signal wait_trig_skip_done_ext            : std_logic;
   signal post_trig_cnt                      : unsigned(c_acq_samples_size-1 downto 0);
   signal post_trig_cnt_max                  : unsigned(c_acq_samples_size-1 downto 0);
@@ -202,7 +194,6 @@ architecture rtl of acq_fsm is
   signal shots_cnt                          : unsigned(15 downto 0);
   signal shots_done                         : std_logic;
   signal shots_decr                         : std_logic;
-  signal shots_decr_d                       : std_logic;
   signal single_shot                        : std_logic;
   signal multishot_buffer_candidate         : std_logic;
 
@@ -348,7 +339,6 @@ begin
     end if;
   end process;
 
-  wait_trig_skip_done <= '1' when (wait_trig_skip_r = '1' and acq_in_wait_trig_d = '1') else '0';
   acq_wait_trig_skip_done_o <= wait_trig_skip_done_ext;
 
   ------------------------------------------------------------------------------
@@ -516,16 +506,6 @@ begin
         acq_in_post_trig_wait <= '0';
         samples_wr_en         <= '0';
         acq_fsm_state         <= "001";
-
-        -- Delayed outputs
-        shots_decr_d           <= '0';
-        acq_in_pre_trig_d      <= '0';
-        acq_in_pre_trig_out_d  <= '0';
-        acq_in_wait_trig_d     <= '0';
-        acq_in_post_trig_d     <= '0';
-        acq_in_post_trig_out_d <= '0';
-        samples_wr_en_d        <= '0';
-        acq_fsm_state_d        <= "001";
 
         pre_trig_done_ext         <= '0';
         wait_trig_skip_done_ext   <= '0';
@@ -1009,16 +989,6 @@ begin
 
         end case;
 
-        -- Delay output signals
-        shots_decr_d           <= shots_decr;
-        acq_in_pre_trig_d      <= acq_in_pre_trig;
-        acq_in_pre_trig_out_d  <= acq_in_pre_trig_out;
-        acq_in_wait_trig_d     <= acq_in_wait_trig;
-        acq_in_post_trig_d     <= acq_in_post_trig;
-        acq_in_post_trig_out_d <= acq_in_post_trig_out;
-        samples_wr_en_d        <= samples_wr_en;
-        acq_fsm_state_d        <= acq_fsm_state;
-
       end if;
     end if;
   end process;
@@ -1031,12 +1001,12 @@ begin
   acq_valid_o        <= acq_valid;
   acq_id_o           <= acq_id;
   acq_trig_o         <= acq_trig;
-  shots_decr_o       <= shots_decr_d;
-  acq_in_pre_trig_o  <= acq_in_pre_trig_out_d;
-  acq_in_wait_trig_o <= acq_in_wait_trig_d;
-  acq_in_post_trig_o <= acq_in_post_trig_out_d;
-  samples_wr_en_o    <= samples_wr_en_d;
-  acq_fsm_state_o    <= acq_fsm_state_d;
+  shots_decr_o       <= shots_decr;
+  acq_in_pre_trig_o  <= acq_in_pre_trig_out;
+  acq_in_wait_trig_o <= acq_in_wait_trig;
+  acq_in_post_trig_o <= acq_in_post_trig_out;
+  samples_wr_en_o    <= samples_wr_en;
+  acq_fsm_state_o    <= acq_fsm_state;
   acq_fsm_req_rst_o  <= acq_fsm_req_rst;
 
   ------------------------------------------------------------------------------
