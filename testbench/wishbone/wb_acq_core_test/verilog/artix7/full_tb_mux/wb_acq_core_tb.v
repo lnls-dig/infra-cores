@@ -1732,7 +1732,7 @@ module wb_acq_core_tb;
     hw_int_trig_thres_filt = 8'b00001111;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b0;
-    data_valid_zero_cycles = 1000;
+    data_valid_zero_cycles = 100;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
