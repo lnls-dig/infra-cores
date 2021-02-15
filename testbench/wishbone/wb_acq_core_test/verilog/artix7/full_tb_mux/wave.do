@@ -19,6 +19,7 @@ quietly virtual signal -install /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_fac
 quietly virtual signal -install /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/gen_ddr3_axis_interface/cmp_acq_ddr3_iface { /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/gen_ddr3_axis_interface/cmp_acq_ddr3_iface/axis_s2mm_cmd_tdata_o(63 downto 32)} axis_addr
 quietly WaveActivateNextPane {} 0
 add wave -noupdate -divider testbench
+add wave -noupdate -expand /wb_acq_core_tb/acq_channel_sample_size
 add wave -noupdate /wb_acq_core_tb/c_data_max
 add wave -noupdate /wb_acq_core_tb/c_wait_acquisition_done
 add wave -noupdate /wb_acq_core_tb/c_ddr3_acq1_addr_offset
@@ -466,27 +467,6 @@ add wave -noupdate /wb_acq_core_tb/data_valid_prob_gen_task
 add wave -noupdate /wb_acq_core_tb/data_test_dvalid
 add wave -noupdate /wb_acq_core_tb/data_test_dvalid_t
 add wave -noupdate -divider word_packer_0
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/g_input_width
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/g_output_width
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/clk_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/rst_n_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/d_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/d_valid_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/d_req_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/flush_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/q_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/q_valid_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/q_id_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/q_req_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/sreg
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/count
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/empty
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/q_valid_comb
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/q_valid_reg
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/q_req_d0
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/c_sreg_size
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/c_sreg_entries
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/count_zero
 add wave -noupdate -divider acq_trig
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_trig/g_data_in_width
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_trig/g_acq_num_channels
@@ -574,44 +554,53 @@ add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_trig/acq_valid_o
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_trig/acq_trig_o
 add wave -noupdate -divider acq_fsm
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_dvalid_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_now_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_start_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_stop_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_trig_i
+add wave -noupdate /wb_acq_core_tb/data_valid_counter_trans
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/g_acq_channels
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/g_multishot_ram_size
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/g_acq_data_width
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/fs_clk_i
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/fs_ce_i
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/fs_rst_n_i
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/ext_clk_i
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/ext_rst_n_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/fs_ce_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/fs_clk_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/fs_rst_n_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/g_acq_channels
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_start_i
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_now_i
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_stop_i
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_data_i
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_trig_i
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_dvalid_i
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_id_i
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/pre_trig_samples_i
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/post_trig_samples_i
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/shots_nb_i
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/lmt_curr_chan_id_i
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/lmt_valid_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/post_trig_samples_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/pre_trig_samples_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/shots_nb_i
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/samples_cnt_o
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_end_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_fsm_req_rst_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_fsm_rstn_ext_sync_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_fsm_rstn_fs_sync_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_fsm_state_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_in_post_trig_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_single_shot_o
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_in_pre_trig_o
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_in_wait_trig_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_post_trig_done_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_in_post_trig_o
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_pre_trig_done_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_single_shot_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_trig_o
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_wait_trig_skip_done_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/lmt_acq_full_pkt_size_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/lmt_acq_pos_pkt_size_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_post_trig_done_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_fsm_accepting_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_fsm_req_rst_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_fsm_state_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_fsm_rstn_fs_sync_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_fsm_rstn_ext_sync_o
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/lmt_acq_pre_pkt_size_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/lmt_acq_pos_pkt_size_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/lmt_acq_full_pkt_size_o
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/lmt_shots_nb_o
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/lmt_valid_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/multishot_buffer_sel_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/samples_cnt_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/samples_wr_en_o
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/shots_decr_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_data_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_valid_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_id_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_trig_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/multishot_buffer_sel_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/samples_wr_en_o
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_end
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_end_t
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_fsm_req_rst
@@ -638,11 +627,13 @@ add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/lmt_valid
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/post_trig_cnt
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/post_trig_cnt_max
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/post_trig_cnt_max_m1
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/post_trig_done
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/post_trig_samples_shift
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/post_trig_samples_shift_s
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/pre_trig_cnt
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/pre_trig_cnt_max
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/pre_trig_cnt_max_m1
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/pre_trig_done
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/pre_trig_samples_shift
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/pre_trig_samples_shift_s
@@ -652,7 +643,6 @@ add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/shots_decr
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/shots_done
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/single_shot
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/wait_trig_skip_done
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/wait_trig_skip_r
 add wave -noupdate -divider multishot_dpram
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_multishot_dpram/fs_clk_i
@@ -699,8 +689,6 @@ add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fc_fifo/fs_ce_i
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fc_fifo/fs_rst_n_i
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fc_fifo/ext_clk_i
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/q_o
-add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/gen_word_packer(0)/gen_packer_wider/cmp_gc_word_packer/q_valid_o
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fc_fifo/ext_rst_n_i
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fc_fifo/dpram_data_i
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fc_fifo/dpram_dvalid_i
@@ -1800,7 +1788,7 @@ add wave -noupdate /wb_acq_core_tb/cmp1_data_checker/chk_pass_o
 add wave -noupdate /wb_acq_core_tb/cmp1_data_checker/exp_addr
 add wave -noupdate /wb_acq_core_tb/cmp1_data_checker/act_addr
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {231687500000 fs} 0}
+WaveRestoreCursors {{Cursor 1} {13367587503 fs} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 295
 configure wave -valuecolwidth 280
@@ -1816,4 +1804,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {231617540220 fs} {231777459780 fs}
+WaveRestoreZoom {13151319321 fs} {13367587503 fs}
