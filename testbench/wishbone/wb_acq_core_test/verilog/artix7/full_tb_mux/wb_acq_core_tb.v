@@ -1658,6 +1658,9 @@ module wb_acq_core_tb;
         acq_channel_sample_size[acq_ch] = dut.g_facq_channels[acq_ch].width;
     end
   endgenerate
+
+  reg data_start_ok = 1'b0;
+  reg data_valid_num_samp = 1'b0;
   initial begin
 
     // Initial values for ADC data signals
@@ -1737,6 +1740,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b0;
     data_valid_zero_cycles = 100;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -1746,15 +1750,60 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
     // TEST #2
     // Number of shots = 1
     // Pre trigger samples only
+    // Only specified number of samples generated
     // No trigger
     ////////////////////////
     test_id = 2;
+    n_shots = 16'h0001;
+    pre_trig_samples = 32'h00000010;
+    post_trig_samples = 32'h00000000;
+    ddr3_start_addr = 32'h00000000; // all zeros for now
+    ddr3_end_addr = 32'h00100000;
+    acq_chan = 16'd0;
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
+    skip_trig = 1'b1;
+    wait_finish = 1'b1;
+    stop_on_error = 1'b1;
+    min_wait_gnt_l = 32;
+    max_wait_gnt_l = 128;
+    data_valid_prob = 1.0;
+    min_wait_trig_l = 100;
+    max_wait_trig_l = 200;
+    hw_trig_sel = 1'b1; // External trigger
+    hw_trig_en = 1'b0;
+    hw_trig_dly = 'h0;
+    hw_int_trig_thres = 32'h000FFFFF;
+    hw_int_trig_thres_filt = 8'b00001111;
+    sw_trig_en = 1'b0;
+    data_valid_prob_gen = 1'b0;
+    data_valid_zero_cycles = 100;
+    data_valid_num_samp = 1'b1;
+
+    wb_acq(test_id, n_shots,
+                pre_trig_samples, post_trig_samples,
+                hw_trig_sel, hw_trig_en, hw_trig_dly, hw_int_trig_thres,
+                hw_int_trig_thres_filt, sw_trig_en,
+                ddr3_start_addr, ddr3_end_addr, acq_chan, skip_trig,
+                wait_finish, stop_on_error, min_wait_gnt_l,
+                max_wait_gnt_l, min_wait_trig_l,
+                max_wait_trig_l, data_valid_prob,
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
+
+    ////////////////////////
+    // TEST #3
+    // Number of shots = 1
+    // Pre trigger samples only
+    // No trigger
+    ////////////////////////
+    test_id = 3;
     n_shots = 16'h0001;
     pre_trig_samples = 32'h00000010;
     post_trig_samples = 32'h00000000;
@@ -1777,6 +1826,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -1786,16 +1836,17 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
-    // TEST #3
+    // TEST #4
     // Number of shots = 1
     // Pre trigger samples only
     // No trigger
     ////////////////////////
 
-    test_id = 3;
+    test_id = 4;
     n_shots = 16'h0001;
     pre_trig_samples = 32'h00000100;
     post_trig_samples = 32'h00000000;
@@ -1818,6 +1869,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -1827,17 +1879,18 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
-    // TEST #4
+    // TEST #5
     // Number of shots = 1
     // Pre trigger samples only
     // No trigger
     // Larger channel
     ////////////////////////
 
-    test_id = 4;
+    test_id = 5;
     n_shots = 16'h0001;
     pre_trig_samples = 32'h00000100;
     post_trig_samples = 32'h00000000;
@@ -1860,6 +1913,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -1869,16 +1923,17 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
-    // TEST #5
+    // TEST #6
     // Number of shots = 1
     // Pre trigger samples only
     // No trigger
     ////////////////////////
 
-    test_id = 5;
+    test_id = 6;
     n_shots = 16'h0001;
     pre_trig_samples = 32'h00000400;
     post_trig_samples = 32'h00000000;
@@ -1901,6 +1956,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -1910,16 +1966,17 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
-    // TEST #6
+    // TEST #7
     // Number of shots = 2
     // Pre trigger samples only
     // No trigger
     ////////////////////////
 
-    test_id = 6;
+    test_id = 7;
     n_shots = 16'h0002;
     pre_trig_samples = 32'h00000010;
     post_trig_samples = 32'h00000000;
@@ -1942,6 +1999,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -1951,48 +2009,8 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
-
-    ////////////////////////
-    // TEST #7
-    // Number of shots = 16
-    // Pre trigger samples only
-    // No trigger
-    ////////////////////////
-
-    test_id = 7;
-    n_shots = 16'h0010;
-    pre_trig_samples = 32'h00000010;
-    post_trig_samples = 32'h00000000;
-    ddr3_start_addr = 32'h00000000; // all zeros for now
-    ddr3_end_addr = 32'h00100000;
-    acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
-    skip_trig = 1'b1;
-    wait_finish = 1'b1;
-    min_wait_gnt_l = 64;
-    max_wait_gnt_l = 128;
-    data_valid_prob = 0.6;
-    min_wait_trig_l = 100;
-    max_wait_trig_l = 200;
-    hw_trig_sel = 1'b1; // External trigger
-    hw_trig_en = 1'b0;
-    hw_trig_dly = 'h0;
-    hw_int_trig_thres = 32'h000FFFFF;
-    hw_int_trig_thres_filt = 8'b00001111;
-    sw_trig_en = 1'b0;
-    data_valid_prob_gen = 1'b1;
-    data_valid_zero_cycles = 0;
-
-    wb_acq(test_id, n_shots,
-                pre_trig_samples, post_trig_samples,
-                hw_trig_sel, hw_trig_en, hw_trig_dly, hw_int_trig_thres,
-                hw_int_trig_thres_filt, sw_trig_en,
-                ddr3_start_addr, ddr3_end_addr, acq_chan, skip_trig,
-                wait_finish, stop_on_error, min_wait_gnt_l,
-                max_wait_gnt_l, min_wait_trig_l,
-                max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
     // TEST #8
@@ -2003,6 +2021,49 @@ module wb_acq_core_tb;
 
     test_id = 8;
     n_shots = 16'h0010;
+    pre_trig_samples = 32'h00000010;
+    post_trig_samples = 32'h00000000;
+    ddr3_start_addr = 32'h00000000; // all zeros for now
+    ddr3_end_addr = 32'h00100000;
+    acq_chan = 16'd0;
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
+    skip_trig = 1'b1;
+    wait_finish = 1'b1;
+    min_wait_gnt_l = 64;
+    max_wait_gnt_l = 128;
+    data_valid_prob = 0.6;
+    min_wait_trig_l = 100;
+    max_wait_trig_l = 200;
+    hw_trig_sel = 1'b1; // External trigger
+    hw_trig_en = 1'b0;
+    hw_trig_dly = 'h0;
+    hw_int_trig_thres = 32'h000FFFFF;
+    hw_int_trig_thres_filt = 8'b00001111;
+    sw_trig_en = 1'b0;
+    data_valid_prob_gen = 1'b1;
+    data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
+
+    wb_acq(test_id, n_shots,
+                pre_trig_samples, post_trig_samples,
+                hw_trig_sel, hw_trig_en, hw_trig_dly, hw_int_trig_thres,
+                hw_int_trig_thres_filt, sw_trig_en,
+                ddr3_start_addr, ddr3_end_addr, acq_chan, skip_trig,
+                wait_finish, stop_on_error, min_wait_gnt_l,
+                max_wait_gnt_l, min_wait_trig_l,
+                max_wait_trig_l, data_valid_prob,
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
+
+    ////////////////////////
+    // TEST #9
+    // Number of shots = 16
+    // Pre trigger samples only
+    // No trigger
+    ////////////////////////
+
+    test_id = 9;
+    n_shots = 16'h0010;
     pre_trig_samples = 32'h00000020;
     post_trig_samples = 32'h00000000;
     ddr3_start_addr = 32'h00000000; // all zeros for now
@@ -2024,6 +2085,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -2033,16 +2095,17 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
-    // TEST #9
+    // TEST #10
     // Number of shots = 1
     // Pre trigger samples only
     // No trigger
     ////////////////////////
 
-    test_id = 9;
+    test_id = 10;
     n_shots = 16'h0010;
     pre_trig_samples = 32'h00000010;
     post_trig_samples = 32'h00000000;
@@ -2065,6 +2128,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -2074,16 +2138,17 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
-    // TEST #10
+    // TEST #11
     // Number of shots = 16
     // Pre trigger samples only
     // No trigger
     ////////////////////////
 
-    test_id = 10;
+    test_id = 11;
     n_shots = 16'h0010;
     pre_trig_samples = 32'h00000020;
     post_trig_samples = 32'h00000000;
@@ -2106,6 +2171,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -2115,15 +2181,16 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
-    // TEST #11
+    // TEST #12
     // Number of shots = 1
     // Pre trigger samples only, small amount
     // No trigger
     ////////////////////////
-    test_id = 11;
+    test_id = 12;
     n_shots = 16'h0001;
     pre_trig_samples = 32'h00000004;
     post_trig_samples = 32'h00000000;
@@ -2147,6 +2214,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -2156,20 +2224,21 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
     // Trigger Tests
     ////////////////////////
 
     ////////////////////////
-    // TEST #12
+    // TEST #13
     // Number of shots = 1
     // Pre trigger samples
     // Post trigger samples
     // With trigger
     ////////////////////////
-    test_id = 12;
+    test_id = 13;
     n_shots = 16'h0001;
     pre_trig_samples = 32'h00000010;
     post_trig_samples = 32'h00000010;
@@ -2193,6 +2262,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -2202,16 +2272,17 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
-    // TEST #13
+    // TEST #14
     // Number of shots = 1
     // Pre trigger samples
     // Post trigger samples
     // With trigger
     ////////////////////////
-    test_id = 13;
+    test_id = 14;
     n_shots = 16'h0001;
     pre_trig_samples = 32'h00000100;
     post_trig_samples = 32'h00000010;
@@ -2235,6 +2306,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -2244,16 +2316,17 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
-    // TEST #14
+    // TEST #15
     // Number of shots = 1
     // Pre trigger samples
     // Post trigger samples
     // With trigger
     ////////////////////////
-    test_id = 14;
+    test_id = 15;
     n_shots = 16'h0001;
     pre_trig_samples = 32'h00000010;
     post_trig_samples = 32'h00000100;
@@ -2277,6 +2350,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -2286,16 +2360,17 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
-    // TEST #15
+    // TEST #16
     // Number of shots = 1
     // Pre trigger samples
     // Post trigger samples
     // With trigger
     ////////////////////////
-    test_id = 15;
+    test_id = 16;
     n_shots = 16'h0001;
     pre_trig_samples = 32'h00000100;
     post_trig_samples = 32'h00001000;
@@ -2319,6 +2394,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -2328,16 +2404,17 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
-    // TEST #16
+    // TEST #17
     // Number of shots = 16
     // Pre trigger samples
     // Post trigger samples
     // With trigger
     ////////////////////////
-    test_id = 16;
+    test_id = 17;
     n_shots = 16'h0010;
     pre_trig_samples = 32'h00000100;
     post_trig_samples = 32'h00000100;
@@ -2361,6 +2438,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -2370,16 +2448,17 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     ////////////////////////
-    // TEST #17
+    // TEST #18
     // Number of shots = 1
     // Pre trigger samples only
     // No trigger
     ////////////////////////
 
-    test_id = 17;
+    test_id = 18;
     n_shots = 16'h0001;
     pre_trig_samples = 32'h00000040;
     post_trig_samples = 32'h00000040;
@@ -2402,6 +2481,7 @@ module wb_acq_core_tb;
     sw_trig_en = 1'b0;
     data_valid_prob_gen = 1'b1;
     data_valid_zero_cycles = 0;
+    data_valid_num_samp = 1'b0;
 
     wb_acq(test_id, n_shots,
                 pre_trig_samples, post_trig_samples,
@@ -2411,7 +2491,8 @@ module wb_acq_core_tb;
                 wait_finish, stop_on_error, min_wait_gnt_l,
                 max_wait_gnt_l, min_wait_trig_l,
                 max_wait_trig_l, data_valid_prob,
-                data_valid_prob_gen, data_valid_zero_cycles);
+                data_valid_prob_gen, data_valid_zero_cycles,
+                data_valid_num_samp);
 
     $display("Simulation Done!");
     $display("All Tests Passed!");
@@ -2422,10 +2503,14 @@ module wb_acq_core_tb;
   // Generate data and valid signals on positive edge of clock
 
   reg [31:0] data_valid_counter [c_n_chan-1:0];
+  reg [31:0] data_valid_counter_trans [c_n_chan-1:0];
   reg [31:0] data_valid_zero_cycles_task = 'h0;
   reg data_valid_prob_gen_task;
+  reg data_valid_num_samp_task;
+  reg [31:0] num_samples_all_task = 'h0;
   initial begin
     data_valid_counter[0] = 'h0;
+    data_valid_counter_trans[0] = 'h0;
     data_valid_zero_cycles_task = 'h0;
     data_valid_prob_gen_task = 1'b0;
     data_test[0] <= 'h0;
@@ -2434,7 +2519,7 @@ module wb_acq_core_tb;
 
   always @(posedge adc_clk)
   begin
-    if (data_gen_start) begin
+    if (data_gen_start && data_start_ok) begin
       //data_test <= f_data_gen(c_data_max);
       if (data_test_dvalid_t[0]) begin
       //  data_test[0] <= {data_test_0 + 16'h30, data_test_0 + 16'h20,
@@ -2460,10 +2545,15 @@ module wb_acq_core_tb;
       end else begin
         if (data_valid_counter[0] == data_valid_zero_cycles_task) begin
           data_valid_counter[0] <= 'h0;
+          data_valid_counter_trans[0] <= data_valid_counter_trans[0] + 1;
           data_test_dvalid_t[0] <= 1'b1;
         end else begin
-          data_valid_counter[0] <= data_valid_counter[0] + 1;
           data_test_dvalid_t[0] <= 1'b0;
+          if (!data_valid_num_samp_task ||
+              (data_valid_num_samp_task &&
+                data_valid_counter_trans[0] != num_samples_all_task)) begin
+            data_valid_counter[0] <= data_valid_counter[0] + 1;
+          end
         end
       end
 
@@ -2484,6 +2574,7 @@ module wb_acq_core_tb;
     for (ch = 1; ch < c_n_chan; ch = ch + 1) begin: gen_chan
       initial begin
         data_valid_counter[ch] = 'h0;
+        data_valid_counter_trans[ch] = 'h0;
         data_test_trig[ch] = 0;
         data_test[ch] = 0;
       end
@@ -2501,10 +2592,15 @@ module wb_acq_core_tb;
           end else begin
             if (data_valid_counter[ch] == data_valid_zero_cycles_task) begin
               data_valid_counter[ch] <= 'h0;
+              data_valid_counter_trans[ch] <= data_valid_counter_trans[ch] + 1;
               data_test_dvalid_t[ch] <= 1'b1;
             end else begin
-              data_valid_counter[ch] <= data_valid_counter[ch] + 1;
               data_test_dvalid_t[ch] <= 1'b0;
+              if (!data_valid_num_samp_task ||
+                  (data_valid_num_samp_task &&
+                    data_valid_counter_trans[ch] != num_samples_all_task)) begin
+                data_valid_counter[ch] <= data_valid_counter[ch] + 1;
+              end
             end
           end
 
@@ -2658,6 +2754,7 @@ module wb_acq_core_tb;
     input real data_valid_prob;
     input data_valid_prob_gen;
     input [31:0] data_valid_zero_cycles;
+    input data_valid_num_samp;
 
     reg [31:0] acq_core_fsm_ctl_reg;
     reg [31:0] acq_core_trig_cfg_reg;
@@ -2681,6 +2778,7 @@ module wb_acq_core_tb;
     $display("Setting source data valid input probability = %.2f%%", data_valid_prob*100);
     $display("Using data_valid probabilistic generator = %d", data_valid_prob_gen);
     $display("Setting data_valid zero cycles = %d", data_valid_zero_cycles);
+    $display("Setting data_valid only to specified number of samples = %d",data_valid_num_samp);
 
     //@(posedge sys_clk);
     //test_in_progress = 1'b0;
@@ -2715,6 +2813,9 @@ module wb_acq_core_tb;
     @(posedge sys_clk);
     WB0.write32(`ADDR_ACQ_CORE_POST_SAMPLES >> `WB_WORD_ACC, (post_trig_samples));
     WB1.write32(`ADDR_ACQ_CORE_POST_SAMPLES >> `WB_WORD_ACC, (post_trig_samples));
+
+    // Calculate total number of samples
+    num_samples_all_task = n_shots*(pre_trig_samples + post_trig_samples);
 
     // Prepare CFG trigger register
     acq_core_trig_cfg_reg = (hw_trig_sel) << `ACQ_CORE_TRIG_CFG_HW_TRIG_SEL_OFFSET;
@@ -2796,6 +2897,10 @@ module wb_acq_core_tb;
     WB0.write32(`ADDR_ACQ_CORE_CTL >> `WB_WORD_ACC, acq_core_fsm_ctl_reg);
     WB1.write32(`ADDR_ACQ_CORE_CTL >> `WB_WORD_ACC, acq_core_fsm_ctl_reg);
 
+    @(posedge sys_clk);
+    data_start_ok = 1'b1;
+    data_valid_num_samp_task = data_valid_num_samp;
+
     // ACQ Core 0
     if (wait_finish) begin
       $display("Waiting until all data have been acquired...\n");
@@ -2846,6 +2951,7 @@ module wb_acq_core_tb;
 
     @(posedge sys_clk);
     test_in_progress = 1'b0;
+    data_start_ok = 1'b0;
 
     // give some time for all the modules that ned a reset between tests
     repeat (2) begin
