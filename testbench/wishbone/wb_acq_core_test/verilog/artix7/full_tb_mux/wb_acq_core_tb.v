@@ -491,12 +491,6 @@ module wb_acq_core_tb;
   localparam c_n_width64                = 16'd64;
   localparam c_n_width128               = 16'd128;
   localparam c_n_width256               = 16'd256;
-  //localparam c_min_wait_gnt             = 32;
-  //localparam c_max_wait_gnt             = 128;
-  localparam c_acq_num_channels         = 5;
-  localparam [16-1:0] c_acq_channels[0:c_acq_num_channels-1] =
-      '{c_n_width256, c_n_width128, c_n_width128,
-      c_n_width128, c_n_width128};
 
   // bpm acquisition parameters
   // Must be at least the size of the biggest acquisition size
@@ -839,8 +833,6 @@ module wb_acq_core_tb;
     .g_fifo_fc_size(ACQ_FIFO_SIZE),
     .g_ddr_payload_width(DDR3_PAYLOAD_WIDTH),
     .g_ddr_dq_width(PAYLOAD_WIDTH),
-    //.g_acq_num_channels(c_acq_num_channels),
-    //.g_acq_channels(c_acq_channels),
     .g_sim_readback(1),
     .g_acq_num_cores(4)
   )
@@ -1658,6 +1650,14 @@ module wb_acq_core_tb;
   //**************************************************************************//
   // Stimulus to DUT
   //**************************************************************************//
+  reg [31:0] acq_channel_sample_size [4:0];
+  genvar acq_ch;
+  generate
+    for (acq_ch = 0; acq_ch < c_n_chan; acq_ch = acq_ch + 1) begin
+      initial
+        acq_channel_sample_size[acq_ch] = dut.g_facq_channels[acq_ch].width;
+    end
+  endgenerate
   initial begin
 
     // Initial values for ADC data signals
@@ -1720,7 +1720,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b1;
     wait_finish = 1'b1;
     stop_on_error = 1'b1;
@@ -1761,7 +1761,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b1;
     wait_finish = 1'b1;
     min_wait_gnt_l = 32;
@@ -1802,7 +1802,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b1;
     wait_finish = 1'b1;
     min_wait_gnt_l = 256;
@@ -1844,7 +1844,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd1;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b1;
     wait_finish = 1'b1;
     min_wait_gnt_l = 256;
@@ -1885,7 +1885,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b1;
     wait_finish = 1'b1;
     min_wait_gnt_l = 1024; // watch for errors here!
@@ -1926,7 +1926,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b1;
     wait_finish = 1'b1;
     min_wait_gnt_l = 64;
@@ -1967,7 +1967,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b1;
     wait_finish = 1'b1;
     min_wait_gnt_l = 64;
@@ -2008,7 +2008,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b1;
     wait_finish = 1'b1;
     min_wait_gnt_l = 128;
@@ -2049,7 +2049,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b1;
     wait_finish = 1'b1;
     min_wait_gnt_l = 64;
@@ -2090,7 +2090,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b1;
     wait_finish = 1'b1;
     min_wait_gnt_l = 128;
@@ -2130,7 +2130,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b1;
     wait_finish = 1'b1;
     stop_on_error = 1'b1;
@@ -2176,7 +2176,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b0;
     wait_finish = 1'b1;
     stop_on_error = 1'b1;
@@ -2218,7 +2218,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b0;
     wait_finish = 1'b1;
     stop_on_error = 1'b1;
@@ -2260,7 +2260,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b0;
     wait_finish = 1'b1;
     stop_on_error = 1'b1;
@@ -2302,7 +2302,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b0;
     wait_finish = 1'b1;
     stop_on_error = 1'b1;
@@ -2344,7 +2344,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b0;
     wait_finish = 1'b1;
     stop_on_error = 1'b1;
@@ -2386,7 +2386,7 @@ module wb_acq_core_tb;
     ddr3_start_addr = 32'h00000000; // all zeros for now
     ddr3_end_addr = 32'h00100000;
     acq_chan = 16'd0;
-    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/c_acq_channels[acq_chan]);
+    lmt_pkt_size = (pre_trig_samples + post_trig_samples)/(DDR3_PAYLOAD_WIDTH/acq_channel_sample_size[acq_chan]);
     skip_trig = 1'b0;
     wait_finish = 1'b1;
     min_wait_gnt_l = 256;
