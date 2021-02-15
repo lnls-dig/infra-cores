@@ -2519,52 +2519,58 @@ module wb_acq_core_tb;
 
   always @(posedge adc_clk)
   begin
-    if (data_gen_start && data_start_ok) begin
-      //data_test <= f_data_gen(c_data_max);
-      if (data_test_dvalid_t[0]) begin
-      //  data_test[0] <= {data_test_0 + 16'h30, data_test_0 + 16'h20,
-      //                                  data_test_0 + 16'h10, data_test_0 + 16'h00};
-        data_test[0] <= {
-            data_test_0 + 16'hF0, data_test_0 + 16'hE0,
-            data_test_0 + 16'hD0, data_test_0 + 16'hC0,
+    if (!test_in_progress) begin
+      data_valid_counter[0] <= 'h0;
+      data_valid_counter_trans[0] <= 'h0;
+      data_test_dvalid_t[0] <= 1'b0;
+    end else begin
+      if (data_gen_start && data_start_ok) begin
+        //data_test <= f_data_gen(c_data_max);
+        if (data_test_dvalid_t[0]) begin
+        //  data_test[0] <= {data_test_0 + 16'h30, data_test_0 + 16'h20,
+        //                                  data_test_0 + 16'h10, data_test_0 + 16'h00};
+          data_test[0] <= {
+              data_test_0 + 16'hF0, data_test_0 + 16'hE0,
+              data_test_0 + 16'hD0, data_test_0 + 16'hC0,
 
-            data_test_0 + 16'hB0, data_test_0 + 16'hA0,
-            data_test_0 + 16'h90, data_test_0 + 16'h80,
+              data_test_0 + 16'hB0, data_test_0 + 16'hA0,
+              data_test_0 + 16'h90, data_test_0 + 16'h80,
 
-            data_test_0 + 16'h70, data_test_0 + 16'h60,
-            data_test_0 + 16'h50, data_test_0 + 16'h40,
+              data_test_0 + 16'h70, data_test_0 + 16'h60,
+              data_test_0 + 16'h50, data_test_0 + 16'h40,
 
-            data_test_0 + 16'h30, data_test_0 + 16'h20,
-            data_test_0 + 16'h10, data_test_0 + 16'h00
-            };
-        data_test_0 <= data_test_0 + 1;
-      end
+              data_test_0 + 16'h30, data_test_0 + 16'h20,
+              data_test_0 + 16'h10, data_test_0 + 16'h00
+              };
+          data_test_0 <= data_test_0 + 1;
+        end
 
-      if (data_valid_prob_gen_task)  begin
-        data_test_dvalid_t[0] <= f_gen_data_rdy_gen(data_valid_threshold);
-      end else begin
-        if (data_valid_counter[0] == data_valid_zero_cycles_task) begin
-          data_valid_counter[0] <= 'h0;
-          data_valid_counter_trans[0] <= data_valid_counter_trans[0] + 1;
-          data_test_dvalid_t[0] <= 1'b1;
+        if (data_valid_prob_gen_task)  begin
+          data_test_dvalid_t[0] <= f_gen_data_rdy_gen(data_valid_threshold);
         end else begin
-          data_test_dvalid_t[0] <= 1'b0;
-          if (!data_valid_num_samp_task ||
-              (data_valid_num_samp_task &&
-                data_valid_counter_trans[0] != num_samples_all_task)) begin
-            data_valid_counter[0] <= data_valid_counter[0] + 1;
+          if (data_valid_counter[0] == data_valid_zero_cycles_task) begin
+            data_valid_counter[0] <= 'h0;
+            data_valid_counter_trans[0] <= data_valid_counter_trans[0] + 1;
+            data_test_dvalid_t[0] <= 1'b1;
+          end else begin
+            data_test_dvalid_t[0] <= 1'b0;
+            if (!data_valid_num_samp_task ||
+                (data_valid_num_samp_task &&
+                  data_valid_counter_trans[0] != num_samples_all_task)) begin
+              data_valid_counter[0] <= data_valid_counter[0] + 1;
+            end
           end
         end
-      end
 
-      data_test_dvalid[0] <= data_test_dvalid_t[0];
-      data_test_trig[0] <= data_trig;
-    end else begin
-      data_test_0 <= 'h0;
-      data_test[0] <= 'h0;
-      data_test_dvalid[0] <= 1'b0;
-      data_test_dvalid_t[0] <= 1'b0;
-      data_test_trig[0] <= 1'b0;
+        data_test_dvalid[0] <= data_test_dvalid_t[0];
+        data_test_trig[0] <= data_trig;
+      end else begin
+        data_test_0 <= 'h0;
+        data_test[0] <= 'h0;
+        data_test_dvalid[0] <= 1'b0;
+        data_test_dvalid_t[0] <= 1'b0;
+        data_test_trig[0] <= 1'b0;
+      end
     end
   end
 
@@ -2581,36 +2587,42 @@ module wb_acq_core_tb;
 
       always @(posedge adc_clk)
       begin
-        if (data_gen_start) begin
-          //data_test <= f_data_gen(c_data_max);
-          if (data_test_dvalid_t[ch]) begin
-            data_test[ch] <= data_test[ch] + ch + 1;
-          end
+        if (!test_in_progress) begin
+          data_valid_counter[ch] <= 'h0;
+          data_valid_counter_trans[ch] <= 'h0;
+          data_test_dvalid_t[ch] <= 1'b0;
+        end else begin
+          if (data_gen_start) begin
+            //data_test <= f_data_gen(c_data_max);
+            if (data_test_dvalid_t[ch]) begin
+              data_test[ch] <= data_test[ch] + ch + 1;
+            end
 
-          if (data_valid_prob_gen_task)  begin
-            data_test_dvalid_t[ch] <= f_gen_data_rdy_gen(data_valid_threshold);
-          end else begin
-            if (data_valid_counter[ch] == data_valid_zero_cycles_task) begin
-              data_valid_counter[ch] <= 'h0;
-              data_valid_counter_trans[ch] <= data_valid_counter_trans[ch] + 1;
-              data_test_dvalid_t[ch] <= 1'b1;
+            if (data_valid_prob_gen_task)  begin
+              data_test_dvalid_t[ch] <= f_gen_data_rdy_gen(data_valid_threshold);
             end else begin
-              data_test_dvalid_t[ch] <= 1'b0;
-              if (!data_valid_num_samp_task ||
-                  (data_valid_num_samp_task &&
-                    data_valid_counter_trans[ch] != num_samples_all_task)) begin
-                data_valid_counter[ch] <= data_valid_counter[ch] + 1;
+              if (data_valid_counter[ch] == data_valid_zero_cycles_task) begin
+                data_valid_counter[ch] <= 'h0;
+                data_valid_counter_trans[ch] <= data_valid_counter_trans[ch] + 1;
+                data_test_dvalid_t[ch] <= 1'b1;
+              end else begin
+                data_test_dvalid_t[ch] <= 1'b0;
+                if (!data_valid_num_samp_task ||
+                    (data_valid_num_samp_task &&
+                      data_valid_counter_trans[ch] != num_samples_all_task)) begin
+                  data_valid_counter[ch] <= data_valid_counter[ch] + 1;
+                end
               end
             end
-          end
 
-          data_test_dvalid[ch] <= data_test_dvalid_t[ch];
-          data_test_trig[ch] <= data_trig;
-        end else begin
-          data_test[ch] <= 'h0;
-          data_test_dvalid[ch] <= 1'b0;
-          data_test_dvalid_t[ch] <= 1'b0;
-          data_test_trig[ch] <= 1'b0;
+            data_test_dvalid[ch] <= data_test_dvalid_t[ch];
+            data_test_trig[ch] <= data_trig;
+          end else begin
+            data_test[ch] <= 'h0;
+            data_test_dvalid[ch] <= 1'b0;
+            data_test_dvalid_t[ch] <= 1'b0;
+            data_test_trig[ch] <= 1'b0;
+          end
         end
       end
     end
