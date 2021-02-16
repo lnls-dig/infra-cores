@@ -1,7 +1,10 @@
 modules = { "local" : ["fmc_adc_common",
                        "pcie_cntr",
                        "textio_extended",
-                       "fabric"
+                       "fabric",
+                       "fmc4sfp_caen",
+                       "rtm8sfp_ohwr",
+                       "si57x_interface",
                       ]
           };
 
