@@ -187,6 +187,7 @@ architecture rtl of acq_fsm is
   signal post_trig_cnt_max                  : unsigned(c_acq_samples_size-1 downto 0);
   signal post_trig_cnt_max_m1               : unsigned(c_acq_samples_size-1 downto 0);
   signal post_trig_done                     : std_logic;
+  signal post_trig_skip_r                   : std_logic;
   signal post_trig_done_ext                 : std_logic;
   signal samples_cnt                        : unsigned(c_acq_samples_size-1 downto 0);
   signal shots_cnt                          : unsigned(15 downto 0);
@@ -337,6 +338,8 @@ begin
     end if;
   end process;
 
+  post_trig_skip_r <= wait_trig_skip_r;
+
   acq_wait_trig_skip_done_o <= wait_trig_skip_done_ext;
 
   ------------------------------------------------------------------------------
@@ -367,7 +370,8 @@ begin
             -- timing
             post_trig_cnt_max_m1 <= post_trig_samples_shift-2;
           end if;
-        elsif (acq_in_post_trig = '1' and acq_dvalid_i = '1') then
+        elsif (acq_in_post_trig = '1' and (acq_dvalid_i = '1' or
+                                           post_trig_skip_r = '1')) then
           post_trig_cnt <= post_trig_cnt + 1;
 
           -- Will increment
