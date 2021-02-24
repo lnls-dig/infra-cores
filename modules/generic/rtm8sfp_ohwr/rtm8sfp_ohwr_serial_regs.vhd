@@ -64,12 +64,24 @@ end rtm8sfp_ohwr_serial_regs;
 
 architecture rtl of rtm8sfp_ohwr_serial_regs is
 
+  -- functions
+  function f_log2_ceil(N : natural) return positive is
+  begin
+    if N <= 2 then
+      return 1;
+    elsif N mod 2 = 0 then
+      return 1 + f_log2_ceil(N/2);
+    else
+      return 1 + f_log2_ceil((N+1)/2);
+    end if;
+  end;
+
   -- constants
   constant c_NUM_TICKS_PER_CLOCK             : integer := 3;
   constant c_SERIAL_DIV                      : natural := g_SYS_CLOCK_FREQ/(c_NUM_TICKS_PER_CLOCK*g_SERIAL_FREQ)-1;
 
   signal serial_tick                         : std_logic;
-  signal serial_divider                      : unsigned(7 downto 0);
+  signal serial_divider                      : unsigned(f_log2_ceil(c_SERIAL_DIV)-1 downto 0);
 
   signal seq_count                           : unsigned(8 downto 0);
   signal sfp_reg_to_device                   : std_logic_vector(39 downto 0) := (others => '0');
