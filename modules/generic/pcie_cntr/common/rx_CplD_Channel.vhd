@@ -1146,8 +1146,7 @@ begin
         g_with_almost_empty => false,
         g_with_almost_full => true,
         g_with_count => false,
-        g_almost_full_threshold => 24,
-        g_with_fifo_inferred => true)
+        g_almost_full_threshold => 24)
       port map(
         rst_n_i => user_reset_n,
         clk_i => user_clk,
