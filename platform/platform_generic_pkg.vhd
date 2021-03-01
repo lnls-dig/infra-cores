@@ -8,9 +8,6 @@ package platform_generic_pkg is
   -- Components
   --------------------------------------------------------------------
   component iobuf_generic
-  --generic
-  --(
-  --);
   port
   (
     -------------------------------

@@ -25,9 +25,6 @@ library unisim;
 use unisim.vcomponents.all;
 
 entity iobuf_generic is
---generic
---(
---);
 port
 (
   -------------------------------
