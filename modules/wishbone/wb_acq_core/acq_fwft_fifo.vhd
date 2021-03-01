@@ -94,84 +94,161 @@ architecture rtl of acq_fwft_fifo is
 begin
 
   gen_async_fifo : if (g_async) generate
-    cmp_fwft_async_fifo : generic_async_fifo
-    generic map (
-      g_data_width                            => g_data_width,
-      g_size                                  => g_size,
+    gen_inferred_fifo : if g_with_fifo_inferred generate
+      cmp_fwft_async_fifo : inferred_async_fifo
+      generic map (
+        g_data_width                            => g_data_width,
+        g_size                                  => g_size,
 
-      g_with_rd_empty                         => g_with_rd_empty,
-      g_with_rd_full                          => g_with_rd_full,
-      g_with_rd_almost_empty                  => g_with_rd_almost_empty,
-      g_with_rd_almost_full                   => g_with_rd_almost_full,
-      g_with_rd_count                         => g_with_rd_count,
+        g_with_rd_empty                         => g_with_rd_empty,
+        g_with_rd_full                          => g_with_rd_full,
+        g_with_rd_almost_empty                  => g_with_rd_almost_empty,
+        g_with_rd_almost_full                   => g_with_rd_almost_full,
+        g_with_rd_count                         => g_with_rd_count,
 
-      g_with_wr_empty                         => g_with_wr_empty,
-      g_with_wr_full                          => g_with_wr_full,
-      g_with_wr_almost_empty                  => g_with_wr_almost_empty,
-      g_with_wr_almost_full                   => g_with_wr_almost_full,
-      g_with_wr_count                         => g_with_wr_count,
+        g_with_wr_empty                         => g_with_wr_empty,
+        g_with_wr_full                          => g_with_wr_full,
+        g_with_wr_almost_empty                  => g_with_wr_almost_empty,
+        g_with_wr_almost_full                   => g_with_wr_almost_full,
+        g_with_wr_count                         => g_with_wr_count,
 
-      g_with_fifo_inferred                    => g_with_fifo_inferred,
+        g_almost_empty_threshold                => g_almost_empty_threshold,
+        g_almost_full_threshold                 => g_almost_full_threshold
+      )
+      port map(
+        rst_n_i                                 => wr_rst_n_i,
 
-      g_almost_empty_threshold                => g_almost_empty_threshold,
-      g_almost_full_threshold                 => g_almost_full_threshold
-    )
-    port map(
-      rst_n_i                                 => wr_rst_n_i,
+        clk_wr_i                                => wr_clk_i,
+        d_i                                     => wr_data_i,
+        we_i                                    => wr_en_i,
+        wr_count_o                              => wr_count_o,
+        wr_almost_empty_o                       => wr_almost_empty_o,
+        wr_almost_full_o                        => wr_almost_full_o,
 
-      clk_wr_i                                => wr_clk_i,
-      d_i                                     => wr_data_i,
-      we_i                                    => wr_en_i,
-      wr_count_o                              => wr_count_o,
-      wr_almost_empty_o                       => wr_almost_empty_o,
-      wr_almost_full_o                        => wr_almost_full_o,
+        clk_rd_i                                => rd_clk_i,
+        q_o                                     => rd_data_o,
+        rd_i                                    => fwft_rd_en,
+        rd_count_o                              => rd_count_o,
+        rd_almost_empty_o                       => rd_almost_empty_o,
+        rd_almost_full_o                        => rd_almost_full_o,
 
-      clk_rd_i                                => rd_clk_i,
-      q_o                                     => rd_data_o,
-      rd_i                                    => fwft_rd_en,
-      rd_count_o                              => rd_count_o,
-      rd_almost_empty_o                       => rd_almost_empty_o,
-      rd_almost_full_o                        => rd_almost_full_o,
+        rd_empty_o                              => fwft_rd_empty,
+        wr_full_o                               => wr_full_o
+      );
+    end generate;
 
-      rd_empty_o                              => fwft_rd_empty,
-      wr_full_o                               => wr_full_o
-    );
+    gen_generic_fifo : if (not g_with_fifo_inferred) generate
+      cmp_fwft_async_fifo : generic_async_fifo
+      generic map (
+        g_data_width                            => g_data_width,
+        g_size                                  => g_size,
+
+        g_with_rd_empty                         => g_with_rd_empty,
+        g_with_rd_full                          => g_with_rd_full,
+        g_with_rd_almost_empty                  => g_with_rd_almost_empty,
+        g_with_rd_almost_full                   => g_with_rd_almost_full,
+        g_with_rd_count                         => g_with_rd_count,
+
+        g_with_wr_empty                         => g_with_wr_empty,
+        g_with_wr_full                          => g_with_wr_full,
+        g_with_wr_almost_empty                  => g_with_wr_almost_empty,
+        g_with_wr_almost_full                   => g_with_wr_almost_full,
+        g_with_wr_count                         => g_with_wr_count,
+
+        g_almost_empty_threshold                => g_almost_empty_threshold,
+        g_almost_full_threshold                 => g_almost_full_threshold
+      )
+      port map(
+        rst_n_i                                 => wr_rst_n_i,
+
+        clk_wr_i                                => wr_clk_i,
+        d_i                                     => wr_data_i,
+        we_i                                    => wr_en_i,
+        wr_count_o                              => wr_count_o,
+        wr_almost_empty_o                       => wr_almost_empty_o,
+        wr_almost_full_o                        => wr_almost_full_o,
+
+        clk_rd_i                                => rd_clk_i,
+        q_o                                     => rd_data_o,
+        rd_i                                    => fwft_rd_en,
+        rd_count_o                              => rd_count_o,
+        rd_almost_empty_o                       => rd_almost_empty_o,
+        rd_almost_full_o                        => rd_almost_full_o,
+
+        rd_empty_o                              => fwft_rd_empty,
+        wr_full_o                               => wr_full_o
+      );
+    end generate;
   end generate;
 
   gen_sync_fifo : if (not g_async) generate
-    cmp_fwft_sync_fifo : generic_sync_fifo
-    generic map (
-      g_data_width                            => g_data_width,
-      g_size                                  => g_size,
+    gen_inferred_fifo : if g_with_fifo_inferred generate
+      cmp_fwft_sync_fifo : inferred_sync_fifo
+      generic map (
+        g_data_width                            => g_data_width,
+        g_size                                  => g_size,
 
-      g_with_empty                            => g_with_rd_empty or g_with_wr_empty,
-      g_with_full                             => g_with_rd_full or g_with_wr_full,
-      g_with_almost_empty                     => g_with_rd_almost_empty or g_with_wr_almost_empty,
-      g_with_almost_full                      => g_with_rd_almost_full or g_with_wr_almost_full,
-      g_with_count                            => g_with_rd_count or g_with_wr_count,
+        g_with_empty                            => g_with_rd_empty or g_with_wr_empty,
+        g_with_full                             => g_with_rd_full or g_with_wr_full,
+        g_with_almost_empty                     => g_with_rd_almost_empty or g_with_wr_almost_empty,
+        g_with_almost_full                      => g_with_rd_almost_full or g_with_wr_almost_full,
+        g_with_count                            => g_with_rd_count or g_with_wr_count,
 
-      g_with_fifo_inferred                    => g_with_fifo_inferred,
+        g_almost_empty_threshold                => g_almost_empty_threshold,
+        g_almost_full_threshold                 => g_almost_full_threshold
+      )
+      port map(
+        rst_n_i                                 => wr_rst_n_i,
 
-      g_almost_empty_threshold                => g_almost_empty_threshold,
-      g_almost_full_threshold                 => g_almost_full_threshold
-    )
-    port map(
-      rst_n_i                                 => wr_rst_n_i,
+        clk_i                                   => wr_clk_i,
+        d_i                                     => wr_data_i,
+        we_i                                    => wr_en_i,
+        count_o                                 => fifo_count_int,
 
-      clk_i                                   => wr_clk_i,
-      d_i                                     => wr_data_i,
-      we_i                                    => wr_en_i,
-      count_o                                 => fifo_count_int,
+        q_o                                     => rd_data_o,
+        rd_i                                    => fwft_rd_en,
 
-      q_o                                     => rd_data_o,
-      rd_i                                    => fwft_rd_en,
+        empty_o                                 => fwft_rd_empty,
+        full_o                                  => wr_full_o,
 
-      empty_o                                 => fwft_rd_empty,
-      full_o                                  => wr_full_o,
+        almost_empty_o                          => fifo_almost_empty_int,
+        almost_full_o                           => fifo_almost_full_int
+      );
+    end generate;
 
-      almost_empty_o                          => fifo_almost_empty_int,
-      almost_full_o                           => fifo_almost_full_int
-    );
+    gen_generic_fifo : if (not g_with_fifo_inferred) generate
+      cmp_fwft_sync_fifo : generic_sync_fifo
+      generic map (
+        g_data_width                            => g_data_width,
+        g_size                                  => g_size,
+
+        g_with_empty                            => g_with_rd_empty or g_with_wr_empty,
+        g_with_full                             => g_with_rd_full or g_with_wr_full,
+        g_with_almost_empty                     => g_with_rd_almost_empty or g_with_wr_almost_empty,
+        g_with_almost_full                      => g_with_rd_almost_full or g_with_wr_almost_full,
+        g_with_count                            => g_with_rd_count or g_with_wr_count,
+
+        g_almost_empty_threshold                => g_almost_empty_threshold,
+        g_almost_full_threshold                 => g_almost_full_threshold
+      )
+      port map(
+        rst_n_i                                 => wr_rst_n_i,
+
+        clk_i                                   => wr_clk_i,
+        d_i                                     => wr_data_i,
+        we_i                                    => wr_en_i,
+        count_o                                 => fifo_count_int,
+
+        q_o                                     => rd_data_o,
+        rd_i                                    => fwft_rd_en,
+
+        empty_o                                 => fwft_rd_empty,
+        full_o                                  => wr_full_o,
+
+        almost_empty_o                          => fifo_almost_empty_int,
+        almost_full_o                           => fifo_almost_full_int
+      );
+    end generate;
 
     wr_count_o <= fifo_count_int;
     rd_count_o <= fifo_count_int;
