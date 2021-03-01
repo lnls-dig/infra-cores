@@ -1,3 +1,5 @@
+files = ["platform_generic_pkg.vhd"]
+
 if target=="xilinx":
 	modules = {"local" : "xilinx"}
 else:
