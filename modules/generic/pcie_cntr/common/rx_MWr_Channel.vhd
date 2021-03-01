@@ -251,7 +251,7 @@ begin
 -- and PCIe core data pipeline
 
   elbuf:
-    generic_sync_fifo
+    inferred_sync_fifo
       generic map(
         g_data_width => C_ELBUF_WIDTH,
         g_size => 32,
