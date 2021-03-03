@@ -147,7 +147,6 @@ architecture rtl of rtm8sfp_ohwr_serial_regs is
                 to_integer(counter(counter'left downto 2))) <= reg_dout;
             reg_pl <= '0';
             reg_str_n <= '1';
-            reg_oe_n <= '0';
 
             -- last bit needs to assert strobe to serial data is latched
             -- onto parallel output
@@ -161,6 +160,9 @@ architecture rtl of rtm8sfp_ohwr_serial_regs is
             reg_str_n <= '1';
 
             if counter(counter'left downto 2) = to_unsigned(val_num_bits, counter'length)-1 then
+              -- Enable output onle after the parallel registers are loaded by
+              -- reg_str assertion.
+              reg_oe_n <= '0';
               last := true;
             end if;
           when others =>
