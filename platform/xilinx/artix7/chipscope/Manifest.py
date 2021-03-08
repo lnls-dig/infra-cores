@@ -18,3 +18,9 @@ files = [
     "vio/chipscope_vio_8.vhd",
     "vio/chipscope_vio_8.ngc"
 ]
+
+modules = {
+    "local": [
+        "ila_t8_d256_s8192_cap",
+    ]
+}
