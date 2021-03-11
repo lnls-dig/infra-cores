@@ -22,5 +22,6 @@ files = [
 modules = {
     "local": [
         "ila_t8_d256_s8192_cap",
+        "vio_din2_w64_dout2_w64",
     ]
 }
