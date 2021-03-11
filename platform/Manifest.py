@@ -1,6 +1,11 @@
 files = ["platform_generic_pkg.vhd"]
 
-if target=="xilinx":
-	modules = {"local" : "xilinx"}
+if action=="synthesis":
+    if target=="xilinx":
+        modules = {"local": "xilinx"}
+    else:
+        print ("WARNING: FPGA family not supported. Some functionality might be unavailable")
+elif action=="simulation":
+    modules = {"local": "simulation"}
 else:
-    print ("WARNING: FPGA family not supported. Some functionality might be unavailable")
+    print ("WARNING: action {} not supported".format(action))
