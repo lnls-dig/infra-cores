@@ -7,12 +7,12 @@ if (action == "synthesis" ):
     else:
         print ("WARNING: Device not supported for synthesis using the FMC150 core!")
 elif (action == "simulation"):
-    if (target == "xilinx"):
-        modules = {"local" : [ "adc", "fmc150", "sim"]}
-    else:
+    try:
+        if (target == "xilinx"):
+            modules = {"local" : [ "adc", "fmc150", "sim"]}
+        else:
+            print ("WARNING: Device not supported for simulation using the FMC150 core!")
+    except NameError:
         print ("WARNING: Device not supported for simulation using the FMC150 core!")
 else:
     print ("WARNING: Device not supported using the FMC150 core!")
-
-
-
