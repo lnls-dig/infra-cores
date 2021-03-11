@@ -36,3 +36,6 @@ work/
 *.edif
 *.mif
 .Xil/
+
+/platform/xilinx/artix7/chipscope/ila_t8_d256_s8192_cap
+/platform/xilinx/artix7/chipscope/vio_din2_w64_dout2_w64
