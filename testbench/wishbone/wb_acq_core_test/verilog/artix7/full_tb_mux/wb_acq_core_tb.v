@@ -1655,7 +1655,8 @@ module wb_acq_core_tb;
   generate
     for (acq_ch = 0; acq_ch < c_n_chan; acq_ch = acq_ch + 1) begin
       initial
-        acq_channel_sample_size[acq_ch] = dut.g_facq_channels[acq_ch].width;
+        acq_channel_sample_size[acq_ch] = (dut.g_facq_channels[acq_ch].width > DDR3_PAYLOAD_WIDTH)?
+            DDR3_PAYLOAD_WIDTH : dut.g_facq_channels[acq_ch].width;
     end
   endgenerate
 
