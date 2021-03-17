@@ -171,7 +171,6 @@ architecture rtl of acq_fsm is
   -- Pre/Post trigger and shots counters
   signal curr_num_coalesce_log2             : integer := 0;
   signal curr_num_coalesce                  : integer := 0;
-  signal curr_num_coalesce_minus_1          : t_acq_coalesce;
   signal pre_trig_samples_shift_s           : std_logic_vector(c_acq_samples_size-1 downto 0);
   signal post_trig_samples_shift_s          : std_logic_vector(c_acq_samples_size-1 downto 0);
   signal pre_trig_samples_shift             : unsigned(c_acq_samples_size-1 downto 0);
@@ -496,9 +495,6 @@ begin
       if fs_rst_n = '0' then
         acq_fsm_current_state <= IDLE;
 
-        -- Intermediate results for better timing
-        curr_num_coalesce_minus_1 <= to_unsigned(0, curr_num_coalesce_minus_1'length);
-
         -- Outputs
         shots_decr            <= '0';
         acq_in_pre_trig       <= '0';
@@ -517,10 +513,6 @@ begin
         pre_trig_done_ext         <= '0';
         wait_trig_skip_done_ext   <= '0';
         post_trig_done_ext        <= '0';
-
-        -- Intermediate results for better timing
-        curr_num_coalesce_minus_1 <= to_unsigned(curr_num_coalesce,
-                                        curr_num_coalesce_minus_1'length)-1;
 
         -- FSM transitions
         case acq_fsm_current_state is
@@ -544,7 +536,7 @@ begin
             -- Only at the start of the acquisition, wait until we are
             -- at the beginning of the atom word. This will assure us that
             -- we are acquiring the complete word, at all times.
-            if acq_id_i = curr_num_coalesce_minus_1 and acq_dvalid_i = '1' then
+            if acq_id_i = to_unsigned(0, acq_id'length) and acq_dvalid_i = '1' then
               acq_fsm_current_state <= PRE_TRIG;
 
               -- FSM outputs
