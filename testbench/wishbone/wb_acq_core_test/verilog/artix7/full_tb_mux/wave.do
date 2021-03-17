@@ -601,6 +601,8 @@ add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_trig_o
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/multishot_buffer_sel_o
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/samples_wr_en_o
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/curr_num_coalesce_log2
+add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/curr_num_coalesce
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_end
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_end_t
 add wave -noupdate /wb_acq_core_tb/dut/cmp_wb_facq_core_mux/gen_facq_core(0)/cmp_wb_facq_core/cmp_wb_acq_core/cmp_acq_fsm/acq_fsm_req_rst
@@ -1788,7 +1790,7 @@ add wave -noupdate /wb_acq_core_tb/cmp1_data_checker/chk_pass_o
 add wave -noupdate /wb_acq_core_tb/cmp1_data_checker/exp_addr
 add wave -noupdate /wb_acq_core_tb/cmp1_data_checker/act_addr
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {13367587503 fs} 0}
+WaveRestoreCursors {{Cursor 1} {185698702499 fs} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 295
 configure wave -valuecolwidth 280
@@ -1804,4 +1806,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {13151319321 fs} {13367587503 fs}
+WaveRestoreZoom {185644548168 fs} {185948540545 fs}
