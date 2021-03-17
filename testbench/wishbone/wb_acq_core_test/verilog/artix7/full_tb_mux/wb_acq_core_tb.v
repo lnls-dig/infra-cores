@@ -827,7 +827,7 @@ module wb_acq_core_tb;
   );
 
   // DUT
-  wb_facq_core_mux_plain #(
+  wb_facq_core_mux_plain_wrapper #(
     .g_ddr_addr_width(ACQ_ADDR_WIDTH),
     .g_acq_addr_width(ACQ_ADDR_WIDTH),
     .g_fifo_fc_size(ACQ_FIFO_SIZE),

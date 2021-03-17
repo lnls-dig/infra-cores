@@ -25,7 +25,7 @@ modules = {"local" : [
                     "../../../../../../platform/xilinx/artix7/afc_v3/pcie_core"]}
 
 files = ["wb_acq_core_tb.v", "axi_interconnect_wrapper.vhd", "ddr_core_wrapper.vhd",
-			"clk_rst.v", "../../../../../../sim/wishbone_test_master.v",
+            "acq_core_wrapper.vhd", "clk_rst.v", "../../../../../../sim/wishbone_test_master.v",
             "glbl.v", "../../../../../../modules/wishbone/ifc_wishbone_pkg.vhd",
             "../../../../../../platform/xilinx/artix7/afc_v3/ipcores_pkg.vhd",
          ]
