@@ -16,7 +16,8 @@ entity xwb_trigger_iface is
       g_interface_mode       : t_wishbone_interface_mode      := CLASSIC;
       g_address_granularity  : t_wishbone_address_granularity := WORD;
       g_sync_edge            : string                         := "positive";
-      g_trig_num             : natural range 1 to 24          := 8
+      g_trig_num             : natural range 1 to 24          := 8;
+      g_trigger_tristate     : boolean                        := true
     );
   port
     (
@@ -37,7 +38,11 @@ entity xwb_trigger_iface is
       -- External ports
       -----------------------------
 
+      -- only used if g_trigger_tristate = true
       trig_b     : inout std_logic_vector(g_trig_num-1 downto 0);
+      -- only used if g_trigger_tristate = false
+      trig_i     : in    std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+      trig_o     : out   std_logic_vector(g_trig_num-1 downto 0);
       trig_dir_o : out   std_logic_vector(g_trig_num-1 downto 0);
 
       -----------------------------
@@ -65,7 +70,8 @@ begin
       g_interface_mode       => g_interface_mode,
       g_address_granularity  => g_address_granularity,
       g_sync_edge            => g_sync_edge,
-      g_trig_num             => g_trig_num
+      g_trig_num             => g_trig_num,
+      g_trigger_tristate     => g_trigger_tristate
     )
     port map (
       clk_i       => clk_i,
@@ -86,6 +92,8 @@ begin
       wb_stall_o => wb_slv_o.stall,
 
       trig_b      => trig_b,
+      trig_i      => trig_i,
+      trig_o      => trig_o,
       trig_dir_o  => trig_dir_o,
       trig_out_o  => trig_out_o,
       trig_in_i   => trig_in_i,

@@ -62,6 +62,7 @@ entity wb_trigger is
     g_with_external_iface  : boolean                        := false;
     g_sync_edge            : string                         := "positive";
     g_trig_num             : natural range 1 to 24          := 8; -- channels facing outside the FPGA. Limit defined by wb_trigger_regs.vhd
+    g_trigger_tristate     : boolean                        := true; -- enable trigger tristate buffer or not
     g_intern_num           : natural range 1 to 24          := 8; -- channels facing inside the FPGA. Limit defined by wb_trigger_regs.vhd
     g_rcv_intern_num       : natural range 1 to 24          := 2; -- signals from inside the FPGA that can be used as input at a rcv mux.
                                                                   -- Limit defined by wb_trigger_regs.vhd
@@ -113,7 +114,11 @@ entity wb_trigger is
     ---- External ports
     -------------------------------
 
+    -- only used if g_trigger_tristate = true
     trig_b      : inout std_logic_vector(g_trig_num-1 downto 0);
+    -- only used if g_trigger_tristate = false
+    trig_i      : in    std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+    trig_o      : out   std_logic_vector(g_trig_num-1 downto 0);
     trig_dir_o  : out   std_logic_vector(g_trig_num-1 downto 0);
 
     -------------------------------
@@ -168,7 +173,8 @@ begin  -- architecture rtl
         g_interface_mode       => g_interface_mode,
         g_address_granularity  => g_address_granularity,
         g_sync_edge            => g_sync_edge,
-        g_trig_num             => g_trig_num
+        g_trig_num             => g_trig_num,
+        g_trigger_tristate     => g_trigger_tristate
       )
       port map (
         clk_i      => clk_i,
@@ -190,6 +196,8 @@ begin  -- architecture rtl
         wb_stall_o => wb_trigger_iface_stall_o,
 
         trig_b      => trig_b,
+        trig_i      => trig_i,
+        trig_o      => trig_o,
         trig_dir_o  => trig_dir_o,
         trig_out_o  => trig_out_resolved,
         trig_in_i   => trig_in_resolved,

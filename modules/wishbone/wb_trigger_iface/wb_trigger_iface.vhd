@@ -62,7 +62,8 @@ entity wb_trigger_iface is
     g_interface_mode       : t_wishbone_interface_mode      := CLASSIC;
     g_address_granularity  : t_wishbone_address_granularity := WORD;
     g_sync_edge            : string                         := "positive";
-    g_trig_num             : natural range 1 to 24          := 8 -- channels facing outside the FPGA. Limit defined by wb_slave_trigger.vhd
+    g_trig_num             : natural range 1 to 24          := 8; -- channels facing outside the FPGA. Limit defined by wb_slave_trigger.vhd
+    g_trigger_tristate     : boolean                        := true
     );
 
   port (
@@ -92,7 +93,11 @@ entity wb_trigger_iface is
     ---- External ports
     -------------------------------
 
+    -- only used if g_trigger_tristate = true
     trig_b      : inout std_logic_vector(g_trig_num-1 downto 0);
+    -- only used if g_trigger_tristate = false
+    trig_i      : in    std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
+    trig_o      : out   std_logic_vector(g_trig_num-1 downto 0);
     trig_dir_o  : out   std_logic_vector(g_trig_num-1 downto 0);
 
     -------------------------------
@@ -605,13 +610,24 @@ begin  -- architecture rtl
     -- Connects cores to backplane
     --------------------------------
 
-    cmp_iobuf : iobuf
-      port map (
-        o  => extended_rcv_buff(i),     -- Buffer output for further use
-        io => trig_b(i),                -- inout (connect directly to top-level port)
-        i  => trig_data_ext(i),         -- Buffer input
-        t  => trig_dir_int_buff(i)      -- 3-state enable input, high=input, low=output
-        );
+    gen_trigger_tristate : if g_trigger_tristate generate
+
+      cmp_iobuf : iobuf
+        port map (
+          o  => extended_rcv_buff(i),     -- Buffer output for further use
+          io => trig_b(i),                -- inout (connect directly to top-level port)
+          i  => trig_data_ext(i),         -- Buffer input
+          t  => trig_dir_int_buff(i)      -- 3-state enable input, high=input, low=output
+          );
+
+    end generate;
+
+    gen_trigger_bidir : if not g_trigger_tristate generate
+
+      trig_o(i) <= trig_data_ext(i);
+      extended_rcv_buff(i) <= trig_i(i);
+
+    end generate;
 
     trig_dbg_o(i) <= extended_rcv_buff(i);
     extended_rcv(i) <= extended_rcv_buff(i) when trig_dir_int(i) = c_trig_dir_fpga_input
