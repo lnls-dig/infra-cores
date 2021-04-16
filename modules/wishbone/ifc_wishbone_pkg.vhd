@@ -3092,6 +3092,7 @@ package ifc_wishbone_pkg is
     -- only used if g_trigger_tristate = false
     trig_i                                    : in    std_logic_vector(g_trig_num-1 downto 0) := (others => '0');
     trig_o                                    : out   std_logic_vector(g_trig_num-1 downto 0);
+    trig_dir_o                                : out   std_logic_vector(g_trig_num-1 downto 0);
 
     -----------------------------
     -- Internal ports
