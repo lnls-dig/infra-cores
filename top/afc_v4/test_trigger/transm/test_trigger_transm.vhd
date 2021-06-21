@@ -3,16 +3,15 @@
 -- Project    :
 -------------------------------------------------------------------------------
 -- File       : test_trigger_transm.vhd
--- Author     : Vitor Finotti Ferreira  <vfinotti@finotti-Inspiron-7520>
+-- Author     : Lucas Russo
 -- Company    : Brazilian Synchrotron Light Laboratory, LNLS/CNPEM
--- Created    : 2015-12-09
--- Last update: 2016-01-27
+-- Created    : 2021-06-21
 -- Platform   :
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
 -- Description:
 -------------------------------------------------------------------------------
--- Copyright (c) 2015 Brazilian Synchrotron Light Laboratory, LNLS/CNPEM
+-- Copyright (c) 2021 Brazilian Synchrotron Light Laboratory, LNLS/CNPEM
 
 -- This program is free software: you can redistribute it and/or
 -- modify it under the terms of the GNU Lesser General Public License
@@ -30,7 +29,7 @@
 -------------------------------------------------------------------------------
 -- Revisions  :
 -- Date        Version  Author  Description
--- 2015-12-09  1.0      vfinotti        Created
+-- 2021-06-21  1.0      lerwys        Created
 -------------------------------------------------------------------------------
 
 library ieee;
@@ -38,13 +37,13 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity test_trigger_transm is
-
   port (
     sys_clk_p_i : in  std_logic;
     sys_clk_n_i : in  std_logic;
-    trigger_o   : out std_logic_vector(7 downto 0);
-    direction_o : out std_logic_vector(7 downto 0));
-
+    trig_i      : in  std_logic_vector(7 downto 0);
+    trig_o      : out std_logic_vector(7 downto 0);
+    trig_dir_o  : out std_logic_vector(7 downto 0)
+);
 end entity test_trigger_transm;
 
 architecture structure of test_trigger_transm is
@@ -53,7 +52,6 @@ architecture structure of test_trigger_transm is
   constant c_count_width      : positive := 32;
   constant c_width_bus_size   : positive := 8;
 
-  signal direction      : std_logic_vector(7 downto 0);
   signal length         : std_logic_vector(c_glitch_len_width-1 downto 0);
   signal trigger_buf    : std_logic_vector(7 downto 0);
   signal pulse          : std_logic_vector(7 downto 0);
@@ -168,7 +166,7 @@ architecture structure of test_trigger_transm is
 
 begin  -- architecture behav
 
-  trigger_o <= pulse_extended;
+  trig_o <= pulse_extended;
 
   -- Clock generation
   cmp_clk_gen : clk_gen
@@ -191,7 +189,7 @@ begin  -- architecture behav
 
   generate_counter : for i in c_glitch_len_width-1 downto 0 generate
 
-    counter_simplei : counter_simple
+    counter_simple_1 : counter_simple
       generic map (
         g_output_width => c_count_width)
       port map (
@@ -254,7 +252,7 @@ begin  -- architecture behav
     probe_in1                       => (others => '0'),
     probe_out0(7 downto 0)          => length,
     probe_out0(15 downto 8)         => pulse_width,
-    probe_out0(23 downto 16)        => direction_o,
+    probe_out0(23 downto 16)        => trig_dir_o,
     probe_out0(63 downto 24)        => open,
     probe_out1                      => open
   );

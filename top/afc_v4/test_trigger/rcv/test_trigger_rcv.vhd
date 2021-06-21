@@ -2,16 +2,15 @@
 -- Project    :
 -------------------------------------------------------------------------------
 -- File       : test_trigger_rcv.vhd
--- Author     : aylons  <aylons@LNLS190>
+-- Author     : Lucas Russo
 -- Company    :
--- Created    : 2015-11-11
--- Last update: 2016-04-25
+-- Created    : 2021-06-21
 -- Platform   :
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
--- Description: Top design for testing the trigger receiver in the AFCv3.1
+-- Description: Top design for testing the trigger receiver in the AFCv4
 -------------------------------------------------------------------------------
--- Copyright (c) 2015
+-- Copyright (c) 2021 Brazilian Synchrotron Light Laboratory, LNLS/CNPEM
 
 -- This program is free software: you can redistribute it and/or
 -- modify it under the terms of the GNU Lesser General Public License
@@ -30,7 +29,7 @@
 -------------------------------------------------------------------------------
 -- Revisions  :
 -- Date        Version  Author          Description
--- 2015-11-11  1.0      aylons          Created
+-- 2021-06-21  1.0      lerwys          Created
 -------------------------------------------------------------------------------
 
 library ieee;
@@ -50,8 +49,9 @@ entity test_trigger_rcv is
   port(
     sys_clk_p_i : in  std_logic;
     sys_clk_n_i : in  std_logic;
-    trigger_i   : in  std_logic_vector(7 downto 0);
-    direction_o : out std_logic_vector(7 downto 0);
+    trig_i      : in  std_logic_vector(7 downto 0);
+    trig_o      : out std_logic_vector(7 downto 0);
+    trig_dir_o  : out std_logic_vector(7 downto 0);
     pulse_o     : out std_logic_vector(7 downto 0)
     );
 end test_trigger_rcv;
@@ -62,7 +62,6 @@ architecture structural of test_trigger_rcv is
   constant c_count_width      : positive := 128;
   constant c_num_clk          : positive := 1;
 
-  signal direction    : std_logic_vector(7 downto 0);
   signal length       : std_logic_vector(c_glitch_len_width-1 downto 0) := "11111111";
   signal pulse        : std_logic_vector(7 downto 0);
 
@@ -236,10 +235,13 @@ begin
         clk_i   => clk_100mhz,
         rst_n_i => rst_n,
         len_i   => length,
-        data_i  => trigger_i(i),
+        data_i  => trig_i(i),
         pulse_o => pulse(i));
 
+    trig_o(i) <= '0';
+
   end generate gen_trigger;
+
 
   -- Connect pulses signals to the output
   pulse_o <= pulse;
@@ -274,7 +276,7 @@ begin
         clk                         => clk_100mhz,
         probe0(127 downto 0)        =>count_success(7),
         probe0(255 downto 128)      =>count_fail(7),
-        probe1                      => trigger_i
+        probe1                      => trig_i
      );
 
   ila_core_inst_1 : entity work.ila_t8_d256_s8192_cap
@@ -289,7 +291,7 @@ begin
     port map (
         clk                         => clk_100mhz,
         probe0(7 downto 0)          => pulse,
-        probe0(15 downto 8)         => trigger_i,
+        probe0(15 downto 8)         => trig_i,
         probe0(255 downto 16)       => (others => '0'),
         probe1(2 downto 0)          => std_logic_vector(current_s),
         probe1(7 downto 3)          => (others => '0')
@@ -301,7 +303,7 @@ begin
     probe_in0                       => (others => '0'),
     probe_in1                       => (others => '0'),
     probe_out0(7 downto 0)          => length,
-    probe_out0(15 downto 8)         => direction_o,
+    probe_out0(15 downto 8)         => trig_dir_o,
     probe_out0(63 downto 16)        => open,
     probe_out1                      => open
   );
