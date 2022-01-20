@@ -46,3 +46,6 @@ work/
 /platform/xilinx/artix7/chipscope/vio_din2_w64_dout2_w64
 !/platform/xilinx/artix7/chipscope/vio_din2_w64_dout2_w64/vio_din2_w64_dout2_w64.xci
 !/platform/xilinx/artix7/chipscope/vio_din2_w64_dout2_w64/Manifest.py
+/platform/xilinx/artix7/chipscope/vio_din2_w128_dout2_w128
+!/platform/xilinx/artix7/chipscope/vio_din2_w128_dout2_w128/vio_din2_w128_dout2_w128.xci
+!/platform/xilinx/artix7/chipscope/vio_din2_w128_dout2_w128/Manifest.py
