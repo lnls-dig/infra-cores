@@ -212,8 +212,8 @@ peripheral {
     };
 
     field {
-      name = "Channel selection for internal trigger";
-      description = "00: channel 1\n01: channel 2\n10: channel 3\nn: channel n+1";
+      name = "Atom selection for internal trigger (atom within the channel selected by DTRIG_WHICH)";
+      description = "00: atom 1\n01: atom 2\n10: atom 3\nn: atom n+1";
       prefix = "int_trig_sel";
       type = SLV;
       size = 5;
