@@ -1,4 +1,5 @@
-modules = { "local" : ["reset_synch",
+modules = { "local" : ["anti_windup_accumulator",
+                       "reset_synch",
                        "pulse2level",
                        "pulse2square",
                        "trigger_rcv",
