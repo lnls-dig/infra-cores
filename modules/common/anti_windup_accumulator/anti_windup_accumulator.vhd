@@ -46,6 +46,10 @@ architecture behave of anti_windup_accumulator is
   constant MAX_Q              : signed(g_Q_WIDTH-1 downto 0)  := ('0', others => '1');
   constant MIN_Q              : signed(g_Q_WIDTH-1 downto 0)  := ('1', others => '0');
 
+  -- signals
+  -- acc_s is one bit larger than q_o
+  signal acc_s                : signed(q_o'length downto 0) := (others => '0');
+
 begin
 
   -- assertions
@@ -63,22 +67,22 @@ begin
 
   -- processes
   process (clk_i)
-    -- q_v is one bit larger than q_o
-    variable q_v              : signed(q_o'length downto 0)   := (others => '0');
+    -- acc_v is one bit larger than q_o
+    variable acc_v            : signed(q_o'length downto 0)   := (others => '0');
 
   begin
     if (rising_edge(clk_i)) then
 
       if (rst_n_i = '0') then
-        q_v := (others => '0');
+        acc_v := (others => '0');
         valid_o <= '0';
 
       elsif (clear_i = '1') then
-        q_v := (others => '0');
+        acc_v := (others => '0');
         valid_o <= '0';
 
       elsif (sum_i = '1') then
-        q_v := q_v + a_i;
+        acc_v := acc_s + a_i;
         -- anti-windup
         if (q_v < g_ANTI_WINDUP_LOWER_LIMIT) then
           q_v := g_ANTI_WINDUP_LOWER_LIMIT(q_o'length downto 0);
@@ -92,9 +96,11 @@ begin
 
       end if;
 
-      q_o <= q_v(q_o'length-1 downto 0);
+      acc_s <= acc_v;
 
     end if;
   end process;
+
+  q_o <= acc_s(q_o'length-1 downto 0);
 
 end architecture behave;
