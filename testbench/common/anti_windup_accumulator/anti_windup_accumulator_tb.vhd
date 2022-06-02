@@ -57,8 +57,8 @@ architecture anti_windup_accumulator_tb_arch of anti_windup_accumulator_tb is
 
   constant c_A_WIDTH                  : natural                       := 16;
   constant c_Q_WIDTH                  : natural                       := 16;
-  constant c_ANTI_WINDUP_UPPER_LIMIT  : signed(31 downto 0)           := to_signed(4000, 32);
-  constant c_ANTI_WINDUP_LOWER_LIMIT  : signed(31 downto 0)           := to_signed(-3000, 32);
+  constant c_ANTI_WINDUP_UPPER_LIMIT  : integer                       := 4000;
+  constant c_ANTI_WINDUP_LOWER_LIMIT  : integer                       := -3000;
 
   constant c_N                        : natural                       := 100;
 
@@ -120,7 +120,7 @@ begin
         report
           "Wrong accumulated value: " & integer'image(to_integer(q_s)) &
           " (expected to be clamped at " &
-          integer'image(to_integer(c_ANTI_WINDUP_UPPER_LIMIT)) & ")"
+          integer'image(c_ANTI_WINDUP_UPPER_LIMIT) & ")"
         severity failure;
     end if;
 
@@ -167,7 +167,7 @@ begin
         report
           "Wrong accumulated value: " & integer'image(to_integer(q_s)) &
           " (expected to be clamped at " &
-          integer'image(to_integer(c_ANTI_WINDUP_LOWER_LIMIT)) & ")"
+          integer'image(c_ANTI_WINDUP_LOWER_LIMIT) & ")"
         severity failure;
     end if;
 

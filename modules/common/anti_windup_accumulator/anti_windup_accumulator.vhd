@@ -24,8 +24,8 @@ entity anti_windup_accumulator is
   (
     g_A_WIDTH                 : natural;                          -- input width
     g_Q_WIDTH                 : natural;                          -- output width
-    g_ANTI_WINDUP_UPPER_LIMIT : signed(31 downto 0);              -- anti-windup upper limit
-    g_ANTI_WINDUP_LOWER_LIMIT : signed(31 downto 0)               -- anti-windup lower limit
+    g_ANTI_WINDUP_UPPER_LIMIT : integer;                          -- anti-windup upper limit
+    g_ANTI_WINDUP_LOWER_LIMIT : integer                           -- anti-windup lower limit
   );
   port
   (
@@ -43,8 +43,8 @@ end anti_windup_accumulator;
 
 architecture behave of anti_windup_accumulator is
   -- constants
-  constant MAX_Q              : signed(g_Q_WIDTH-1 downto 0)  := ('0', others => '1');
-  constant MIN_Q              : signed(g_Q_WIDTH-1 downto 0)  := ('1', others => '0');
+  constant MAX_Q              : signed(q_o'length-1 downto 0)  := ('0', others => '1');
+  constant MIN_Q              : signed(q_o'length-1 downto 0)  := ('1', others => '0');
 
   -- signals
   -- acc_s is one bit larger than q_o
@@ -57,11 +57,11 @@ begin
     report "g_ANTI_WINDUP_UPPER_LIMIT <= g_ANTI_WINDUP_LOWER_LIMIT!"
     severity error;
 
-  assert (g_ANTI_WINDUP_UPPER_LIMIT <= MAX_Q)
+  assert (g_ANTI_WINDUP_UPPER_LIMIT <= to_integer(MAX_Q))
     report "g_ANTI_WINDUP_UPPER_LIMIT > MAX_Q!"
     severity error;
 
-  assert (g_ANTI_WINDUP_LOWER_LIMIT >= MIN_Q)
+  assert (g_ANTI_WINDUP_LOWER_LIMIT >= to_integer(MIN_Q))
     report "g_ANTI_WINDUP_LOWER_LIMIT < MIN_Q!"
     severity error;
 
@@ -84,10 +84,10 @@ begin
       elsif (sum_i = '1') then
         acc_v := acc_s + a_i;
         -- anti-windup
-        if (q_v < g_ANTI_WINDUP_LOWER_LIMIT) then
-          q_v := g_ANTI_WINDUP_LOWER_LIMIT(q_o'length downto 0);
-        elsif (q_v > g_ANTI_WINDUP_UPPER_LIMIT) then
-          q_v := g_ANTI_WINDUP_UPPER_LIMIT(q_o'length downto 0);
+        if (acc_v < to_signed(g_ANTI_WINDUP_LOWER_LIMIT, 32)) then
+          acc_v := to_signed(g_ANTI_WINDUP_LOWER_LIMIT, 32)(q_o'length downto 0);
+        elsif (acc_v > to_signed(g_ANTI_WINDUP_UPPER_LIMIT, 32)) then
+          acc_v := to_signed(g_ANTI_WINDUP_UPPER_LIMIT, 32)(q_o'length downto 0);
         end if;
         valid_o <= '1';
 
