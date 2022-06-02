@@ -221,4 +221,25 @@ package ifc_common_pkg is
   );
   end component;
 
+  component anti_windup_accumulator
+    generic
+    (
+      g_A_WIDTH                              : natural;                           -- input width
+      g_Q_WIDTH                              : natural;                           -- output width
+      g_ANTI_WINDUP_UPPER_LIMIT              : signed(31 downto 0);               -- anti-windup upper limit
+      g_ANTI_WINDUP_LOWER_LIMIT              : signed(31 downto 0)                -- anti-windup lower limit
+    );
+    port
+    (
+      clk_i                                  : in std_logic;                      -- clock
+      rst_n_i                                : in std_logic;                      -- reset
+
+      a_i                                    : in signed(g_A_WIDTH-1 downto 0);   -- input a
+      clear_i                                : in std_logic;                      -- clear
+      sum_i                                  : in std_logic;                      -- sum
+      q_o                                    : out signed(g_Q_WIDTH-1 downto 0);  -- output q
+      valid_o                                : out std_logic                      -- valid
+    );
+  end component anti_windup_accumulator;
+
 end ifc_common_pkg;
