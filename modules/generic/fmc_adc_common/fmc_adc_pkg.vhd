@@ -651,9 +651,9 @@ package body fmc_adc_pkg is
 
     -- If there are remaining data chains unclocked, assign
     -- them to the last usable clock
-    for i in data_chain_idx to c_num_chains-1 loop
-      if data_chains(i) = '1' then
-        intercon(i) := data_chain_idx-1;
+    for idx in data_chain_idx to c_num_chains-1 loop
+      if data_chains(idx) = '1' then
+        intercon(idx) := data_chain_idx-1;
       end if;
     end loop;
 
@@ -687,8 +687,6 @@ package body fmc_adc_pkg is
     return boolean
   is
     constant c_num_chains : natural := map_chain'length;
-    variable i : natural := 0;
-    variable j : natural := 0;
     variable result : boolean := true;
   begin
     for i in 0 to c_num_chains-1 loop
@@ -715,7 +713,6 @@ package body fmc_adc_pkg is
   is
     constant c_num_chains : natural := clock_chains'length;
     variable intercon : t_chain_intercon(c_num_chains-1 downto 0);
-    variable i : natural := 0;
   begin
     -- Check for the sizes
     assert (clock_chains'length = data_chains'length) report
