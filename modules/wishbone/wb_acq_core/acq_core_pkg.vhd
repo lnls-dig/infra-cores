@@ -237,11 +237,11 @@ package acq_core_pkg is
   -- Functions declaration
   ----------------------------
   function f_extract_property_array(acq_chan_param_array : t_acq_chan_param_array;
-      property : t_acq_chan_property)
+      chan_property : t_acq_chan_property)
     return t_property_value_array;
 
   function f_acq_chan_find(acq_chan_param_array : t_acq_chan_param_array;
-      find_widest : boolean; property : t_acq_chan_property)
+      find_widest : boolean; chan_property : t_acq_chan_property)
     return natural;
 
   --Find the widest channel
@@ -1139,7 +1139,7 @@ end acq_core_pkg;
 package body acq_core_pkg is
 
   function f_extract_property_array(acq_chan_param_array : t_acq_chan_param_array;
-      property : t_acq_chan_property)
+      chan_property : t_acq_chan_property)
     return t_property_value_array
   is
     variable property_value_array : t_property_value_array(acq_chan_param_array'length-1 downto 0) :=
@@ -1148,7 +1148,7 @@ package body acq_core_pkg is
     -- Generate arrays depending on the selected property
     loop_property_array : for i in 0 to property_value_array'length-1 loop
 
-      case property is
+      case chan_property is
           when WIDTH =>
               property_value_array(i) := to_integer(acq_chan_param_array(i).width);
           when WIDTH_BYTES =>
@@ -1171,15 +1171,15 @@ package body acq_core_pkg is
 
   --Find the widest (find_widest = true) or narrowest (find_widest = false) channel
   function f_acq_chan_find(acq_chan_param_array : t_acq_chan_param_array;
-      find_widest : boolean; property : t_acq_chan_property)
+      find_widest : boolean; chan_property : t_acq_chan_property)
     return natural
   is
     variable property_current_best : natural;
     variable property_array : t_property_value_array(acq_chan_param_array'length-1 downto 0);
   begin
 
-    -- Fill array with property values
-    property_array := f_extract_property_array(acq_chan_param_array, property);
+    -- Fill array with chan_property values
+    property_array := f_extract_property_array(acq_chan_param_array,chan_property);
 
     -- Initialize current_best with the first element in the array
     property_current_best := property_array(0);
