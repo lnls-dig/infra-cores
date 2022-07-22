@@ -37,7 +37,6 @@ entity anti_windup_accumulator is
     sum_i                     : in std_logic;                     -- sum
     q_o                       : out signed(g_Q_WIDTH-1 downto 0); -- output q
     valid_o                   : out std_logic                     -- valid
-
   );
 end anti_windup_accumulator;
 
@@ -54,15 +53,18 @@ begin
 
   -- assertions
   assert (g_ANTI_WINDUP_UPPER_LIMIT > g_ANTI_WINDUP_LOWER_LIMIT)
-    report "g_ANTI_WINDUP_UPPER_LIMIT <= g_ANTI_WINDUP_LOWER_LIMIT!"
+    report "g_ANTI_WINDUP_UPPER_LIMIT (" & integer'image(g_ANTI_WINDUP_UPPER_LIMIT) & ") " &
+      "<= g_ANTI_WINDUP_LOWER_LIMIT (" & integer'image(g_ANTI_WINDUP_LOWER_LIMIT) & ")!"
     severity error;
 
   assert (g_ANTI_WINDUP_UPPER_LIMIT <= to_integer(MAX_Q))
-    report "g_ANTI_WINDUP_UPPER_LIMIT > MAX_Q!"
+    report "g_ANTI_WINDUP_UPPER_LIMIT (" & integer'image(g_ANTI_WINDUP_UPPER_LIMIT) & ") " &
+      "> MAX_Q (" & integer'image(to_integer(MAX_Q)) & ")!"
     severity error;
 
   assert (g_ANTI_WINDUP_LOWER_LIMIT >= to_integer(MIN_Q))
-    report "g_ANTI_WINDUP_LOWER_LIMIT < MIN_Q!"
+    report "g_ANTI_WINDUP_LOWER_LIMIT (" & integer'image(g_ANTI_WINDUP_LOWER_LIMIT) & ") " &
+      "< MIN_Q (" & integer'image(to_integer(MIN_Q)) & ")!"
     severity error;
 
   -- processes
