@@ -22,5 +22,6 @@ modules = { "local" : [
                         "wb_pcie_cntr",
                         "wb_fmc_adc_common",
                         "wb_fmc_active_clk",
-                        "wb_afc_mgmt"
+                        "wb_afc_mgmt",
+                        "wb_evt_cnt",
                       ] };

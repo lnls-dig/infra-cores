@@ -1,0 +1,33 @@
+memory-map:
+  bus: wb-32-be
+  name: wb_evt_cnt_regs
+  description: Event counter
+  comment: |
+    Count events. The counter can be reset or read via an external trigger.
+  x-hdl:
+    busgroup: True
+  children:
+    - reg:
+        name: ctl
+        width: 32
+        access: rw
+        address: 0x00000000
+        description: Event counter control register
+        comment: |
+          Event counter control register
+        children:
+          - field:
+              name: trig_act
+              range: 0
+              description: Action after receiving the external trigger
+              comment: |
+                0: Clear counter;
+                1: Copy counter value to cnt_snap.
+    - reg:
+        name: cnt_snap
+        width: 32
+        access: ro
+        address: 0x00000004
+        description: Counter snapshot register
+        comment: |
+          A frozen snapshot of the internal counter.          
