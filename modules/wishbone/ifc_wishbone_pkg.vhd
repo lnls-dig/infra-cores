@@ -3348,6 +3348,33 @@ package ifc_wishbone_pkg is
   );
   end component;
 
+  component xwb_evt_cnt is
+  generic (
+    g_INTERFACE_MODE      : t_wishbone_interface_mode      := CLASSIC;
+    g_ADDRESS_GRANULARITY : t_wishbone_address_granularity := WORD;
+    g_WITH_EXTRA_WB_REG   : boolean := false
+    );
+  port (
+    -- System clock (for wishbone).
+    clk_i                 : in  std_logic;
+    -- Reset (clk_i domain)
+    rst_clk_n_i           : in  std_logic;
+    -- Wishbone interface.
+    wb_slv_i              : in  t_wishbone_slave_in;
+    wb_slv_o              : out t_wishbone_slave_out;
+    -- Clock signal to be used for the counter.
+    clk_evt_i             : in  std_logic;
+    -- Reset (clk_evt_i domain)
+    rst_clk_evt_n_i       : in  std_logic;
+    -- Event signal. Will be read every clk_evt_i rising edge,
+    -- incrementing the internal counter if is '1'.
+    evt_i                 : in  std_logic;
+    -- External trigger input. Function depends of the
+    -- configuration in ctl.trig_act bit (clk_evt_i domain).
+    ext_trig_i            : in  std_logic
+    );
+  end component;
+
   --------------------------------------------------------------------
   -- SDB Devices Structures
   --------------------------------------------------------------------
@@ -3572,6 +3599,23 @@ package ifc_wishbone_pkg is
     version       => x"00000001",
     date          => x"20170825",
     name          => "LNLS_AFC_MGMT_REGS ")));
+
+  -- Event Counter
+  constant c_xwb_evt_cnt_regs_sdb : t_sdb_device := (
+    abi_class     => x"0000",                   -- undocumented device
+    abi_ver_major => x"01",
+    abi_ver_minor => x"00",
+    wbd_endian    => c_sdb_endian_big,
+    wbd_width     => x"4",                      -- 32-bit port granularity (0100)
+    sdb_component => (
+    addr_first    => x"0000000000000000",
+    addr_last     => x"00000000000000FF",
+    product => (
+    vendor_id     => x"1000000000001215",       -- LNLS
+    device_id     => x"df6ba91f",
+    version       => x"00000001",
+    date          => x"20220718",
+    name          => "LNLS_EVT_CNT_REGS  ")));
 
 
 end ifc_wishbone_pkg;

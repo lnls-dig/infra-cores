@@ -1,0 +1,4 @@
+xwb_evt_cnt_tb
+xwb_evt_cnt_tb.ghw
+*.o
+*.cf
