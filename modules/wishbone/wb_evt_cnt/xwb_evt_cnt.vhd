@@ -239,20 +239,21 @@ begin
       if rst_clk_n_i = '0' then
         cnt <= (others => '0');
       else
+        -- Incremment cnt for each external event
+        if evt_i = '1' then
+          cnt <= cnt + 1;
+        end if;
+
+        -- When receiving an external trigger pulse clear or take a snapshot of
+        -- the counter depending on the state of the ctl.trig_act bit
         if ext_trig_i = '1' then
           if trig_act_sync = '0' then
             cnt <= (others => '0');
           else
             cnt_snap <= cnt;
-            if evt_i = '1' then
-              cnt <= cnt + 1;
-            end if;
-          end if;
-        else
-          if evt_i = '1' then
-            cnt <= cnt + 1;
           end if;
         end if;
+
       end if;
     end if;
   end process;

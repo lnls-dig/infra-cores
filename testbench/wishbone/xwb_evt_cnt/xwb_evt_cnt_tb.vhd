@@ -145,17 +145,19 @@ begin
   process(clk_evt)
   begin
     if rising_edge(clk_evt) then
-      if ext_trig = '1' then
-        if trig_act = TRIG_ACT_SNAP then
-          cnt_test_snap <= cnt_test;
-        elsif trig_act = TRIG_ACT_CLEAR then
-          cnt_test_snap <= (others => '0');
-        end if;
-      end if;
       -- Incremment cnt_test only if evt = '1' (new event)
       if evt = '1' then
         cnt_test <= std_logic_vector(unsigned(cnt_test) + 1);
       end if;
+
+      if ext_trig = '1' then
+        if trig_act = TRIG_ACT_SNAP then
+          cnt_test_snap <= cnt_test;
+        elsif trig_act = TRIG_ACT_CLEAR then
+          cnt_test <= (others => '0');
+        end if;
+      end if;
+
     end if;
   end process;
 
