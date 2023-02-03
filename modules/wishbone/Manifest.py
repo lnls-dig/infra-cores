@@ -5,7 +5,6 @@ modules = { "local" : [
                         "wb_trigger_iface",
                         "wb_trigger_mux",
                         "wb_trigger",
-                        "wb_fmc516",
                         "wb_fmc130m_4ch",
                         "wb_fmc250m_4ch",
                         "wb_fmcpico1m_4ch",
