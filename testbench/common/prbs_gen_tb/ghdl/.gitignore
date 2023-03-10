@@ -1,0 +1,4 @@
+prbs_gen_tb
+prbs_gen_tb.ghw
+*.cf
+*.o
