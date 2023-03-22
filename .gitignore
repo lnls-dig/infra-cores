@@ -37,6 +37,17 @@ work/
 *.mif
 .Xil/
 
+######################
+# Python files
+######################
+__pycache__/
+*.py[cod]
+*$py.class
+eggs/
+.eggs/
+*.egg-info/
+*.egg
+
 /platform/xilinx/artix7/chipscope/ila_t8_d256_s4096_cap
 !/platform/xilinx/artix7/chipscope/ila_t8_d256_s4096_cap/ila_t8_d256_s4096_cap.xci
 !/platform/xilinx/artix7/chipscope/ila_t8_d256_s4096_cap/Manifest.py
