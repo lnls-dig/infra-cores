@@ -33,6 +33,8 @@ entity prbs_gen is
 
     -- Length (in bits) of internal LFSR. This determines the duration of the
     -- generated sequence, which is given by: 2^{length_i} - 1.
+    -- NOTE: Changing this signal resets the internal LFSR. valid_i is ignored
+    --       in this cycle.
     length_i  : in natural range 2 to 32 := 32;
 
     -- Signal for iterating the PRBS
