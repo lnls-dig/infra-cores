@@ -7,8 +7,7 @@
 -- Platform   : Simulation
 -- Standard   : VHDL'08
 ---------------------------------------------------------------------------------
--- Description: This testbench only drives the prbs_gen core. No assertion is
---              done at the moment.
+-- Description: This testbench asserts the generation of PRBS7 and PRBS8.
 ---------------------------------------------------------------------------------
 -- Copyright (c) 2023 CNPEM
 -- Licensed under GNU Lesser General Public License (LGPL) v3.0
