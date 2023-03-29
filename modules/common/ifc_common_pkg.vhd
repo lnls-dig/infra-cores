@@ -253,4 +253,18 @@ package ifc_common_pkg is
     );
   end component prbs_gen;
 
+  component prbs_gen_for_sys_id is
+    port (
+      clk_i           : in std_logic;
+      rst_n_i         : in std_logic;
+      en_i            : in std_logic;
+      step_duration_i : in natural range 1 to 1024 := 1;
+      lfsr_length_i   : in natural range 2 to 32 := 32;
+      valid_i         : in std_logic;
+      busy_o          : out std_logic;
+      prbs_o          : out std_logic;
+      valid_o         : out std_logic
+    );
+  end component prbs_gen_for_sys_id;
+
 end ifc_common_pkg;
