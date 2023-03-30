@@ -242,4 +242,15 @@ package ifc_common_pkg is
     );
   end component anti_windup_accumulator;
 
+  component prbs_gen is
+    port (
+      clk_i     : in std_logic;
+      rst_n_i   : in std_logic;
+      length_i  : in natural range 2 to 32 := 32;
+      valid_i   : in std_logic;
+      prbs_o    : out std_logic;
+      valid_o   : out std_logic
+    );
+  end component prbs_gen;
+
 end ifc_common_pkg;
