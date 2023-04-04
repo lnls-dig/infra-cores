@@ -443,29 +443,6 @@ architecture rtl of wb_acq_core is
   signal dbg_ddr_addr_cnt_axis              : std_logic_vector(g_ddr_addr_width-1 downto 0);
   signal dbg_ddr_addr_init                  : std_logic_vector(g_ddr_addr_width-1 downto 0);
   signal dbg_ddr_addr_max                   : std_logic_vector(g_ddr_addr_width-1 downto 0);
-  ------------------------------------------------------------------------------
-  -- Components
-  ------------------------------------------------------------------------------
-
-  component acq_core_regs
-  port (
-    rst_n_i                                 : in     std_logic;
-    clk_sys_i                               : in     std_logic;
-    wb_adr_i                                : in     std_logic_vector(5 downto 0);
-    wb_dat_i                                : in     std_logic_vector(31 downto 0);
-    wb_dat_o                                : out    std_logic_vector(31 downto 0);
-    wb_cyc_i                                : in     std_logic;
-    wb_sel_i                                : in     std_logic_vector(3 downto 0);
-    wb_stb_i                                : in     std_logic;
-    wb_we_i                                 : in     std_logic;
-    wb_ack_o                                : out    std_logic;
-    wb_stall_o                              : out    std_logic;
-    fs_clk_i                                : in     std_logic;
-    ext_clk_i                               : in     std_logic;
-    regs_i                                  : in     t_acq_core_in_registers;
-    regs_o                                  : out    t_acq_core_out_registers
-  );
-  end component;
 
   function to_std_logic(arg : boolean) return std_logic is
   begin
@@ -542,6 +519,8 @@ begin
     wb_we_i                                 => wb_slv_adp_out.we,
     wb_ack_o                                => wb_slv_adp_in.ack,
     wb_stall_o                              => wb_slv_adp_in.stall,
+    wb_err_o                                => wb_slv_adp_in.err,
+    wb_rty_o                                => wb_slv_adp_in.rty,
     fs_clk_i                                => fs_clk_i,
     ext_clk_i                               => ext_clk_i,
     regs_i                                  => regs_in,
@@ -587,13 +566,23 @@ begin
 
   regs_in.sta_fsm_state_i                   <= acq_fsm_state;
   regs_in.sta_fsm_acq_done_i                <= acq_end;
-  regs_in.sta_reserved1_i                   <= dbg_fifo_rd_empty & dbg_fifo_fc_rd_en & dbg_fifo_re & dbg_fifo_we;
+
+  regs_in.sta_fifo_we_i                     <= dbg_fifo_we;
+  regs_in.sta_fifo_re_i                     <= dbg_fifo_re;
+  regs_in.sta_fifo_fc_rd_en_i               <= dbg_fifo_fc_rd_en;
+  regs_in.sta_fifo_rd_empty_i               <= dbg_fifo_rd_empty;
+
   regs_in.sta_fc_trans_done_i               <= fifo_fc_all_trans_done_l;
   regs_in.sta_fc_full_i                     <= fifo_sta_full;
-  regs_in.sta_reserved2_i                   <= "00" & dbg_source_pl_stall & dbg_source_pl_dreq &
-                                               dbg_fifo_fc_valid_fwft & dbg_fifo_wr_full;
+
+  regs_in.sta_fifo_wr_full_i                <= dbg_fifo_wr_full;
+  regs_in.sta_fifo_fc_valid_fwft_i          <= dbg_fifo_fc_valid_fwft;
+  regs_in.sta_source_pl_dreq_i              <= dbg_source_pl_dreq;
+  regs_in.sta_source_pl_stall_i             <= dbg_source_pl_stall;
+  regs_in.sta_reserved2_i                   <= "00";
+
   regs_in.sta_ddr3_trans_done_i             <= ddr3_all_trans_done_l;
-  regs_in.sta_reserved3_i                   <= f_gen_std_logic_vector(regs_in.sta_reserved3_i'length-
+  regs_in.sta_fifo_wr_count_i               <= f_gen_std_logic_vector(regs_in.sta_fifo_wr_count_i'length-
                                                 dbg_fifo_wr_count'length, '0') & dbg_fifo_wr_count;
   regs_in.trig_pos_i                        <= f_gen_std_logic_vector(regs_in.trig_pos_i'length-
                                                     ddr_trig_addr'length, '0') & ddr_trig_addr;
