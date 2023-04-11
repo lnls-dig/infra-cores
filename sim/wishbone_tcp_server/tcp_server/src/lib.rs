@@ -131,6 +131,12 @@ pub struct GHDLNaturalDimArr <'a> {
   bounds: &'a GHDLRange,
 }
 
+/// Generic sized constrained GHDL std_logic_vector
+#[repr(C)]
+pub struct GHDLFixedStdLogicVector <const N: usize> {
+    array: [u8; N],
+}
+
 /// Indicate the message type
 #[repr(C)]
 pub enum WBMsgType {
@@ -157,6 +163,50 @@ pub struct WBServer {
     reader: Option<BufReader<TcpStream>>,
     addr: u32,
     data: u32,
+}
+
+impl <const N: usize> GHDLFixedStdLogicVector<N> {
+    /// Convert GHDL std_logic_vector (downto) to u32
+    ///
+    /// # Returns
+    /// A `u32` number representing the converted std_logic_vector
+    fn to_u32(&self) -> u32 {
+        let mut num: u32 = 0;
+        for element in self.array.iter() {
+            num = num << 1;
+            if *element == (IEEEStdLogic::High as u8) ||
+                *element == (IEEEStdLogic::WeakHigh as u8) {
+                    num = num | 0x00000001;
+                } else if *element != (IEEEStdLogic::Low as u8) &&
+                *element != (IEEEStdLogic::WeakLow as u8) {
+                    eprintln!("std_logic_vector with undefined/unknown/high-z/don't-care bit. Treating it as '0'.");
+                }
+        }
+        num
+    }
+
+    /// Convert a u32 number to GHDL's internal representation of
+    /// std_logic_vector (downto)
+    ///
+    /// # Arguments
+    /// * `num` - Input number to be converted
+    ///
+    /// # Notes
+    ///
+    /// If the std_logic_vector length is less than 32 bits, only the
+    /// least significant bits of `num` will be converted. If
+    /// std_logic_vector is more than 32 bits, the higher bits will be
+    /// set to '0'.
+    fn from_u32(&mut self, mut num: u32) {
+        for element in self.array.iter_mut().rev() {
+            if num & 0x00000001 == 0 {
+                *element = 2;
+            } else {
+                *element = 3;
+            }
+            num = num >> 1;
+        }
+    }
 }
 
 impl<'a> GHDLNaturalDimArr<'a> {
@@ -295,43 +345,6 @@ pub extern fn wishbone_tcp_server_wait_data(fsrv: &mut WBServer, msg_type: &mut 
     }
 }
 
-/// Convert a 32 bits number to GHDL's internal representation of std_logic_vector
-///
-/// # Arguments
-/// * `num` - Input number to be converted
-/// * `std_vec` - std_logic_vector(31 downto 0) output
-fn u32_to_std_vec(mut num: u32, std_vec: &mut [u8; 32]) {
-    for element in std_vec.iter_mut() {
-        if num & 0x80000000 == 0 {
-            *element = 2;
-        } else {
-            *element = 3;
-        }
-        num = num << 1;
-    }
-}
-
-/// Convert a 32 bits std_logic_vector to u32
-///
-/// # Arguments
-/// * `std_vec` - std_logic_vector(31 downto 0) input
-/// # Returns
-/// * `num` - Output number
-fn std_vec_to_u32(std_vec: &[u8; 32]) -> u32 {
-    let mut num: u32 = 0;
-    for element in std_vec.iter() {
-        num = num << 1;
-        if *element == (IEEEStdLogic::High as u8) ||
-        *element == (IEEEStdLogic::WeakHigh as u8) {
-            num = num | 0x00000001;
-        } else if *element != (IEEEStdLogic::Low as u8) &&
-        *element != (IEEEStdLogic::WeakLow as u8) {
-            eprintln!("std_logic_vector with undefined/unknown/high-z/don't-care bit. Treating it as '0'.");
-        }
-    }
-    num
-}
-
 /// Get the address and data to be write / read
 ///
 /// # Arguments
@@ -339,9 +352,9 @@ fn std_vec_to_u32(std_vec: &[u8; 32]) -> u32 {
 /// * `addr` - Address buffer as std_logic_vector(31 downto 0)
 /// * `data` - Data buffer as std_logic_vector(31 downto 0)
 #[no_mangle]
-pub extern fn wishbone_tcp_server_get_addr_data(fsrv: &mut WBServer, addr: &mut [u8; 32], data: &mut [u8; 32]) {
-    u32_to_std_vec(fsrv.addr, addr);
-    u32_to_std_vec(fsrv.data, data);
+pub extern fn wishbone_tcp_server_get_addr_data(fsrv: &mut WBServer, addr: &mut GHDLFixedStdLogicVector<32>, data: &mut GHDLFixedStdLogicVector<32>) {
+    addr.from_u32(fsrv.addr);
+    data.from_u32(fsrv.data);
 }
 
 /// Send the data read to the client
@@ -350,10 +363,10 @@ pub extern fn wishbone_tcp_server_get_addr_data(fsrv: &mut WBServer, addr: &mut 
 /// * `fsrv` - WBServer instance pointer
 /// * `data` - Data buffer as std_logic_vector(31 downto 0) to be send to the client
 #[no_mangle]
-pub extern fn wishbone_tcp_server_write_data(fsrv: &mut WBServer, data: &[u8; 32]) {
+pub extern fn wishbone_tcp_server_write_data(fsrv: &mut WBServer, data: &GHDLFixedStdLogicVector<32>) {
     match &mut fsrv.stream {
         Some(stream) => {
-            let data_str = format!("{:08x}\n", std_vec_to_u32(data));
+            let data_str = format!("{:08x}\n", data.to_u32());
             stream.write(data_str.as_bytes()).unwrap();
         },
         None => (),
