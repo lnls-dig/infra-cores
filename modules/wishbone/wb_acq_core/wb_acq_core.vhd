@@ -440,9 +440,9 @@ architecture rtl of wb_acq_core is
   signal ddr_trig_addr                      : std_logic_vector(g_ddr_addr_width-1 downto 0);
 
   -- Debug outputs
-  signal dbg_ddr_addr_cnt_axis              : std_logic_vector(30 downto 0);
-  signal dbg_ddr_addr_init                  : std_logic_vector(30 downto 0);
-  signal dbg_ddr_addr_max                   : std_logic_vector(30 downto 0);
+  signal dbg_ddr_addr_cnt_axis              : std_logic_vector(g_ddr_addr_width-1 downto 0);
+  signal dbg_ddr_addr_init                  : std_logic_vector(g_ddr_addr_width-1 downto 0);
+  signal dbg_ddr_addr_max                   : std_logic_vector(g_ddr_addr_width-1 downto 0);
   ------------------------------------------------------------------------------
   -- Components
   ------------------------------------------------------------------------------
