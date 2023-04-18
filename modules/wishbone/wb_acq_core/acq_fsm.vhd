@@ -189,7 +189,7 @@ architecture rtl of acq_fsm is
   signal post_trig_skip_r                   : std_logic;
   signal post_trig_done_ext                 : std_logic;
   signal samples_cnt                        : unsigned(c_acq_samples_size-1 downto 0);
-  signal shots_cnt                          : unsigned(15 downto 0);
+  signal shots_cnt                          : unsigned(15 downto 0) := (others => '0');
   signal shots_done                         : std_logic;
   signal shots_decr                         : std_logic;
   signal single_shot                        : std_logic;

@@ -246,13 +246,13 @@ architecture rtl of acq_fc_fifo is
 
   -- Samples counts
   -- counts the words written in the FIFO
-  signal fifo_in_valid_cnt                  : t_fc_pkt;
+  signal fifo_in_valid_cnt                  : t_fc_pkt := (others => '0');
   signal fifo_in_valid_full                 : std_logic;
 
   -- Counts the completed tranfered words to ext mem
   signal fifo_pkt_sent                      : std_logic;
   signal fifo_pkt_cnt_en                    : std_logic;
-  signal fifo_pkt_sent_cnt                  : t_fc_pkt;
+  signal fifo_pkt_sent_cnt                  : t_fc_pkt := (others => '0');
   signal fifo_pkt_sent_ct_cnt               : t_fc_pkt;
   signal fifo_pkt_sent_ct_all               : std_logic;
   signal acq_cnt_en                         : std_logic;
@@ -260,21 +260,21 @@ architecture rtl of acq_fc_fifo is
   signal dbg_shots_cnt                      : std_logic_vector(c_shots_size_width-1 downto 0);
 
   -- Transaction limit signals
-  signal lmt_pre_pkt_size                   : unsigned(c_pkt_size_width-1 downto 0);
-  signal lmt_pre_pkt_size_s                 : std_logic_vector(c_pkt_size_width-1 downto 0);
-  signal lmt_pre_pkt_size_alig_s            : std_logic_vector(c_pkt_size_width-1 downto 0);
-  signal lmt_pre_pkt_size_aggd              : unsigned(c_pkt_size_width-1 downto 0);
-  signal lmt_pos_pkt_size                   : unsigned(c_pkt_size_width-1 downto 0);
-  signal lmt_pos_pkt_size_s                 : std_logic_vector(c_pkt_size_width-1 downto 0);
-  signal lmt_pos_pkt_size_alig_s            : std_logic_vector(c_pkt_size_width-1 downto 0);
-  signal lmt_pos_pkt_size_aggd              : unsigned(c_pkt_size_width-1 downto 0);
-  signal lmt_full_pkt_size                  : unsigned(c_pkt_size_width-1 downto 0);
-  signal lmt_full_pkt_size_s                : std_logic_vector(c_pkt_size_width-1 downto 0);
-  signal lmt_full_pkt_size_alig_s           : std_logic_vector(c_pkt_size_width-1 downto 0);
-  signal lmt_full_pkt_size_aggd             : unsigned(c_pkt_size_width-1 downto 0);
-  signal lmt_shots_nb                       : unsigned(c_shots_size_width-1 downto 0);
-  signal lmt_curr_chan_id                   : unsigned(c_chan_id_width-1 downto 0);
-  signal lmt_curr_chan_id_ext               : unsigned(c_chan_id_width-1 downto 0);
+  signal lmt_pre_pkt_size                   : unsigned(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_pre_pkt_size_s                 : std_logic_vector(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_pre_pkt_size_alig_s            : std_logic_vector(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_pre_pkt_size_aggd              : unsigned(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_pos_pkt_size                   : unsigned(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_pos_pkt_size_s                 : std_logic_vector(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_pos_pkt_size_alig_s            : std_logic_vector(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_pos_pkt_size_aggd              : unsigned(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_full_pkt_size                  : unsigned(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_full_pkt_size_s                : std_logic_vector(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_full_pkt_size_alig_s           : std_logic_vector(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_full_pkt_size_aggd             : unsigned(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_shots_nb                       : unsigned(c_shots_size_width-1 downto 0) := (others => '0');
+  signal lmt_curr_chan_id                   : unsigned(c_chan_id_width-1 downto 0) := (others => '0');
+  signal lmt_curr_chan_id_ext               : unsigned(c_chan_id_width-1 downto 0) := (others => '0');
   signal lmt_valid                          : std_logic;
   signal lmt_valid_ext                      : std_logic;
 

@@ -145,12 +145,12 @@ architecture rtl of acq_trigger is
   type t_id_pipe is array (natural range <>) of t_acq_id;
 
   -- Signals
-  signal lmt_dtrig_chan_id                  : unsigned(c_chan_id_width-1 downto 0);
+  signal lmt_dtrig_chan_id                  : unsigned(c_chan_id_width-1 downto 0) := (others => '0');
   signal lmt_dtrig_valid                    : std_logic;
-  signal lmt_curr_chan_id                   : unsigned(c_chan_id_width-1 downto 0);
+  signal lmt_curr_chan_id                   : unsigned(c_chan_id_width-1 downto 0) := (others => '0');
   signal lmt_valid                          : std_logic;
 
-  signal dtrig_data_in                      : std_logic_vector(g_data_in_width-1 downto 0);
+  signal dtrig_data_in                      : std_logic_vector(g_data_in_width-1 downto 0) := (others => '0');
   signal dtrig_valid_in                     : std_logic;
   signal dtrig_id_in                        : t_acq_id;
 
@@ -182,8 +182,8 @@ architecture rtl of acq_trigger is
   signal int_trig_over_thres                : std_logic;
   signal int_trig_over_thres_filt           : std_logic;
   signal int_trig_over_thres_filt_d         : std_logic;
-  signal int_trig_data                      : std_logic_vector(c_widest_atom_width-1 downto 0);
-  signal int_trig_data_se                   : std_logic_vector(c_widest_atom_width-1 downto 0);
+  signal int_trig_data                      : std_logic_vector(c_widest_atom_width-1 downto 0) := (others => '0');
+  signal int_trig_data_se                   : std_logic_vector(c_widest_atom_width-1 downto 0) := (others => '0');
   signal hw_trig                            : std_logic;
   signal hw_trig_t                          : std_logic;
   signal sw_trig                            : std_logic;
@@ -314,7 +314,7 @@ begin
   -- Problem: Vivado 2015.2 does not support dynamic slicing!
   -- Solution: Implement a case statement to address each possible slice
 
-  p_int_trig_data : process(acq_num_atoms_uncoalesced_log2)
+  p_int_trig_data : process(acq_num_atoms_uncoalesced_log2, cfg_int_trig_sel_i, lmt_dtrig_chan_id)
   begin
      case to_integer(acq_num_atoms_uncoalesced_log2) is
        when 0 =>
