@@ -267,4 +267,15 @@ package ifc_common_pkg is
     );
   end component prbs_gen_for_sys_id;
 
+  component pulse_syncr is
+    port (
+      clk_i         : in std_logic;
+      rst_n_i       : in std_logic;
+      clr_i         : in std_logic;
+      pulse_i       : in std_logic;
+      sync_i        : in std_logic;
+      sync_pulse_o  : out std_logic
+    );
+  end component pulse_syncr;
+
 end ifc_common_pkg;
