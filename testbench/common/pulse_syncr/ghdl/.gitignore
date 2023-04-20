@@ -1,0 +1,4 @@
+pulse_syncr_tb
+pulse_syncr_tb.ghw
+*.cf
+*.o
