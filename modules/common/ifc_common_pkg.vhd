@@ -278,4 +278,19 @@ package ifc_common_pkg is
     );
   end component pulse_syncr;
 
+  component mov_avg_dyn is
+  generic (
+    g_MAX_ORDER_SEL : natural := 4;
+    g_DATA_WIDTH    : natural := 32
+  );
+  port (
+    clk_i           : in std_logic;
+    rst_n_i         : in std_logic;
+    order_sel_i     : in natural range 0 to g_MAX_ORDER_SEL := 0;
+    data_i          : in signed(g_DATA_WIDTH-1 downto 0);
+    valid_i         : in std_logic;
+    avgd_data_o     : out signed(g_DATA_WIDTH-1 downto 0);
+    valid_o         : out std_logic
+  );
+  end component mov_avg_dyn;
 end ifc_common_pkg;

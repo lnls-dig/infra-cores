@@ -1,0 +1,4 @@
+mov_avg_dyn_tb
+mov_avg_dyn_tb.ghw
+*.cf
+*.o
