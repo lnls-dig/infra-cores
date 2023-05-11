@@ -11,6 +11,7 @@ modules = { "local" : ["anti_windup_accumulator",
                        "heartbeat",
                        "prbs_gen",
                        "prbs_for_sys_id",
-                       "pulse_syncr"] };
+                       "pulse_syncr",
+                       "mov_avg_dyn"] };
 
 files = [ "ifc_common_pkg.vhd" ];
