@@ -21,4 +21,5 @@ modules = { "local" : [
                         "wb_fmc_active_clk",
                         "wb_afc_mgmt",
                         "wb_evt_cnt",
+                        "wb_master_uart",
                       ] };
