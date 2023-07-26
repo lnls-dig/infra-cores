@@ -1,0 +1,15 @@
+memory-map:
+  bus: wb-32-be
+  name: wb_ram
+  description: Wishbone RAM interface
+  x-hdl:
+    busgroup: true
+  children:
+    - memory:
+        name: ram
+        memsize: 32768
+        children:
+          - reg:
+              name: data
+              access: rw
+              width: 32

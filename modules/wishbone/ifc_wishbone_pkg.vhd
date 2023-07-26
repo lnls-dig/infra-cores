@@ -1,5 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 library work;
 use work.wishbone_pkg.all;
@@ -2749,6 +2750,59 @@ package ifc_wishbone_pkg is
     ext_trig_i            : in  std_logic
     );
   end component;
+
+  component wb_master_uart is
+  generic (
+    g_END_LINE_CHAR:  std_logic_vector(7 downto 0) := x"0A";
+    g_INTERFACE_MODE: t_wishbone_interface_mode    := CLASSIC
+  );
+  port (
+    -- Core clock
+    clk_i:           in  std_logic;
+    -- Core reset (active low)
+    rst_n_i:         in  std_logic;
+    -- Baud-rate divider: baud = freq(clk_i) / (clk_div_i + 1)
+    clk_div_i:       in  unsigned (15 downto 0);
+    -- UART TX output
+    tx_o:            out std_logic;
+    -- UART RX input
+    rx_i:            in  std_logic;
+    -- Wishbone master interface
+    m_wb_adr_o:      out std_logic_vector(c_wishbone_address_width-1 downto 0) := (others => '0');
+    m_wb_sel_o:      out std_logic_vector(c_wishbone_data_width/8-1 downto 0) := (others => '0');
+    m_wb_we_o:       out std_logic := '0';
+    m_wb_dat_o:      out std_logic_vector(c_wishbone_data_width-1 downto 0) := (others => '0');
+    m_wb_dat_i:      in  std_logic_vector(c_wishbone_data_width-1 downto 0) := (others => '0');
+    m_wb_cyc_o:      out std_logic := '0';
+    m_wb_stb_o:      out std_logic := '0';
+    m_wb_ack_i:      in  std_logic;
+    m_wb_err_i:      in  std_logic;
+    m_wb_stall_i:    in  std_logic;
+    m_wb_rty_i:      in  std_logic
+  );
+  end component wb_master_uart;
+
+  component xwb_master_uart is
+  generic (
+    g_END_LINE_CHAR:  std_logic_vector(7 downto 0) := x"0A";
+    g_INTERFACE_MODE: t_wishbone_interface_mode    := CLASSIC
+  );
+  port (
+    -- Core clock
+    clk_i:           in  std_logic;
+    -- Core reset (active low)
+    rst_n_i:         in  std_logic;
+    -- Baud-rate divider: baud = freq(clk_i) / (clk_div_i + 1)
+    clk_div_i:       in  unsigned (15 downto 0);
+    -- UART TX output
+    tx_o:            out std_logic;
+    -- UART RX input
+    rx_i:            in  std_logic;
+    -- Wishbone master interface
+    wb_master_i:     in  t_wishbone_master_in;
+    wb_master_o:     out t_wishbone_master_out
+  );
+  end component xwb_master_uart;
 
   --------------------------------------------------------------------
   -- SDB Devices Structures
