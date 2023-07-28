@@ -71,6 +71,7 @@ architecture rtl of wb_rs232_syscon is
   signal m_wb_err_in                        : std_logic;
   signal m_wb_stall_in                      : std_logic;
   signal m_wb_rty_in                        : std_logic;
+  signal m_wb_err_or_rty_in                 : std_logic;
 
   component rs232_syscon_top_1_0
   port (
@@ -117,7 +118,7 @@ begin
     sl_dat_o                                => m_wb_dat_in,
     sl_ack_o                                => m_wb_ack_in,
     sl_stall_o                              => open,
-    sl_rty_o                                => open,
+    sl_rty_o                                => m_wb_rty_in,
     sl_err_o                                => m_wb_err_in,
 
     ma_adr_o                                => m_wb_adr_o,
@@ -133,12 +134,14 @@ begin
     ma_err_i                                => m_wb_err_i
   );
 
+  m_wb_err_or_rty_in <= m_wb_err_in or m_wb_rty_in;
+
   cmp_rs232_syscon_top_1_0 : rs232_syscon_top_1_0
   port map (
     clk_i                                   => wb_clk_i,
     reset_i                                 => rst,
     ack_i                                   => m_wb_ack_in,
-    err_i                                   => m_wb_err_in,
+    err_i                                   => m_wb_err_or_rty_in,
     rs232_rxd_i                             => rs232_rxd_i,
     data_in                                 => m_wb_dat_in,
     data_out                                => m_wb_dat_out,
