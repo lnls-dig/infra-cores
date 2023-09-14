@@ -1,8 +1,18 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+USE ieee.fixed_pkg.ALL;
 
 package ifc_common_pkg is
+
+  -- Type that wraps all biquad coefficients (a0 = 1)
+  TYPE t_biquad_coeffs IS RECORD
+    b0 : SFIXED;
+    b1 : SFIXED;
+    b2 : SFIXED;
+    a1 : SFIXED;
+    a2 : SFIXED;
+  END RECORD;
 
   --------------------------------------------------------------------
   -- Components
@@ -293,4 +303,32 @@ package ifc_common_pkg is
     valid_o         : out std_logic
   );
   end component mov_avg_dyn;
+
+  COMPONENT biquad IS
+    GENERIC (
+      g_X_INT_WIDTH       : NATURAL;
+      g_X_FRAC_WIDTH      : NATURAL;
+      g_COEFF_INT_WIDTH   : NATURAL;
+      g_COEFF_FRAC_WIDTH  : NATURAL;
+      g_Y_INT_WIDTH       : NATURAL;
+      g_Y_FRAC_WIDTH      : NATURAL;
+      g_EXTRA_BITS        : NATURAL
+    );
+    PORT (
+      clk_i               : IN  STD_LOGIC;
+      rst_n_i             : IN  STD_LOGIC;
+      x_i                 : IN  SFIXED(g_X_INT_WIDTH-1 DOWNTO -g_X_FRAC_WIDTH);
+      x_valid_i           : IN  STD_LOGIC;
+      coeffs_i            : IN  t_biquad_coeffs(
+                                  b0(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH),
+                                  b1(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH),
+                                  b2(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH),
+                                  a1(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH),
+                                  a2(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH)
+                                );
+
+      y_o                 : OUT SFIXED(g_Y_INT_WIDTH-1 DOWNTO -g_Y_FRAC_WIDTH);
+      y_valid_o           : OUT STD_LOGIC
+    );
+  END COMPONENT biquad;
 end ifc_common_pkg;
