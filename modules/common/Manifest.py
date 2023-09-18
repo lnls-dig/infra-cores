@@ -13,6 +13,7 @@ modules = { "local" : ["anti_windup_accumulator",
                        "prbs_for_sys_id",
                        "pulse_syncr",
                        "mov_avg_dyn",
-                       "biquad"] };
+                       "biquad",
+                       "iir_filt"] };
 
 files = [ "ifc_common_pkg.vhd" ];
