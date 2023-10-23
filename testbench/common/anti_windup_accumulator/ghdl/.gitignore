@@ -1,2 +1,4 @@
+*.o
+*.cf
 anti_windup_accumulator_tb
 anti_windup_accumulator_tb.ghw
