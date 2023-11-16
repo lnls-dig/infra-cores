@@ -76,26 +76,12 @@ ENTITY biquad IS
 END ENTITY biquad;
 
 ARCHITECTURE behave OF biquad IS
-  CONSTANT c_B0_TIMES_W_IDX : NATURAL := 0;
-  CONSTANT c_A1_TIMES_W_D1_IDX : NATURAL := 1;
-  CONSTANT c_A2_TIMES_W_D2_IDX : NATURAL := 2;
-  CONSTANT c_B1_TIMES_W_D1_IDX : NATURAL := 3;
-  CONSTANT c_B2_TIMES_W_D2_IDX : NATURAL := 4;
-  CONSTANT c_AUX_A_IDX : NATURAL := 5;
-  CONSTANT c_AUX_B_IDX : NATURAL := 6;
+  SIGNAL w, w_d1, w_d2, b0_times_w, a1_times_w_d1, a2_times_w_d2, b1_times_w_d1,
+         b2_times_w_d2, aux_a, aux_b :
+           SFIXED((g_COEFF_INT_WIDTH + g_X_INT_WIDTH + g_EXTRA_BITS)-1 DOWNTO
+                  -(g_COEFF_FRAC_WIDTH + g_X_FRAC_WIDTH + g_EXTRA_BITS)) :=
+             (OTHERS => '0');
 
-  TYPE t_terms IS ARRAY (NATURAL RANGE <>) OF
-    SFIXED((g_COEFF_INT_WIDTH + g_X_INT_WIDTH + g_EXTRA_BITS)-1 DOWNTO
-           -(g_COEFF_FRAC_WIDTH + g_X_FRAC_WIDTH + g_EXTRA_BITS));
-
-  SIGNAL w, w_d1, w_d2 : SFIXED((g_COEFF_INT_WIDTH + g_X_INT_WIDTH +
-                                 g_EXTRA_BITS)-1
-                                DOWNTO
-                                -(g_COEFF_FRAC_WIDTH + g_X_FRAC_WIDTH +
-                                g_EXTRA_BITS))
-                       := (OTHERS => '0');
-  SIGNAL terms : t_terms(c_AUX_B_IDX DOWNTO c_B0_TIMES_W_IDX)
-               := (OTHERS => (OTHERS => '0'));
   SIGNAL state : NATURAL RANGE 0 TO 3 := 0;
 BEGIN
   PROCESS(clk_i) IS
@@ -105,7 +91,13 @@ BEGIN
         w <= (OTHERS => '0');
         w_d1 <= (OTHERS => '0');
         w_d2 <= (OTHERS => '0');
-        terms <= (OTHERS => (OTHERS => '0'));
+        b0_times_w <= (OTHERS => '0');
+        a1_times_w_d1 <= (OTHERS => '0');
+        a2_times_w_d2 <= (OTHERS => '0');
+        b1_times_w_d1 <= (OTHERS => '0');
+        b2_times_w_d2 <= (OTHERS => '0');
+        aux_a <= (OTHERS => '0');
+        aux_b <= (OTHERS => '0');
         state <= 0;
         y_valid_o <= '0';
       ELSE
@@ -115,7 +107,7 @@ BEGIN
           -- Computes: w[n] = x[n] - a1*w[n - 1] - a2*w[n - 2]
           WHEN 0 =>
             IF x_valid_i THEN
-              w <= resize(x_i + terms(c_AUX_A_IDX), w'LEFT, w'RIGHT);
+              w <= resize(x_i + aux_a, w'LEFT, w'RIGHT);
               state <= 1;
             END IF;
 
@@ -123,9 +115,8 @@ BEGIN
           --           w[n - 1] (for the next iteration)
           --           w[n - 2] (for the next iteration)
           WHEN 1 =>
-            terms(c_B0_TIMES_W_IDX) <= resize(coeffs_i.b0*w,
-                                              terms(c_B0_TIMES_W_IDX)'LEFT,
-                                              terms(c_B0_TIMES_W_IDX)'RIGHT);
+            b0_times_w <= resize(coeffs_i.b0*w, b0_times_w'LEFT,
+                                 b0_times_w'RIGHT);
             w_d1 <= w;
             w_d2 <= w_d1;
             state <= 2;
@@ -136,34 +127,25 @@ BEGIN
           --           b1*w[n - 1] (for the next iteration)
           --           b2*w[n - 2] (for the next iteration)
           WHEN 2 =>
-            y_o <= resize(terms(c_B0_TIMES_W_IDX) + terms(c_AUX_B_IDX),
-                          y_o'LEFT, y_o'RIGHT);
+            y_o <= resize(b0_times_w + aux_b, y_o'LEFT, y_o'RIGHT);
             y_valid_o <= '1';
-            terms(c_A1_TIMES_W_D1_IDX) <= resize(coeffs_i.a1*w_d1,
-                                                 terms(c_A1_TIMES_W_D1_IDX)'LEFT,
-                                                 terms(c_A1_TIMES_W_D1_IDX)'RIGHT);
-            terms(c_A2_TIMES_W_D2_IDX) <= resize(coeffs_i.a2*w_d2,
-                                                 terms(c_A2_TIMES_W_D2_IDX)'LEFT,
-                                                 terms(c_A2_TIMES_W_D2_IDX)'RIGHT);
-            terms(c_B1_TIMES_W_D1_IDX) <= resize(coeffs_i.b1*w_d1,
-                                                 terms(c_B1_TIMES_W_D1_IDX)'LEFT,
-                                                 terms(c_B1_TIMES_W_D1_IDX)'RIGHT);
-            terms(c_B2_TIMES_W_D2_IDX) <= resize(coeffs_i.b2*w_d2,
-                                                 terms(c_B2_TIMES_W_D2_IDX)'LEFT,
-                                                 terms(c_B2_TIMES_W_D2_IDX)'RIGHT);
+            a1_times_w_d1 <= resize(coeffs_i.a1*w_d1, a1_times_w_d1'LEFT,
+                                    a1_times_w_d1'RIGHT);
+            a2_times_w_d2 <= resize(coeffs_i.a2*w_d2, a2_times_w_d2'LEFT,
+                                    a2_times_w_d2'RIGHT);
+            b1_times_w_d1 <= resize(coeffs_i.b1*w_d1, b1_times_w_d1'LEFT,
+                                    b1_times_w_d1'RIGHT);
+            b2_times_w_d2 <= resize(coeffs_i.b2*w_d2, b2_times_w_d2'LEFT,
+                                    b2_times_w_d2'RIGHT);
             state <= 3;
 
           -- Computes: -a1*w[n - 1] - a2*w[n - 2] (for the next iteration)
           --            b1*w[n - 1] + b2*w[n - 2] (for the next iteration)
           WHEN 3 =>
-            terms(c_AUX_A_IDX) <= resize(-terms(c_A1_TIMES_W_D1_IDX) -
-                                          terms(c_A2_TIMES_W_D2_IDX),
-                                         terms(c_AUX_A_IDX)'LEFT,
-                                         terms(c_AUX_A_IDX)'RIGHT);
-            terms(c_AUX_B_IDX) <= resize(terms(c_B1_TIMES_W_D1_IDX) +
-                                         terms(c_B2_TIMES_W_D2_IDX),
-                                         terms(c_AUX_B_IDX)'LEFT,
-                                         terms(c_AUX_B_IDX)'RIGHT);
+            aux_a <= resize(-a1_times_w_d1 - a2_times_w_d2, aux_a'LEFT,
+                            aux_a'RIGHT);
+            aux_b <= resize(b1_times_w_d1 + b2_times_w_d2, aux_b'LEFT,
+                            aux_b'RIGHT);
             state <= 0;
         END CASE;
       END IF;
