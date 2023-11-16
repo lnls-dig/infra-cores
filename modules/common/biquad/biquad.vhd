@@ -107,6 +107,7 @@ BEGIN
         w_d2 <= (OTHERS => '0');
         terms <= (OTHERS => (OTHERS => '0'));
         state <= 0;
+        y_valid_o <= '0';
       ELSE
         y_valid_o <= '0';
 
