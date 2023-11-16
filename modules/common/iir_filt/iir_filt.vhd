@@ -73,6 +73,9 @@ ENTITY iir_filt IS
                                 a2(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH)
                               );
 
+    -- Busy flag
+    busy_o              : OUT STD_LOGIC;
+
     -- Output
     -- y[n]
     y_o                 : OUT SFIXED(g_Y_INT_WIDTH-1 DOWNTO -g_Y_FRAC_WIDTH);
@@ -95,6 +98,7 @@ ARCHITECTURE behave OF iir_filt IS
   TYPE t_cascade_ifcs IS ARRAY (NATURAL RANGE <>) OF t_cascade_ifc;
 
   SIGNAL cascade_ifcs : t_cascade_ifcs(c_NUM_OF_BIQUADS-1 DOWNTO 0);
+  SIGNAL busy : STD_LOGIC_VECTOR(c_NUM_OF_BIQUADS-1 DOWNTO 0);
 BEGIN
   gen_biquads : FOR idx IN 0 TO c_NUM_OF_BIQUADS-1
     GENERATE
@@ -114,6 +118,7 @@ BEGIN
           x_i                 => cascade_ifcs(idx).x,
           x_valid_i           => cascade_ifcs(idx).x_valid,
           coeffs_i            => coeffs_i(idx),
+          busy_o              => busy(idx),
           y_o                 => cascade_ifcs(idx).y,
           y_valid_o           => cascade_ifcs(idx).y_valid
         );
@@ -130,4 +135,8 @@ BEGIN
 
   y_o <= resize(cascade_ifcs(c_NUM_OF_BIQUADS-1).y, y_o'LEFT, y_o'RIGHT);
   y_valid_o <= cascade_ifcs(c_NUM_OF_BIQUADS-1).y_valid;
+
+  -- Since all biquads have the same FSM length, it's enough to consider only
+  -- the first cascaded biquad's busy flag.
+  busy_o <= busy(0);
 END ARCHITECTURE behave;

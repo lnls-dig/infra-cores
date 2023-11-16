@@ -67,6 +67,9 @@ ENTITY biquad IS
                                 a2(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH)
                               );
 
+    -- Busy flag
+    busy_o              : OUT STD_LOGIC;
+
     -- Output
     -- y[n] = b0*x[n] + b1*x[n - 1] + b2*x[n - 2] - a1*y[n - 1] - a2*y[n - 2]
     y_o                 : OUT SFIXED(g_Y_INT_WIDTH-1 DOWNTO -g_Y_FRAC_WIDTH);
@@ -151,4 +154,9 @@ BEGIN
       END IF;
     END IF;
   END PROCESS;
+
+  busy_o <= '1' WHEN (state = 0 AND x_valid_i = '1') ELSE
+            '1' WHEN state = 1 ELSE
+            '1' WHEN state = 2 ELSE
+            '0';
 END ARCHITECTURE behave;

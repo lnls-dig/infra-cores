@@ -330,6 +330,7 @@ package ifc_common_pkg is
                                   a2(g_COEFF_INT_WIDTH-1 downto -g_COEFF_FRAC_WIDTH)
                                 );
 
+      busy_o              : out std_logic;
       y_o                 : out sfixed(g_Y_INT_WIDTH-1 downto -g_Y_FRAC_WIDTH);
       y_valid_o           : out std_logic
     );
@@ -360,6 +361,7 @@ package ifc_common_pkg is
                                   a1(g_COEFF_INT_WIDTH-1 downto -g_COEFF_FRAC_WIDTH),
                                   a2(g_COEFF_INT_WIDTH-1 downto -g_COEFF_FRAC_WIDTH)
                                 );
+      busy_o              : out std_logic;
       y_o                 : out sfixed(g_Y_INT_WIDTH-1 downto -g_Y_FRAC_WIDTH);
       y_valid_o           : out std_logic
     );

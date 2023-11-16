@@ -100,6 +100,7 @@ ARCHITECTURE test OF biquad_tb IS
                     a1(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH),
                     a2(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH)
                   );
+  SIGNAL busy : STD_LOGIC := '0';
   SIGNAL y : SFIXED(g_Y_INT_WIDTH-1 DOWNTO -g_Y_FRAC_WIDTH);
   SIGNAL y_valid : STD_LOGIC := '0';
 BEGIN
@@ -131,6 +132,7 @@ BEGIN
 
       read(lin, aux);
       x <= to_sfixed(aux, x'LEFT, x'RIGHT);
+      f_wait_clocked_signal(clk, busy, '0');
       x_valid <= '1';
       f_wait_cycles(clk, 1);
       x_valid <= '0';
@@ -163,6 +165,7 @@ BEGIN
       x_i                 => x,
       x_valid_i           => x_valid,
       coeffs_i            => coeffs,
+      busy_o              => busy,
       y_o                 => y,
       y_valid_o           => y_valid
     );
