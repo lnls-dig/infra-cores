@@ -110,6 +110,11 @@ BEGIN
     VARIABLE lin : LINE;
     VARIABLE aux : REAL;
   BEGIN
+    rst_n <= '0';
+    f_wait_cycles(clk, 1);
+    rst_n <= '1';
+
+    f_wait_cycles(clk, 1);
     file_open(fin, g_TEST_COEFFS_FILENAME, read_mode);
     readline(fin, lin);
     read(lin, aux); coeffs.b0 <= to_sfixed(aux, coeffs.b0'LEFT, coeffs.b0'RIGHT);

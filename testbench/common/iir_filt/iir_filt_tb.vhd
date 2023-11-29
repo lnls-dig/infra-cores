@@ -117,6 +117,10 @@ BEGIN
     VARIABLE lin : LINE;
     VARIABLE aux : REAL;
   BEGIN
+    rst_n <= '0';
+    f_wait_cycles(clk, 1);
+    rst_n <= '1';
+
     file_open(fin, g_TEST_COEFFS_FILENAME, read_mode);
     FOR idx IN 0 TO c_NUM_OF_BIQUADS-1
     LOOP
