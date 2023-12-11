@@ -62,7 +62,7 @@ end acq_sel_chan;
 architecture rtl of acq_sel_chan is
 
   signal lmt_valid                          : std_logic;
-  signal lmt_curr_chan_id                   : unsigned(c_chan_id_width-1 downto 0);
+  signal lmt_curr_chan_id                   : unsigned(c_chan_id_width-1 downto 0) := (others => '0');
 
   signal acq_data_marsh_demux               : std_logic_vector(c_acq_chan_max_w-1 downto 0);
   signal acq_trig_demux                     : std_logic;

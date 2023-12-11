@@ -198,9 +198,9 @@ architecture rtl of acq_ddr3_axis_write is
 
   -- Flow control signals
   signal lmt_pre_pkt_size                   : unsigned(c_pkt_size_width-1 downto 0);
-  signal lmt_pre_pkt_size_s                 : std_logic_vector(c_pkt_size_width-1 downto 0);
-  signal lmt_pre_pkt_size_alig_s            : std_logic_vector(c_pkt_size_width-1 downto 0);
-  signal lmt_pre_pkt_size_aggd              : unsigned(c_pkt_size_width-1 downto 0);
+  signal lmt_pre_pkt_size_s                 : std_logic_vector(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_pre_pkt_size_alig_s            : std_logic_vector(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_pre_pkt_size_aggd              : unsigned(c_pkt_size_width-1 downto 0) := (others => '0');
   signal lmt_pre_pkt_size_aggd_byte_s       : std_logic_vector(c_pkt_size_width-1 downto 0);
   signal lmt_pre_pkt_size_aggd_byte         : unsigned(c_pkt_size_width-1 downto 0);
   signal lmt_pos_pkt_size                   : unsigned(c_pkt_size_width-1 downto 0);
@@ -212,7 +212,7 @@ architecture rtl of acq_ddr3_axis_write is
   signal lmt_full_pkt_size                  : unsigned(c_pkt_size_width-1 downto 0);
   signal lmt_full_pkt_size_s                : std_logic_vector(c_pkt_size_width-1 downto 0);
   signal lmt_full_pkt_size_alig_s           : std_logic_vector(c_pkt_size_width-1 downto 0);
-  signal lmt_full_pkt_size_aggd             : unsigned(c_pkt_size_width-1 downto 0);
+  signal lmt_full_pkt_size_aggd             : unsigned(c_pkt_size_width-1 downto 0) := (others => '0');
   signal lmt_full_pkt_size_aggd_byte_s      : std_logic_vector(c_pkt_size_width-1 downto 0);
   signal lmt_full_pkt_size_aggd_byte        : unsigned(c_pkt_size_width-1 downto 0);
   signal lmt_shots_nb                       : unsigned(c_shots_size_width-1 downto 0);
@@ -237,7 +237,7 @@ architecture rtl of acq_ddr3_axis_write is
   signal fc_dreq_pld                        : std_logic;
   signal fc_ack                             : std_logic;
   signal fc_trigger_cmd                     : std_logic;
-  signal fc_data_id_cmd                     : std_logic_vector(2 downto 0);
+  signal fc_data_id_cmd                     : std_logic_vector(2 downto 0) := (others => '0');
 
   signal valid_trans_cmd                    : std_logic;
   signal valid_trans_cmd_d0                 : std_logic;
@@ -267,9 +267,9 @@ architecture rtl of acq_ddr3_axis_write is
   signal pl_pkt_thres_hit_pld               : std_logic;
 
   -- Counter signals
-  signal dbg_cmd_pkt_ct_cnt                 : std_logic_vector(c_pkt_size_width-1 downto 0);
+  signal dbg_cmd_pkt_ct_cnt                 : std_logic_vector(c_pkt_size_width-1 downto 0) := (others => '0');
   signal dbg_cmd_shots_cnt                  : std_logic_vector(c_shots_size_width-1 downto 0);
-  signal dbg_pld_pkt_ct_cnt                 : std_logic_vector(c_pkt_size_width-1 downto 0);
+  signal dbg_pld_pkt_ct_cnt                 : std_logic_vector(c_pkt_size_width-1 downto 0) := (others => '0');
   signal dbg_pld_shots_cnt                  : std_logic_vector(c_shots_size_width-1 downto 0);
   signal pl_cmd_cnt_en                      : std_logic;
   signal acq_cmd_cnt_en                     : std_logic;
@@ -278,7 +278,7 @@ architecture rtl of acq_ddr3_axis_write is
 
   -- DDR3 Signals
   signal ddr_data_in                        : std_logic_vector(g_ddr_header_width+g_ddr_payload_width-1 downto 0);
-  signal ddr_addr_cnt_axis                  : unsigned(g_ddr_addr_width-1 downto 0);
+  signal ddr_addr_cnt_axis                  : unsigned(g_ddr_addr_width-1 downto 0) := (others => '0');
   signal ddr_byte_addr_cnt_axis             : std_logic_vector(g_ddr_addr_width-1 downto 0);
   signal ddr_addr_cnt_max_reached           : std_logic;
   signal ddr_addr_cnt_m1_max_reached        : std_logic;
@@ -292,8 +292,8 @@ architecture rtl of acq_ddr3_axis_write is
   signal ddr_btt_mem_area_rem               : unsigned(g_ddr_addr_width-1 downto 0);
   signal ddr_btt_slv                        : std_logic_vector(c_axis_cmd_tdata_btt_width-1 downto 0);
   signal ddr_addr_init                      : unsigned(g_ddr_addr_width-1 downto 0);
-  signal ddr_addr_max                       : unsigned(g_ddr_addr_width-1 downto 0);
-  signal ddr_addr_max_m1                    : unsigned(g_ddr_addr_width-1 downto 0);
+  signal ddr_addr_max                       : unsigned(g_ddr_addr_width-1 downto 0) := (others => '0');
+  signal ddr_addr_max_m1                    : unsigned(g_ddr_addr_width-1 downto 0) := (others => '0');
   signal ddr_recv_pkt_cnt                   : unsigned(c_ddr_axis_max_wtt_width-1 downto 0);
   signal ddr_addr_first                     : std_logic;
   signal ddr_reissue_trans                  : std_logic;

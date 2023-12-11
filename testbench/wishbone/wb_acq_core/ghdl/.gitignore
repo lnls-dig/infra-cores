@@ -1,0 +1,5 @@
+wb_acq_core_tb
+wb_acq_core_tb.ghw
+
+*.o
+*.cf

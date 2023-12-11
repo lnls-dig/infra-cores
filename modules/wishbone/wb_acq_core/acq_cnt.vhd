@@ -55,17 +55,17 @@ end acq_cnt;
 
 architecture rtl of acq_cnt is
 
-  signal pkt_ct_cnt                          : unsigned(c_pkt_size_width-1 downto 0);
+  signal pkt_ct_cnt                          : unsigned(c_pkt_size_width-1 downto 0) := (others => '0');
   signal pkt_cnt_en                          : std_logic;
 
   signal pkt_ct_cnt_all                      : std_logic;
   signal pkt_ct_cnt_will_finish              : std_logic;
 
-  signal shots_cnt                           : unsigned(c_shots_size_width-1 downto 0);
+  signal shots_cnt                           : unsigned(c_shots_size_width-1 downto 0) := (others => '0');
   signal shots_cnt_all                       : std_logic;
 
-  signal lmt_pkt_size                        : unsigned(c_pkt_size_width-1 downto 0);
-  signal lmt_shots_nb                        : unsigned(c_shots_size_width-1 downto 0);
+  signal lmt_pkt_size                        : unsigned(c_pkt_size_width-1 downto 0) := to_unsigned(1, c_pkt_size_width);
+  signal lmt_shots_nb                        : unsigned(c_shots_size_width-1 downto 0) := to_unsigned(1, c_shots_size_width);
 
 begin
 

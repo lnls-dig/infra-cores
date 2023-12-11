@@ -122,9 +122,9 @@ architecture rtl of fc_source is
   -- signals that a packet was actually transfered
   signal pkt_sent                           : std_logic;
   signal lmt_valid                          : std_logic;
-  signal lmt_pre_pkt_size                   : unsigned(c_pkt_size_width-1 downto 0);
-  signal lmt_pos_pkt_size                   : unsigned(c_pkt_size_width-1 downto 0);
-  signal lmt_full_pkt_size                  : unsigned(c_pkt_size_width-1 downto 0);
+  signal lmt_pre_pkt_size                   : unsigned(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_pos_pkt_size                   : unsigned(c_pkt_size_width-1 downto 0) := (others => '0');
+  signal lmt_full_pkt_size                  : unsigned(c_pkt_size_width-1 downto 0) := (others => '0');
 
   -- Pre output FIFO signals
   signal pre_out_fifo_we                    : std_logic;
@@ -146,7 +146,7 @@ architecture rtl of fc_source is
   signal fc_oob_out_int                     : t_fc_data_oob;
 
   -- Counters
-  signal fc_in_pend_cnt                     : t_fc_pkt;
+  signal fc_in_pend_cnt                     : t_fc_pkt := (others => '0');
 
   signal output_pipe_full                   : std_logic;
   signal output_pipe_almost_full            : std_logic;
