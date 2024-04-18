@@ -27,8 +27,9 @@ USE work.ifc_common_pkg.ALL;
 
 ENTITY iir_filt IS
   GENERIC (
-    -- Maximum filter order
-    g_MAX_FILT_ORDER    : NATURAL;
+    -- Number of internal biquads
+    -- The order is given by 2*g_NUM_BIQUADS
+    g_NUM_BIQUADS       : NATURAL;
 
     -- Integer width of x
     g_X_INT_WIDTH       : NATURAL;
@@ -64,8 +65,7 @@ ENTITY iir_filt IS
 
     -- Coefficients for all ceil(g_MAX_FILT_ORDER/2) internal biquads
     -- b0, b1, b2, a1, a2 (a0 = 1)
-    coeffs_i            : IN  t_iir_filt_coeffs(
-                                ((g_MAX_FILT_ORDER + 1)/2)-1 DOWNTO 0)(
+    coeffs_i            : IN  t_iir_filt_coeffs(g_NUM_BIQUADS-1 DOWNTO 0)(
                                 b0(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH),
                                 b1(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH),
                                 b2(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH),
@@ -85,8 +85,6 @@ ENTITY iir_filt IS
 END ENTITY iir_filt;
 
 ARCHITECTURE behave OF iir_filt IS
-  CONSTANT c_NUM_OF_BIQUADS : NATURAL := (g_MAX_FILT_ORDER + 1)/2;
-
   TYPE t_cascade_ifc IS RECORD
     x       : SFIXED(g_X_INT_WIDTH-1 DOWNTO
                 -(g_X_FRAC_WIDTH + g_IFCS_EXTRA_BITS));
@@ -97,10 +95,10 @@ ARCHITECTURE behave OF iir_filt IS
   END RECORD;
   TYPE t_cascade_ifcs IS ARRAY (NATURAL RANGE <>) OF t_cascade_ifc;
 
-  SIGNAL cascade_ifcs : t_cascade_ifcs(c_NUM_OF_BIQUADS-1 DOWNTO 0);
-  SIGNAL busy : STD_LOGIC_VECTOR(c_NUM_OF_BIQUADS-1 DOWNTO 0);
+  SIGNAL cascade_ifcs : t_cascade_ifcs(g_NUM_BIQUADS-1 DOWNTO 0);
+  SIGNAL busy : STD_LOGIC_VECTOR(g_NUM_BIQUADS-1 DOWNTO 0);
 BEGIN
-  gen_biquads : FOR idx IN 0 TO c_NUM_OF_BIQUADS-1
+  gen_biquads : FOR idx IN 0 TO g_NUM_BIQUADS-1
     GENERATE
       cmp_biquad : biquad
         GENERIC MAP (
@@ -127,14 +125,14 @@ BEGIN
   cascade_ifcs(0).x <= resize(x_i, cascade_ifcs(0).x'LEFT, cascade_ifcs(0).x'RIGHT);
   cascade_ifcs(0).x_valid <= x_valid_i;
 
-  gen_cascade_conn : FOR idx IN 0 TO c_NUM_OF_BIQUADS-2
+  gen_cascade_conn : FOR idx IN 0 TO g_NUM_BIQUADS-2
     GENERATE
       cascade_ifcs(idx + 1).x <= cascade_ifcs(idx).y;
       cascade_ifcs(idx + 1).x_valid <= cascade_ifcs(idx).y_valid;
     END GENERATE gen_cascade_conn;
 
-  y_o <= resize(cascade_ifcs(c_NUM_OF_BIQUADS-1).y, y_o'LEFT, y_o'RIGHT);
-  y_valid_o <= cascade_ifcs(c_NUM_OF_BIQUADS-1).y_valid;
+  y_o <= resize(cascade_ifcs(g_NUM_BIQUADS-1).y, y_o'LEFT, y_o'RIGHT);
+  y_valid_o <= cascade_ifcs(g_NUM_BIQUADS-1).y_valid;
 
   -- Since all biquads have the same FSM length, it's enough to consider only
   -- the first cascaded biquad's busy flag.
