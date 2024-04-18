@@ -338,7 +338,7 @@ package ifc_common_pkg is
 
   component iir_filt is
     generic (
-      g_MAX_FILT_ORDER    : natural;
+      g_NUM_BIQUADS       : natural;
       g_X_INT_WIDTH       : natural;
       g_X_FRAC_WIDTH      : natural;
       g_COEFF_INT_WIDTH   : natural;
@@ -353,8 +353,7 @@ package ifc_common_pkg is
       rst_n_i             : in  std_logic;
       x_i                 : in  sfixed(g_X_INT_WIDTH-1 downto -g_X_FRAC_WIDTH);
       x_valid_i           : in  std_logic;
-      coeffs_i            : in  t_iir_filt_coeffs(
-                                  ((g_MAX_FILT_ORDER + 1)/2)-1 downto 0)(
+      coeffs_i            : in  t_iir_filt_coeffs(g_NUM_BIQUADS-1 downto 0)(
                                   b0(g_COEFF_INT_WIDTH-1 downto -g_COEFF_FRAC_WIDTH),
                                   b1(g_COEFF_INT_WIDTH-1 downto -g_COEFF_FRAC_WIDTH),
                                   b2(g_COEFF_INT_WIDTH-1 downto -g_COEFF_FRAC_WIDTH),

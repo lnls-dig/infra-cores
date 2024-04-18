@@ -32,11 +32,12 @@ USE work.ifc_common_pkg.ALL;
 
 ENTITY iir_filt_tb IS
   GENERIC (
-    -- Maximum filter order
-    g_MAX_FILT_ORDER        : NATURAL := 10;
+    -- Number of internal biquads
+    -- The order is given by 2*g_NUM_BIQUADS
+    g_NUM_BIQUADS           : NATURAL := 5;
 
     -- File containing the biquad's coefficients
-    -- This file must have at least ceil(g_MAX_FILT_ORDER/2) lines of coefficients
+    -- This file must have at least g_NUM_BIQUADS lines of coefficients
     g_TEST_COEFFS_FILENAME  : STRING := "../iir_filt_coeffs.dat";
     -- File containing the values for x and the expected values for y
     g_TEST_X_Y_FILENAME     : STRING := "../iir_filt_x_y.dat";
@@ -94,13 +95,12 @@ ARCHITECTURE test OF iir_filt_tb IS
   END PROCEDURE f_wait_clocked_signal;
 
   CONSTANT c_SYS_CLOCK_FREQ : NATURAL := 100_000_000;
-  CONSTANT c_NUM_OF_BIQUADS : NATURAL := (g_MAX_FILT_ORDER + 1)/2;
 
   SIGNAL clk : STD_LOGIC := '0';
   SIGNAL rst_n : STD_LOGIC := '1';
   SIGNAL x : SFIXED(g_X_INT_WIDTH-1 DOWNTO -g_X_FRAC_WIDTH);
   SIGNAL x_valid : STD_LOGIC := '0';
-  SIGNAL coeffs : t_iir_filt_coeffs(c_NUM_OF_BIQUADS-1 DOWNTO 0)(
+  SIGNAL coeffs : t_iir_filt_coeffs(g_NUM_BIQUADS-1 DOWNTO 0)(
                     b0(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH),
                     b1(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH),
                     b2(g_COEFF_INT_WIDTH-1 DOWNTO -g_COEFF_FRAC_WIDTH),
@@ -123,7 +123,7 @@ BEGIN
     rst_n <= '1';
 
     file_open(fin, g_TEST_COEFFS_FILENAME, read_mode);
-    FOR idx IN 0 TO c_NUM_OF_BIQUADS-1
+    FOR idx IN 0 TO g_NUM_BIQUADS-1
     LOOP
       readline(fin, lin);
       read(lin, aux); coeffs(idx).b0 <= to_sfixed(aux, coeffs(idx).b0'LEFT, coeffs(idx).b0'RIGHT);
@@ -160,7 +160,7 @@ BEGIN
 
   UUT : iir_filt
     GENERIC MAP (
-      g_MAX_FILT_ORDER    => g_MAX_FILT_ORDER,
+      g_NUM_BIQUADS       => g_NUM_BIQUADS,
       g_X_INT_WIDTH       => g_X_INT_WIDTH,
       g_X_FRAC_WIDTH      => g_X_FRAC_WIDTH,
       g_COEFF_INT_WIDTH   => g_COEFF_INT_WIDTH,
