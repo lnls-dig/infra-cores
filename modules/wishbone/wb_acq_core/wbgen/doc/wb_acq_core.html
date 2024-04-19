@@ -1193,10 +1193,10 @@ CH23_ATOM_DESC
 <table cellpadding=0 cellspacing=0 border=0>
 <tr>
 <td  class="td_arrow_left">
-&rarr;
+&rArr;
 </td>
 <td  class="td_pblock_left">
-rst_n_i
+wb_adr_i[5:0]
 </td>
 <td  class="td_sym_center">
 
@@ -1210,10 +1210,10 @@ rst_n_i
 </tr>
 <tr>
 <td  class="td_arrow_left">
-&rarr;
+&rArr;
 </td>
 <td  class="td_pblock_left">
-clk_sys_i
+wb_dat_i[31:0]
 </td>
 <td  class="td_sym_center">
 
@@ -1227,40 +1227,6 @@ acq_core_ctl_fsm_start_acq_o
 </tr>
 <tr>
 <td  class="td_arrow_left">
-&rArr;
-</td>
-<td  class="td_pblock_left">
-wb_adr_i[5:0]
-</td>
-<td  class="td_sym_center">
-
-</td>
-<td  class="td_pblock_right">
-acq_core_ctl_fsm_stop_acq_o
-</td>
-<td  class="td_arrow_right">
-&rarr;
-</td>
-</tr>
-<tr>
-<td  class="td_arrow_left">
-&rArr;
-</td>
-<td  class="td_pblock_left">
-wb_dat_i[31:0]
-</td>
-<td  class="td_sym_center">
-
-</td>
-<td  class="td_pblock_right">
-acq_core_ctl_reserved1_o[13:0]
-</td>
-<td  class="td_arrow_right">
-&rArr;
-</td>
-</tr>
-<tr>
-<td  class="td_arrow_left">
 &lArr;
 </td>
 <td  class="td_pblock_left">
@@ -1270,7 +1236,7 @@ wb_dat_o[31:0]
 
 </td>
 <td  class="td_pblock_right">
-acq_core_ctl_fsm_acq_now_o
+acq_core_ctl_fsm_stop_acq_o
 </td>
 <td  class="td_arrow_right">
 &rarr;
@@ -1287,7 +1253,7 @@ wb_cyc_i
 
 </td>
 <td  class="td_pblock_right">
-acq_core_ctl_reserved2_o[14:0]
+acq_core_ctl_reserved1_o[13:0]
 </td>
 <td  class="td_arrow_right">
 &rArr;
@@ -1301,13 +1267,13 @@ acq_core_ctl_reserved2_o[14:0]
 wb_sel_i[3:0]
 </td>
 <td  class="td_sym_center">
-&nbsp;
+
 </td>
 <td  class="td_pblock_right">
-
+acq_core_ctl_fsm_acq_now_o
 </td>
 <td  class="td_arrow_right">
-
+&rarr;
 </td>
 </tr>
 <tr>
@@ -1321,10 +1287,10 @@ wb_stb_i
 
 </td>
 <td  class="td_pblock_right">
-<b>Status register:</b>
+acq_core_ctl_reserved2_o[14:0]
 </td>
 <td  class="td_arrow_right">
-
+&rArr;
 </td>
 </tr>
 <tr>
@@ -1333,6 +1299,40 @@ wb_stb_i
 </td>
 <td  class="td_pblock_left">
 wb_we_i
+</td>
+<td  class="td_sym_center">
+&nbsp;
+</td>
+<td  class="td_pblock_right">
+
+</td>
+<td  class="td_arrow_right">
+
+</td>
+</tr>
+<tr>
+<td  class="td_arrow_left">
+&larr;
+</td>
+<td  class="td_pblock_left">
+wb_ack_o
+</td>
+<td  class="td_sym_center">
+
+</td>
+<td  class="td_pblock_right">
+<b>Status register:</b>
+</td>
+<td  class="td_arrow_right">
+
+</td>
+</tr>
+<tr>
+<td  class="td_arrow_left">
+&larr;
+</td>
+<td  class="td_pblock_left">
+wb_err_o
 </td>
 <td  class="td_sym_center">
 
@@ -1349,7 +1349,7 @@ acq_core_sta_fsm_state_i[2:0]
 &larr;
 </td>
 <td  class="td_pblock_left">
-wb_ack_o
+wb_rty_o
 </td>
 <td  class="td_sym_center">
 
@@ -1372,10 +1372,61 @@ wb_stall_o
 
 </td>
 <td  class="td_pblock_right">
-acq_core_sta_reserved1_i[3:0]
+acq_core_sta_fifo_we_i
 </td>
 <td  class="td_arrow_right">
-&lArr;
+&larr;
+</td>
+</tr>
+<tr>
+<td  class="td_arrow_left">
+
+</td>
+<td  class="td_pblock_left">
+
+</td>
+<td  class="td_sym_center">
+
+</td>
+<td  class="td_pblock_right">
+acq_core_sta_fifo_re_i
+</td>
+<td  class="td_arrow_right">
+&larr;
+</td>
+</tr>
+<tr>
+<td  class="td_arrow_left">
+
+</td>
+<td  class="td_pblock_left">
+
+</td>
+<td  class="td_sym_center">
+
+</td>
+<td  class="td_pblock_right">
+acq_core_sta_fifo_fc_rd_en_i
+</td>
+<td  class="td_arrow_right">
+&larr;
+</td>
+</tr>
+<tr>
+<td  class="td_arrow_left">
+
+</td>
+<td  class="td_pblock_left">
+
+</td>
+<td  class="td_sym_center">
+
+</td>
+<td  class="td_pblock_right">
+acq_core_sta_fifo_rd_empty_i
+</td>
+<td  class="td_arrow_right">
+&larr;
 </td>
 </tr>
 <tr>
@@ -1423,7 +1474,75 @@ acq_core_sta_fc_full_i
 
 </td>
 <td  class="td_pblock_right">
-acq_core_sta_reserved2_i[5:0]
+acq_core_sta_fifo_wr_full_i
+</td>
+<td  class="td_arrow_right">
+&larr;
+</td>
+</tr>
+<tr>
+<td  class="td_arrow_left">
+
+</td>
+<td  class="td_pblock_left">
+
+</td>
+<td  class="td_sym_center">
+
+</td>
+<td  class="td_pblock_right">
+acq_core_sta_fifo_fc_valid_fwft_i
+</td>
+<td  class="td_arrow_right">
+&larr;
+</td>
+</tr>
+<tr>
+<td  class="td_arrow_left">
+
+</td>
+<td  class="td_pblock_left">
+
+</td>
+<td  class="td_sym_center">
+
+</td>
+<td  class="td_pblock_right">
+acq_core_sta_source_pl_dreq_i
+</td>
+<td  class="td_arrow_right">
+&larr;
+</td>
+</tr>
+<tr>
+<td  class="td_arrow_left">
+
+</td>
+<td  class="td_pblock_left">
+
+</td>
+<td  class="td_sym_center">
+
+</td>
+<td  class="td_pblock_right">
+acq_core_sta_source_pl_stall_i
+</td>
+<td  class="td_arrow_right">
+&larr;
+</td>
+</tr>
+<tr>
+<td  class="td_arrow_left">
+
+</td>
+<td  class="td_pblock_left">
+
+</td>
+<td  class="td_sym_center">
+
+</td>
+<td  class="td_pblock_right">
+acq_core_sta_reserved2_i[1:0]
 </td>
 <td  class="td_arrow_right">
 &lArr;
@@ -1457,7 +1576,7 @@ acq_core_sta_ddr3_trans_done_i
 
 </td>
 <td  class="td_pblock_right">
-acq_core_sta_reserved3_i[14:0]
+acq_core_sta_fifo_wr_count_i[14:0]
 </td>
 <td  class="td_arrow_right">
 &lArr;
@@ -5970,7 +6089,7 @@ STA
 </tr>
 <tr>
 <td style="border: solid 1px black;" colspan=8  class="td_field">
-RESERVED3[14:7]
+FIFO_WR_COUNT[14:7]
 </td>
 <td >
 
@@ -6024,7 +6143,7 @@ RESERVED3[14:7]
 </tr>
 <tr>
 <td style="border: solid 1px black;" colspan=7  class="td_field">
-RESERVED3[6:0]
+FIFO_WR_COUNT[6:0]
 </td>
 <td style="border: solid 1px black;" colspan=1  class="td_field">
 DDR3_TRANS_DONE
@@ -6077,26 +6196,26 @@ DDR3_TRANS_DONE
 </td>
 </tr>
 <tr>
-<td style="border: solid 1px black;" colspan=6  class="td_field">
-RESERVED2[5:0]
+<td style="border: solid 1px black;" colspan=2  class="td_field">
+RESERVED2[1:0]
+</td>
+<td style="border: solid 1px black;" colspan=1  class="td_field">
+SOURCE_PL_STALL
+</td>
+<td style="border: solid 1px black;" colspan=1  class="td_field">
+SOURCE_PL_DREQ
+</td>
+<td style="border: solid 1px black;" colspan=1  class="td_field">
+FIFO_FC_VALID_FWFT
+</td>
+<td style="border: solid 1px black;" colspan=1  class="td_field">
+FIFO_WR_FULL
 </td>
 <td style="border: solid 1px black;" colspan=1  class="td_field">
 FC_FULL
 </td>
 <td style="border: solid 1px black;" colspan=1  class="td_field">
 FC_TRANS_DONE
-</td>
-<td >
-
-</td>
-<td >
-
-</td>
-<td >
-
-</td>
-<td >
-
 </td>
 <td >
 
@@ -6131,23 +6250,23 @@ FC_TRANS_DONE
 </td>
 </tr>
 <tr>
-<td style="border: solid 1px black;" colspan=4  class="td_field">
-RESERVED1[3:0]
+<td style="border: solid 1px black;" colspan=1  class="td_field">
+FIFO_RD_EMPTY
+</td>
+<td style="border: solid 1px black;" colspan=1  class="td_field">
+FIFO_FC_RD_EN
+</td>
+<td style="border: solid 1px black;" colspan=1  class="td_field">
+FIFO_RE
+</td>
+<td style="border: solid 1px black;" colspan=1  class="td_field">
+FIFO_WE
 </td>
 <td style="border: solid 1px black;" colspan=1  class="td_field">
 FSM_ACQ_DONE
 </td>
 <td style="border: solid 1px black;" colspan=3  class="td_field">
 FSM_STATE[2:0]
-</td>
-<td >
-
-</td>
-<td >
-
-</td>
-<td >
-
 </td>
 <td >
 
@@ -6167,9 +6286,21 @@ FSM_ACQ_DONE
 </b>[<i>read-only</i>]: FSM acquisition status
 <br>Values:<br>0: in progress<br>1: completed
 <li><b>
-RESERVED1
-</b>[<i>read-only</i>]: Reserved
-<br>Ignore on read, write with 0's
+FIFO_WE
+</b>[<i>read-only</i>]: FIFO write enable
+<br>FIFO write enable, used for debug only
+<li><b>
+FIFO_RE
+</b>[<i>read-only</i>]: FIFO read enable
+<br>FIFO read enable, used for debug only
+<li><b>
+FIFO_FC_RD_EN
+</b>[<i>read-only</i>]: FIFO flow control read enable
+<br>FIFO flow control read enable, used for debug only
+<li><b>
+FIFO_RD_EMPTY
+</b>[<i>read-only</i>]: FIFO empty
+<br>FIFO empty, used for debug only
 <li><b>
 FC_TRANS_DONE
 </b>[<i>read-only</i>]: External flow control transfer status
@@ -6179,6 +6310,22 @@ FC_FULL
 </b>[<i>read-only</i>]: External flow control FIFO full status
 <br>Values:<br>0: not full<br>1: full (data may be lost)
 <li><b>
+FIFO_WR_FULL
+</b>[<i>read-only</i>]: FIFO write full
+<br>FIFO write full, used for debug only
+<li><b>
+FIFO_FC_VALID_FWFT
+</b>[<i>read-only</i>]: FWFT FIFO valid output
+<br>FWFT FIFO valid output, used for debug only
+<li><b>
+SOURCE_PL_DREQ
+</b>[<i>read-only</i>]: Flow control data required
+<br>Flow control data required, used for debug only
+<li><b>
+SOURCE_PL_STALL
+</b>[<i>read-only</i>]: Flow control stall
+<br>Flow control stall, used for debug only
+<li><b>
 RESERVED2
 </b>[<i>read-only</i>]: Reserved
 <br>Ignore on read, write with 0's
@@ -6187,9 +6334,9 @@ DDR3_TRANS_DONE
 </b>[<i>read-only</i>]: DDR3 transfer status
 <br>Values:<br>0: in progress<br>1: completed
 <li><b>
-RESERVED3
-</b>[<i>read-only</i>]: Reserved
-<br>Ignore on read, write with 0's
+FIFO_WR_COUNT
+</b>[<i>read-only</i>]: FIFO write count
+<br>FIFO write count, used for debugging only
 </ul>
 <a name="TRIG_CFG"></a>
 <h3><a name="sect_3_3">3.3. Trigger configuration</a></h3>
@@ -6462,8 +6609,8 @@ SW_TRIG_EN
 <br>0: disable<br>1: enable
 <li><b>
 INT_TRIG_SEL
-</b>[<i>read/write</i>]: Channel selection for internal trigger
-<br>00: channel 1<br>01: channel 2<br>10: channel 3<br>n: channel n+1
+</b>[<i>read/write</i>]: Atom selection for internal trigger (atom within the channel selected by DTRIG_WHICH)
+<br>00: atom 1<br>01: atom 2<br>10: atom 3<br>n: atom n+1
 <li><b>
 RESERVED
 </b>[<i>read/write</i>]: Reserved

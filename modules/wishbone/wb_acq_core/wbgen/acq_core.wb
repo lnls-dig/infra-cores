@@ -102,11 +102,41 @@ peripheral {
     };
 
     field {
-      name = "Reserved";
-      description = "Ignore on read, write with 0's";
-      prefix = "reserved1";
+      name = "FIFO write enable";
+      description = "FIFO write enable, used for debug only";
+      prefix = "fifo_we";
       type = SLV;
-      size = 4;
+      size = 1;
+      access_bus = READ_ONLY;
+      access_dev = WRITE_ONLY;
+    };
+
+    field {
+      name = "FIFO read enable";
+      description = "FIFO read enable, used for debug only";
+      prefix = "fifo_re";
+      type = SLV;
+      size = 1;
+      access_bus = READ_ONLY;
+      access_dev = WRITE_ONLY;
+    };
+
+    field {
+      name = "FIFO flow control read enable";
+      description = "FIFO flow control read enable, used for debug only";
+      prefix = "fifo_fc_rd_en";
+      type = SLV;
+      size = 1;
+      access_bus = READ_ONLY;
+      access_dev = WRITE_ONLY;
+    };
+
+    field {
+      name = "FIFO empty";
+      description = "FIFO empty, used for debug only";
+      prefix = "fifo_rd_empty";
+      type = SLV;
+      size = 1;
       access_bus = READ_ONLY;
       access_dev = WRITE_ONLY;
     };
@@ -135,11 +165,51 @@ peripheral {
     };
 
     field {
+      name = "FIFO write full";
+      description = "FIFO write full, used for debug only";
+      prefix = "fifo_wr_full";
+      type = SLV;
+      size = 1;
+      access_bus = READ_ONLY;
+      access_dev = WRITE_ONLY;
+    };
+
+    field {
+      name = "FWFT FIFO valid output";
+      description = "FWFT FIFO valid output, used for debug only";
+      prefix = "fifo_fc_valid_fwft";
+      type = SLV;
+      size = 1;
+      access_bus = READ_ONLY;
+      access_dev = WRITE_ONLY;
+    };
+
+    field {
+      name = "Flow control data required";
+      description = "Flow control data required, used for debug only";
+      prefix = "source_pl_dreq";
+      type = SLV;
+      size = 1;
+      access_bus = READ_ONLY;
+      access_dev = WRITE_ONLY;
+    };
+
+    field {
+      name = "Flow control stall";
+      description = "Flow control stall, used for debug only";
+      prefix = "source_pl_stall";
+      type = SLV;
+      size = 1;
+      access_bus = READ_ONLY;
+      access_dev = WRITE_ONLY;
+    };
+
+    field {
       name = "Reserved";
       description = "Ignore on read, write with 0's";
       prefix = "reserved2";
       type = SLV;
-      size = 6;
+      size = 2;
       access_bus = READ_ONLY;
       access_dev = WRITE_ONLY;
     };
@@ -157,9 +227,9 @@ peripheral {
     };
 
     field {
-      name = "Reserved";
-      description = "Ignore on read, write with 0's";
-      prefix = "reserved3";
+      name = "FIFO write count";
+      description = "FIFO write count, used for debugging only";
+      prefix = "fifo_wr_count";
       type = SLV;
       size = 15;
       access_bus = READ_ONLY;
