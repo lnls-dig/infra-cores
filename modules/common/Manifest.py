@@ -14,6 +14,7 @@ modules = { "local" : ["anti_windup_accumulator",
                        "pulse_syncr",
                        "mov_avg_dyn",
                        "biquad",
-                       "iir_filt"] };
+                       "iir_filt",
+                       "i2c_slave_iface"] };
 
 files = [ "ifc_common_pkg.vhd" ];

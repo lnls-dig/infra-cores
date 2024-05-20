@@ -365,4 +365,53 @@ package ifc_common_pkg is
       y_valid_o           : out std_logic
     );
   end component iir_filt;
+
+  component i2c_slave_iface is
+    generic (
+      -- 7 bits slave address
+      g_I2C_SLAVE_ADDR: std_logic_vector(6 downto 0)
+    );
+    port (
+      -- Synchronous reset (active low)
+      rst_n_i  : in std_logic;
+
+      -- Clock input (should be at least 16x the maximum bitrate)
+      clk_i    : in std_logic;
+
+      -- I2C SCL input
+      scl_i    : in std_logic;
+
+      -- I2C SDA input
+      sda_i    : in std_logic;
+
+      -- I2C SDA output
+      sda_o    : out std_logic := '1';
+
+      -- I2C SDA output enable
+      sda_oe   : out std_logic := '0';
+
+      -- Data input (to be sent to master), non registered, should only be
+      -- updated after a read request signal (rd_o) is asserted
+      data_i   : in std_logic_vector(7 downto 0);
+
+      -- Data request signal, will be '1' for one clk_i cycle, data should be
+      -- available in data_i in the next clk_i cycle
+      rd_o     : out std_logic := '0';
+
+      -- Data output (data received from master), should only be sampled when
+      -- wr_o is asserted
+      data_o   : out std_logic_vector(7 downto 0);
+
+      -- Data available, will be '1' for one clk_i cycle, data_o will have the
+      -- data received from master
+      wr_o     : out std_logic := '0';
+
+      -- I2C start / restart detected
+      start_o  : out std_logic := '0';
+
+      -- I2C stop detected
+      stop_o  : out std_logic := '0'
+    );
+  end component i2c_slave_iface;
+
 end ifc_common_pkg;

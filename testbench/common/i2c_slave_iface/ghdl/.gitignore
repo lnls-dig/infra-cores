@@ -1,0 +1,4 @@
+i2c_slave_iface_tb
+*.ghw
+*.cf
+*.o
