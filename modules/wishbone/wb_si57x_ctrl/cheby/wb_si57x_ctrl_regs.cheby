@@ -1,0 +1,118 @@
+memory-map:
+  bus: wb-32-be
+  name: wb_si57x_ctrl_regs
+  description: Silabs Si57x controller
+  comment: |
+    Abstracts away the Si57x I2C interface and presents a memory mapped register ABI
+  x-hdl:
+    busgroup: True
+  children:
+    - reg:
+        name: ctl
+        width: 32
+        access: rw
+        address: 0x00000000
+        description: Si57x control register
+        comment: |
+          Si57x control register
+        children:
+          - field:
+              name: read_strp_regs
+              range: 0
+              description: Load the Si57x startup registers
+              x-hdl:
+                type: autoclear
+              comment: |
+                0: Do nothing;
+                1: Load startup registers (WARNING: This will change the output frequency of the Si57x oscillator to the startup values, autoclear).
+          - field:
+              name: apply_cfg
+              range: 1
+              description: Write the HSDIV, N1 and RFREQ registers
+              x-hdl:
+                type: autoclear
+              comment: |
+                0: Do nothing;
+                1: Write registers (autoclear).
+    - reg:
+        name: sta
+        width: 32
+        access: ro
+        description: Status bits
+        comment: |
+          Si57x controller status bits
+        children:
+          - field:
+                name: strp_complete
+                range: 0
+                description: Startup registers status
+                comment: |
+                  0: HSDIV_STRP, N1_STRP and RFREQ_STRP are not valid, a read_startup_regs command should be issued
+                  1: HSDIV_STRP, N1_STRP and RFREQ_STRP are updated and valid
+          - field:
+                name: cfg_in_sync
+                range: 1
+                description: Registers synchronization status
+                comment: |
+                  0: Registers HSDIV, N1 and RFREQ values are not in sync with the internal Si57x registers
+                  1: Registers HSDIV, N1 and RFREQ values are in sync with the internal Si57x registers
+          - field:
+                name: i2c_err
+                range: 2
+                description: I2C error status
+                comment: |
+                  0: No errors
+                  1: An I2C error occured (no response from slave, arbitration lost)
+          - field:
+                name: busy
+                range: 3
+                description: Controller busy status
+                comment: |
+                  0: The Si57x controller is idle and can receive new commands
+                  1: The Si57x controller is busy and will ignore new commands
+    - reg:
+        name: hsdiv_n1_rfreq_msb_strp
+        width: 32
+        access: ro
+        description: HSDIV, N1 and RFREQ higher bits startup values
+        children:
+          - field:
+                name: rfreq_msb_strp
+                range: 5-0
+                description: RFREQ startup value (most significant bits)
+          - field:
+                name: n1_strp
+                range: 12-6
+                description: N1 startup value
+          - field:
+                name: hsdiv_strp
+                range: 15-13
+                description: HSDIV startup value
+    - reg:
+        name: rfreq_lsb_strp
+        width: 32
+        access: ro
+        description: RFREQ startup value (least significant bits)
+    - reg:
+        name: hsdiv_n1_rfreq_msb
+        width: 32
+        access: rw
+        description: HSDIV, N1 and RFREQ higher bits
+        children:
+          - field:
+                name: rfreq_msb
+                range: 5-0
+                description: RFREQ (most significant bits)
+          - field:
+                name: n1
+                range: 12-6
+                description: N1
+          - field:
+                name: hsdiv
+                range: 15-13
+                description: HSDIV
+    - reg:
+        name: rfreq_lsb
+        width: 32
+        access: rw
+        description: RFREQ (least significant bits)

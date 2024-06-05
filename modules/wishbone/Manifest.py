@@ -22,4 +22,5 @@ modules = { "local" : [
                         "wb_afc_mgmt",
                         "wb_evt_cnt",
                         "wb_master_uart",
+                        "wb_si57x_ctrl",
                       ] };

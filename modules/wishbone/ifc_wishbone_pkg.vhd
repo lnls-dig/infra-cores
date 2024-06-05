@@ -2804,6 +2804,28 @@ package ifc_wishbone_pkg is
   );
   end component xwb_master_uart;
 
+  component xwb_si57x_ctrl is
+    generic (
+      g_SI57X_I2C_ADDR      : std_logic_vector(6 downto 0);
+      g_SCL_CLK_DIV         : natural range 1 to 65536;
+      g_SI57X_7PPM_VARIANT  : boolean;
+      g_INTERFACE_MODE      : t_wishbone_interface_mode;
+      g_ADDRESS_GRANULARITY : t_wishbone_address_granularity
+    );
+    port (
+      clk_i    : in  std_logic;
+      rst_n_i  : in  std_logic;
+      wb_slv_i : in  t_wishbone_slave_in;
+      wb_slv_o : out t_wishbone_slave_out;
+      sda_i    : in  std_logic;
+      sda_o    : out std_logic;
+      sda_oe_o : out std_logic;
+      scl_i    : in  std_logic;
+      scl_o    : out std_logic;
+      scl_oe_o : out std_logic
+    );
+  end component xwb_si57x_ctrl;
+
   --------------------------------------------------------------------
   -- SDB Devices Structures
   --------------------------------------------------------------------
@@ -2994,6 +3016,23 @@ package ifc_wishbone_pkg is
     version       => x"00000001",
     date          => x"20220718",
     name          => "LNLS_EVT_CNT_REGS  ")));
+
+    -- Si57x controller
+  constant c_xwb_si57x_ctrl_regs_sdb : t_sdb_device := (
+    abi_class     => x"0000",                   -- undocumented device
+    abi_ver_major => x"01",
+    abi_ver_minor => x"00",
+    wbd_endian    => c_sdb_endian_big,
+    wbd_width     => x"4",                      -- 32-bit port granularity (0100)
+    sdb_component => (
+    addr_first    => x"0000000000000000",
+    addr_last     => x"00000000000000FF",
+    product => (
+    vendor_id     => x"1000000000001215",       -- LNLS
+    device_id     => x"293c7542",
+    version       => x"00000001",
+    date          => x"20240619",
+    name          => "LNLS_SI57X_CTL_REGS")));
 
 
 end ifc_wishbone_pkg;
