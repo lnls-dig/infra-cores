@@ -7,12 +7,11 @@
 -- Standard   : VHDL 1993
 -------------------------------------------------------------------------------
 -- Description: This is a synthesizable I2C slave interface that samples the
---              SDA and SCL lines with the clk_i internal clock. It doesn't
---              checks for master ACK/NACK, can't do clock streching, only
---              supports a single fixed I2C address and answers with an ACK
---              every byte received after the I2C address.
+--              SDA and SCL lines with the clk_i internal clock. It can't do
+--              clock streching, only supports a single fixed I2C address and
+--              answers with an ACK every byte received after the I2C address.
 --              Master data is always sampled at the rising edge of SCL, slave
---              data is always written at the SCL falling edge
+--              data is always written at the SCL falling edge.
 -------------------------------------------------------------------------------
 -- Copyright (c) 2024 CNPEM
 -- Licensed under GNU Lesser General Public License (LGPL) v3.0
@@ -254,11 +253,16 @@ begin
             end if;
 
           when READING_ACK =>
-            -- Master ACK is ignored here
             if f_rising_edge_sig(scl_sync_prev, scl_sync) then
-              -- Request more data to be sent to master
-              rd_o <= '1';
-              i2c_state <= WRITING_BYTE;
+              if sda_sync = '0' then
+                -- If Master sends an ACK, request more data to be
+                -- sent to master
+                rd_o <= '1';
+                i2c_state <= WRITING_BYTE;
+              else
+                -- Else, goes to the IDLE state
+                i2c_state <= IDLE;
+              end if;
             end if;
 
         end case;
