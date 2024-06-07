@@ -102,6 +102,67 @@ architecture tb of i2c_slave_iface_tb is
       wait for scl_period_us/2 * 1 us;
   end procedure;
 
+  -- FIFO type for safe inter-process comunication
+  type t_fifo is protected
+    -- Read a byte from the FIFO if the FIFO is not empty, otherwise set
+    -- success to false
+    procedure read_data(data: out std_logic_vector(7 downto 0);
+                        success: out boolean);
+    -- Write a byte to the FIFO if the FIFO is not full, otherwise set
+    -- success to false
+    procedure write_data(data: in std_logic_vector(7 downto 0);
+                         success: out boolean);
+  end protected t_fifo;
+
+  type t_fifo is protected body
+    type t_byte_arr is array (integer range <>) of std_logic_vector(7 downto 0);
+    constant c_max_depth: integer := 31;
+    variable data_arr: t_byte_arr(0 to c_max_depth);
+    variable wr_cnt: integer range 0 to c_max_depth := 0;
+    variable rd_cnt: integer range 0 to c_max_depth := 0;
+
+    procedure read_data(data: out std_logic_vector(7 downto 0);
+                        success: out boolean) is
+    variable wr_rd_diff: integer := wr_cnt - rd_cnt;
+    variable buff_used: integer;
+    begin
+      buff_used := wr_rd_diff when wr_rd_diff >= 0 else c_max_depth + wr_rd_diff + 1;
+      if buff_used > 0 then
+        data := data_arr(rd_cnt);
+        if rd_cnt < c_max_depth then
+          rd_cnt := rd_cnt + 1;
+        else
+          rd_cnt := 0;
+        end if;
+        success := true;
+      else
+        success := false;
+      end if;
+    end procedure;
+
+    procedure write_data(data: in std_logic_vector(7 downto 0);
+                         success: out boolean) is
+    variable wr_rd_diff: integer := wr_cnt - rd_cnt;
+    variable buff_used: integer;
+    begin
+      buff_used := wr_rd_diff when wr_rd_diff >= 0 else c_max_depth + wr_rd_diff + 1;
+      if buff_used < c_max_depth then
+        data_arr(wr_cnt) := data;
+        if wr_cnt < c_max_depth then
+          wr_cnt := wr_cnt + 1;
+        else
+          wr_cnt := 0;
+        end if;
+        success := true;
+      else
+        success := false;
+      end if;
+    end procedure;
+
+  end protected body t_fifo;
+
+  shared variable mst_to_slv_fifo, slv_to_mst_fifo: t_fifo;
+
   signal clk: std_logic := '0';
   signal sda_i: std_logic := '1';
   signal sda_o: std_logic := '1';
@@ -114,11 +175,11 @@ architecture tb of i2c_slave_iface_tb is
   signal rst_n: std_logic := '0';
   signal ack: boolean := false;
   signal read_data: std_logic_vector(7 downto 0) := (others => '0');
-  signal data_sampled : std_logic_vector(7 downto 0) := (others => '0');
   signal start: std_logic;
   signal stop: std_logic;
 begin
-  clk <= not(clk) after 100 ns;
+  -- Clock is 16x the SCL rate
+  clk <= not(clk) after 625 ns;
 
   cmp_i2c_slave: i2c_slave_iface
     generic map (
@@ -140,6 +201,8 @@ begin
     );
 
   process
+    variable v_success: boolean := false;
+    variable v_data: std_logic_vector(7 downto 0);
   begin
     wait for 200 ns;
     rst_n <= '1';
@@ -164,8 +227,26 @@ begin
     f_read_ack(scl, sda_o, ack);
     assert ack report "Expected an ACK, got an NACK!"
       severity failure;
-    assert data_sampled = x"A5" report "Expected 0xA5, got 0x" & to_hstring(data_sampled)
+    mst_to_slv_fifo.read_data(v_data, v_success);
+    assert v_success report "FIFO empty!" severity failure;
+    assert v_data = x"A5" report "Expected 0xA5, got 0x" & to_hstring(v_data)
       severity failure;
+
+    -- Send data to slave
+    f_write_byte(scl, sda_i, x"4F");
+    f_read_ack(scl, sda_o, ack);
+    assert ack report "Expected an ACK, got an NACK!"
+      severity failure;
+    mst_to_slv_fifo.read_data(v_data, v_success);
+    assert v_success report "FIFO empty!" severity failure;
+    assert v_data = x"4F" report "Expected 0x4F, got 0x" & to_hstring(v_data)
+      severity failure;
+
+    -- Load data to the Slave to Master FIFO
+    slv_to_mst_fifo.write_data(x"B9", v_success);
+    assert v_success report "FIFO full!" severity failure;
+    slv_to_mst_fifo.write_data(x"13", v_success);
+    assert v_success report "FIFO full!" severity failure;
 
     -- Send a restart (master read, slave write)
     f_gen_start(scl, sda_i);
@@ -174,12 +255,15 @@ begin
     assert ack report "Expected an ACK, got an NACK!"
       severity failure;
 
-    -- Read data from slave
-    data_i <= x"B9";
+    -- Checks if the data sent by the slave is correct
     f_read_byte(scl, sda_o, read_data);
-    assert data_i = read_data report "Expected 0x" & to_hstring(data_i) &
-      ", got 0x" & to_hstring(read_data)
-      severity failure;
+    assert data_i = x"B9" report "Expected 0xB9, got 0x" &
+      to_hstring(read_data) severity failure;
+    f_send_ack(scl, sda_i, true);
+
+    f_read_byte(scl, sda_o, read_data);
+    assert data_i = x"13" report "Expected 0x13, got 0x" &
+      to_hstring(read_data) severity failure;
 
     -- Master send a NACK and STOP (last byte)
     f_send_ack(scl, sda_i, false);
@@ -189,11 +273,21 @@ begin
   end process;
 
   process(clk)
+    variable v_success: boolean := false;
+    variable v_data: std_logic_vector(7 downto 0);
   begin
     if rising_edge(clk) then
       -- Read data_o only when data_o is valid
       if wr = '1' then
-        data_sampled <= data_o;
+        mst_to_slv_fifo.write_data(data_o, v_success);
+        assert v_success report "Mater to Slave FIFO full!" severity failure;
+      end if;
+
+      -- Write data to the slave controller only when requested
+      if rd = '1' then
+        slv_to_mst_fifo.read_data(v_data, v_success);
+        data_i <= v_data;
+        assert v_success report "Slave to Master FIFO empty!" severity failure;
       end if;
     end if;
   end process;
