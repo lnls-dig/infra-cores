@@ -31,6 +31,9 @@ use work.wb_fmc_active_clk_csr_wbgen2_pkg.all;
 entity wb_fmc_active_clk is
 generic
 (
+  g_si57x_i2c_addr                          : std_logic_vector(6 downto 0);
+  g_si57x_7ppm_variant                      : boolean;
+  g_si57x_i2c_clk_div                       : natural range 1 to 65536;
   g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
   g_address_granularity                     : t_wishbone_address_granularity := WORD;
   g_with_extra_wb_reg                       : boolean := false
@@ -115,7 +118,7 @@ architecture rtl of wb_fmc_active_clk is
   constant c_layout : t_sdb_record_array(c_slaves-1 downto 0) :=
   ( 0 => f_sdb_embed_device(c_xwb_fmc_active_clk_regs_sdb,
                                                         x"00000000"),   -- FMC Active Clock Interface regs
-    1 => f_sdb_embed_device(c_xwb_i2c_master_sdb,       x"00000100"),   -- VCXO Si571 I2C
+    1 => f_sdb_embed_device(c_xwb_si57x_ctrl_regs_sdb,  x"00000100"),   -- VCXO Si571 controller
     2 => f_sdb_embed_device(c_xwb_spi_sdb,              x"00000200")    -- AD9510 SPI
   );
 
@@ -163,12 +166,12 @@ architecture rtl of wb_fmc_active_clk is
   -----------------------------
   -- VCXO Si571 I2C Signals
   -----------------------------
-  signal si571_i2c_scl_in                   : std_logic_vector(0 downto 0);
-  signal si571_i2c_scl_out                  : std_logic_vector(0 downto 0);
-  signal si571_i2c_scl_oe_n                 : std_logic_vector(0 downto 0);
-  signal si571_i2c_sda_in                   : std_logic_vector(0 downto 0);
-  signal si571_i2c_sda_out                  : std_logic_vector(0 downto 0);
-  signal si571_i2c_sda_oe_n                 : std_logic_vector(0 downto 0);
+  signal si571_i2c_scl_in                   : std_logic;
+  signal si571_i2c_scl_out                  : std_logic;
+  signal si571_i2c_scl_oe                   : std_logic;
+  signal si571_i2c_sda_in                   : std_logic;
+  signal si571_i2c_sda_out                  : std_logic;
+  signal si571_i2c_sda_oe                   : std_logic;
 
   -----------------------------
   -- Components
@@ -361,35 +364,35 @@ begin
   -- I2C Programmable Si571 VCXO
   -----------------------------
   -- I2C Programmable VCXO control interface.
-  -- I2C Programmable VCXO is slave number 1, word addressed
-  -- Note: I2C registers are 8-bit wide, but accessed as 32-bit registers
 
-  cmp_vcxo_i2c : xwb_i2c_master
-  generic map(
-    g_interface_mode                        => g_interface_mode,
-    g_address_granularity                   => g_address_granularity
-  )
-  port map (
-    clk_sys_i                               => sys_clk_i,
-    rst_n_i                                 => sys_rst_n_i,
+  cmp_xwb_si57x_ctrl: xwb_si57x_ctrl
+    generic map (
+      g_si57x_i2c_addr      => g_si57x_i2c_addr,
+      g_scl_clk_div         => g_si57x_i2c_clk_div,
+      g_si57x_7ppm_variant  => g_si57x_7ppm_variant,
+      g_interface_mode      => g_interface_mode,
+      g_address_granularity => g_address_granularity
+    )
+    port map (
+      clk_i    => sys_clk_i,
+      rst_n_i  => sys_rst_n_i,
 
-    slave_i                                 => cbar_master_out(1),
-    slave_o                                 => cbar_master_in(1),
-    desc_o                                  => open,
+      wb_slv_i => cbar_master_out(1),
+      wb_slv_o => cbar_master_in(1),
 
-    scl_pad_i                               => si571_i2c_scl_in,
-    scl_pad_o                               => si571_i2c_scl_out,
-    scl_padoen_o                            => si571_i2c_scl_oe_n,
-    sda_pad_i                               => si571_i2c_sda_in,
-    sda_pad_o                               => si571_i2c_sda_out,
-    sda_padoen_o                            => si571_i2c_sda_oe_n
-  );
+      sda_i    => si571_i2c_sda_in,
+      sda_o    => si571_i2c_sda_out,
+      sda_oe_o => si571_i2c_sda_oe,
+      scl_i    => si571_i2c_scl_in,
+      scl_o    => si571_i2c_scl_out,
+      scl_oe_o => si571_i2c_scl_oe
+    );
 
-  si571_scl_pad_b  <= si571_i2c_scl_out(0) when si571_i2c_scl_oe_n(0) = '0' else 'Z';
-  si571_i2c_scl_in(0) <= si571_scl_pad_b;
+  si571_scl_pad_b  <= si571_i2c_scl_out when si571_i2c_scl_oe = '1' else 'Z';
+  si571_i2c_scl_in <= si571_scl_pad_b;
 
-  si571_sda_pad_b  <= si571_i2c_sda_out(0) when si571_i2c_sda_oe_n(0) = '0' else 'Z';
-  si571_i2c_sda_in(0) <= si571_sda_pad_b;
+  si571_sda_pad_b  <= si571_i2c_sda_out when si571_i2c_sda_oe = '1' else 'Z';
+  si571_i2c_sda_in <= si571_sda_pad_b;
 
   -- Not used wishbone signals
   --cbar_master_in(1).err                     <= '0';
