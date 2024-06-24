@@ -1235,6 +1235,10 @@ begin
 
   cmp_fmc_active_clk : xwb_fmc_active_clk
   generic map(
+    -- I2C address for Si571AJC000337DG
+    g_si57x_i2c_addr                        => "1001001",
+    g_si57x_7ppm_variant                    => false,
+    g_si57x_i2c_clk_div                     => 1000,
     g_interface_mode                        => g_interface_mode,
     g_address_granularity                   => g_address_granularity,
     g_with_extra_wb_reg                     => g_with_extra_wb_reg
