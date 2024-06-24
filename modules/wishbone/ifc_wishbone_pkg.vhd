@@ -2201,6 +2201,9 @@ package ifc_wishbone_pkg is
   component wb_fmc_active_clk
   generic
   (
+    g_si57x_i2c_addr                          : std_logic_vector(6 downto 0);
+    g_si57x_7ppm_variant                      : boolean;
+    g_si57x_i2c_clk_div                       : natural range 1 to 65536;
     g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
     g_address_granularity                     : t_wishbone_address_granularity := WORD;
     g_with_extra_wb_reg                       : boolean := false
@@ -2267,6 +2270,9 @@ package ifc_wishbone_pkg is
   component xwb_fmc_active_clk
   generic
   (
+    g_si57x_i2c_addr                          : std_logic_vector(6 downto 0);
+    g_si57x_7ppm_variant                      : boolean;
+    g_si57x_i2c_clk_div                       : natural range 1 to 65536;
     g_interface_mode                          : t_wishbone_interface_mode      := CLASSIC;
     g_address_granularity                     : t_wishbone_address_granularity := WORD;
     g_with_extra_wb_reg                       : boolean := false
