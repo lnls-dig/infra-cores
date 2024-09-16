@@ -174,7 +174,7 @@ begin
 
     -- Write through port A
     clka_i                                  => fs_clk_i,
-    bwea_i                                  => open,
+    bwea_i                                  => (others => '0'),
     wea_i                                   => dpram0_wea,
     aa_i                                    => dpram0_addra,
     da_i                                    => dpram0_dina,
@@ -182,7 +182,9 @@ begin
 
     -- Read through port B
     clkb_i                                  => fs_clk_i,
-    bweb_i                                  => open,
+    bweb_i                                  => (others => '0'),
+    web_i                                   => '0',
+    db_i                                    => (others => '0'),
     ab_i                                    => dpram0_addrb,
     qb_o                                    => dpram0_doutb
   );
@@ -201,14 +203,16 @@ begin
     rst_n_i                                 => fs_rst_n_i,
 
     clka_i                                  => fs_clk_i,
-    bwea_i                                  => open,
+    bwea_i                                  => (others => '0'),
     wea_i                                   => dpram1_wea,
     aa_i                                    => dpram1_addra,
     da_i                                    => dpram1_dina,
     qa_o                                    => open,
 
     clkb_i                                  => fs_clk_i,
-    bweb_i                                  => open,
+    bweb_i                                  => (others => '0'),
+    web_i                                   => '0',
+    db_i                                    => (others => '0'),
     ab_i                                    => dpram1_addrb,
     qb_o                                    => dpram1_doutb
     );
