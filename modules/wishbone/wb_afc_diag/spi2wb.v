@@ -35,7 +35,6 @@ module spi2wb(
 wire [31:0]SERIAL_data;
 wire [31:0]SPI_data_i;
 wire [15:0]SERIAL_addr;
-wire [31:0]dpram_data_a;
 
 localparam T_IDLE = 3'b001;
 localparam T_DATA_OUT = 3'b010;
@@ -60,26 +59,7 @@ spi_link_top spi_link_top_i(
 
     );
 
-// True dual port block RAM
-spi2wb_dpram spi2wb_dpram_i (
-
-  // Access from Wishbone bus
-  .clka(wb_clk_i), // input clka
-  .wea(1'b0), // input [0 : 0] wea
-  .addra(wb_addr_i[7:0]), // input [7 : 0] addra
-  .dina(32'h00000000), // input [31 : 0] dina
-  .douta(dpram_data_a[31:0]), // output [31 : 0] douta
-
-  // Access from SPI core
-  //.clkb(wb_clk_i), // input clkb
-  .clkb(spi_clk_i), // input clkb
-  //.enb(SERIAL_valid), // input enb
-  .enb(!SPI_CS), // input enb
-  .web(SERIAL_valid), // input [0 : 0] web
-  .addrb(SERIAL_addr[7:0]), // input [7 : 0] addrb
-  .dinb(SERIAL_data[31:0]), // input [31 : 0] dinb
-  .doutb(SPI_data_i[31:0]) // output [31 : 0] doutb
-);
+assign SPI_data_i = 32'b0;
 
 // debug signals
 assign dbg_spi_clk = spi_clk_i;
@@ -107,7 +87,7 @@ assign dbg_SPI_data = SPI_data_i[31:0];
 	        end
 	        
 	        T_DATA_OUT: begin
-	           wb_data_o <= dpram_data_a[31:0];
+	           wb_data_o <= 32'b0;
 	           wb_ack_o <= 1'b1;
 	           state <= T_ACK_CLEAR;
 	        end
